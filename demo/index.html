@@ -157,7 +157,7 @@
       const legendPanel = document.getElementById("legend-panel");
       const defaultView = { lat: 24, lng: 40, altitude: 2.6 };
       let countries = null;
-      const embeddedMode = new URLSearchParams(window.location.search).get("embedded") === "1";
+      const embeddedMode = new URLSearchParams(window.location.search).get("standalone") !== "1";
       const isTouchDevice = Boolean(window.matchMedia?.("(pointer: coarse)").matches || navigator.maxTouchPoints > 0);
 
       if (embeddedMode) document.body.classList.add("embedded");

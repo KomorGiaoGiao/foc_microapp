@@ -17,14 +17,24 @@
     <cover-view class="detail-close" bindtap="closeDetail">返回全球视角</cover-view>
   </cover-view>
 
+  <cover-view class="legend-panel" tt:if="{{legendOpen}}">
+    <cover-view class="legend-title">图例</cover-view>
+    <cover-view class="legend-row"><cover-view class="legend-dot"></cover-view>家族办公室城市</cover-view>
+    <cover-view class="legend-row"><cover-view class="legend-dot muted"></cover-view>选中位置</cover-view>
+  </cover-view>
+
   <cover-view class="bottom-bar">
+    <cover-view class="bottom-action" bindtap="resetView">
+      <cover-view class="bottom-icon">◎</cover-view>
+      <cover-view>全球</cover-view>
+    </cover-view>
     <cover-view class="bottom-action" bindtap="toggleSearch">
       <cover-view class="bottom-icon">⌕</cover-view>
       <cover-view>搜索</cover-view>
     </cover-view>
-    <cover-view class="bottom-action" bindtap="resetView">
-      <cover-view class="bottom-icon">◎</cover-view>
-      <cover-view>复位</cover-view>
+    <cover-view class="bottom-action" bindtap="toggleLegend">
+      <cover-view class="bottom-icon">▤</cover-view>
+      <cover-view>图例</cover-view>
     </cover-view>
     <cover-view class="bottom-action" bindtap="showMapInfo">
       <cover-view class="bottom-icon">ⓘ</cover-view>
