@@ -8,16 +8,16 @@
     <view class="search-action" bindtap="submitSearch">定位</view>
   </view>
 
-  <view class="detail-panel" tt:if="{{detailOpen}}">
-    <view class="detail-kicker">SELECTED REGION</view>
-    <text class="detail-title">{{selectedName}}</text>
-    <text class="detail-description">{{selectedDescription}}</text>
-    <view class="detail-meta">
-      <text>地图数据</text>
-      <text>知识库同步</text>
-    </view>
-    <view class="detail-close" bindtap="closeDetail">返回全球视角</view>
-  </view>
+  <cover-view class="detail-panel" tt:if="{{detailOpen}}">
+    <cover-view class="detail-kicker">SELECTED REGION</cover-view>
+    <cover-view class="detail-title">{{selectedName}}</cover-view>
+    <cover-view class="detail-description">{{selectedDescription}}</cover-view>
+    <cover-view class="detail-meta">
+      <cover-view>地图数据</cover-view>
+      <cover-view>知识库同步</cover-view>
+    </cover-view>
+    <cover-view class="detail-close" bindtap="closeDetail">返回全球视角</cover-view>
+  </cover-view>
 
   <cover-view class="bottom-bar">
     <cover-view class="bottom-action" bindtap="toggleSearch">
