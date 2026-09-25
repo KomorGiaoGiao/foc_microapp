@@ -6,6 +6,8 @@
   const asideRoot = document.getElementById("knowledge-aside");
   const progressBar = document.getElementById("knowledge-progress-bar");
   const layout = document.querySelector(".knowledge-layout");
+  const tocToggle = document.getElementById("knowledge-toc-toggle");
+  const tocBackdrop = document.getElementById("knowledge-toc-backdrop");
   const articles = window.KNOWLEDGE_ARTICLES || {};
 
   function escapeHtml(value) {
@@ -43,25 +45,40 @@
       ${article.sections.map((section) => `<section class="knowledge-section" id="${escapeHtml(section.id)}"><h2>${escapeHtml(section.title)}</h2>${section.blocks.map(renderBlock).join("")}</section>`).join("")}
     `;
     tocRoot.innerHTML = `<div class="knowledge-toc-title">文章目录</div><a href="#article-top">开篇摘要</a>${article.sections.map((section) => `<a href="#${escapeHtml(section.id)}">${escapeHtml(section.title)}</a>`).join("")}`;
+    tocRoot.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeToc));
     asideRoot.innerHTML = article.aside.map(([label, value]) => `<div class="knowledge-aside-block"><div class="knowledge-aside-label">${escapeHtml(label)}</div><div class="knowledge-aside-value">${escapeHtml(value)}</div></div>`).join("");
     layout.scrollTop = 0;
     progressBar.style.width = "0%";
+  }
+
+  function setTocOpen(isOpen) {
+    tocRoot.classList.toggle("is-open", isOpen);
+    tocBackdrop.hidden = !isOpen;
+    tocToggle.setAttribute("aria-expanded", String(isOpen));
+  }
+
+  function closeToc() {
+    setTocOpen(false);
   }
 
   function open(slug) {
     const article = articles[slug];
     if (!article) return false;
     render(article);
+    closeToc();
     reader.hidden = false;
     return true;
   }
 
   function close() {
+    closeToc();
     reader.hidden = true;
     document.dispatchEvent(new CustomEvent("knowledge:closed"));
   }
 
   document.getElementById("knowledge-close").addEventListener("click", close);
+  tocToggle.addEventListener("click", () => setTocOpen(tocToggle.getAttribute("aria-expanded") !== "true"));
+  tocBackdrop.addEventListener("click", closeToc);
   layout.addEventListener("scroll", () => {
     const scrollable = layout.scrollHeight - layout.clientHeight;
     const progress = scrollable > 0 ? Math.min(100, (layout.scrollTop / scrollable) * 100) : 0;
