@@ -38,19 +38,29 @@
 
   <view class="bottom-bar">
     <view class="bottom-action" bindtap="resetView">
-      <text class="bottom-icon">◎</text>
+      <view class="bottom-icon icon-globe">
+        <view class="icon-globe-lat"></view>
+        <view class="icon-globe-lng"></view>
+      </view>
       <text>全球</text>
     </view>
     <view class="bottom-action" bindtap="toggleSearch">
-      <text class="bottom-icon">⌕</text>
+      <view class="bottom-icon icon-search">
+        <view class="icon-search-circle"></view>
+        <view class="icon-search-handle"></view>
+      </view>
       <text>搜索</text>
     </view>
     <view class="bottom-action" bindtap="toggleLegend">
-      <text class="bottom-icon">▤</text>
+      <view class="bottom-icon icon-legend">
+        <view class="icon-legend-line line-one"></view>
+        <view class="icon-legend-line line-two"></view>
+        <view class="icon-legend-line line-three"></view>
+      </view>
       <text>图例</text>
     </view>
     <view class="bottom-action" bindtap="showMapInfo">
-      <text class="bottom-icon">ⓘ</text>
+      <view class="bottom-icon icon-info"><text class="icon-info-i">i</text></view>
       <text>说明</text>
     </view>
   </view>
