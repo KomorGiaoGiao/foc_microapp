@@ -89,6 +89,13 @@
         .legend-panel { right: 12px; bottom: 184px; }
         .map-status { left: 68px; bottom: 4px; }
       }
+
+      .embedded .side-rail,
+      .embedded .topbar,
+      .embedded .search-panel,
+      .embedded .legend-panel,
+      .embedded .selection,
+      .embedded .map-status { display: none !important; }
     </style>
   </head>
   <body>
@@ -166,6 +173,15 @@
       const legendPanel = document.getElementById("legend-panel");
       const defaultView = { lat: 24, lng: 40, altitude: 2.6 };
       let countries = null;
+      const embeddedMode = new URLSearchParams(window.location.search).get("embedded") === "1";
+
+      if (embeddedMode) document.body.classList.add("embedded");
+
+      function postMapMessage(message) {
+        if (window.tt?.miniProgram?.postMessage) {
+          window.tt.miniProgram.postMessage({ data: message });
+        }
+      }
 
       const offices = window.FAMILY_OFFICE_LOCATIONS || [];
 
@@ -199,7 +215,10 @@
       function handleCountryClick(polygon) {
         const properties = polygon.properties || {};
         if (properties.kind === "province") {
-          showSelection(properties.name || "行政区", `行政区：${properties.name}`);
+          const name = properties.name || "行政区";
+          const description = `行政区：${name}`;
+          showSelection(name, description);
+          postMapMessage({ type: "regionSelected", name, description });
           return;
         }
 
@@ -208,12 +227,15 @@
         const view = getCountryView(polygon);
         globe.pointOfView(view, 900);
         showSelection(name, "国家已选中");
+        postMapMessage({ type: "regionSelected", name, description: "国家已选中" });
       }
 
       function handleOfficeClick(point) {
         globeControls.autoRotate = false;
         globe.pointOfView({ lat: point.lat, lng: point.lng, altitude: 0.28 }, 900);
-        showSelection(point.city, `${point.country ? `${point.country} · ` : ""}${point.count} 家家族办公室`);
+        const description = `${point.country ? `${point.country} · ` : ""}${point.count} 家家族办公室`;
+        showSelection(point.city, description);
+        postMapMessage({ type: "regionSelected", name: point.city, description });
       }
 
       function showSelection(name, description) {
@@ -229,6 +251,7 @@
         globeControls.autoRotate = true;
         globe.pointOfView(defaultView, 900);
         mapStatus.textContent = "拖动旋转 · 滚轮缩放 · 点击国家查看";
+        postMapMessage({ type: "viewReset" });
       }
 
       document.getElementById("back").addEventListener("click", resetView);
@@ -264,6 +287,15 @@
       });
 
       searchInput.addEventListener("input", (event) => renderSearchResults(event.target.value));
+
+      window.addEventListener("message", (event) => {
+        const message = event.data?.data || event.data || {};
+        if (message.type === "resetView") resetView();
+        if (message.type === "search" && message.query) {
+          const match = offices.find((point) => `${point.city} ${point.country}`.toLowerCase().includes(message.query.toLowerCase()));
+          if (match) handleOfficeClick(match);
+        }
+      });
 
       function renderSearchResults(query) {
         const normalizedQuery = query.trim().toLowerCase();
