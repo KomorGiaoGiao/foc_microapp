@@ -19,18 +19,18 @@
     <view class="detail-close" bindtap="closeDetail">返回全球视角</view>
   </view>
 
-  <view class="bottom-bar">
-    <view class="bottom-action" bindtap="toggleSearch">
-      <text class="bottom-icon">⌕</text>
-      <text>搜索</text>
-    </view>
-    <view class="bottom-action" bindtap="resetView">
-      <text class="bottom-icon">◎</text>
-      <text>复位</text>
-    </view>
-    <view class="bottom-action" bindtap="showMapInfo">
-      <text class="bottom-icon">ⓘ</text>
-      <text>说明</text>
-    </view>
-  </view>
+  <cover-view class="bottom-bar">
+    <cover-view class="bottom-action" bindtap="toggleSearch">
+      <cover-view class="bottom-icon">⌕</cover-view>
+      <cover-view>搜索</cover-view>
+    </cover-view>
+    <cover-view class="bottom-action" bindtap="resetView">
+      <cover-view class="bottom-icon">◎</cover-view>
+      <cover-view>复位</cover-view>
+    </cover-view>
+    <cover-view class="bottom-action" bindtap="showMapInfo">
+      <cover-view class="bottom-icon">ⓘ</cover-view>
+      <cover-view>说明</cover-view>
+    </cover-view>
+  </cover-view>
 </view>
