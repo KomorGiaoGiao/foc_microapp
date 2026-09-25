@@ -23,23 +23,17 @@
       button { color: inherit; }
       #globe { width: 100%; height: 100%; }
 
-      .side-rail { position: fixed; z-index: 5; inset: 0 auto 0 0; width: 68px; display: flex; flex-direction: column; align-items: center; background: var(--rail); border-right: 1px solid rgba(255,255,255,.08); }
-      .rail-brand { width: 100%; height: 72px; display: grid; place-items: center; border-bottom: 1px solid var(--line); }
+      .side-rail { position: fixed; z-index: 5; left: 50%; bottom: 18px; width: auto; height: 54px; display: flex; align-items: center; transform: translateX(-50%); background: var(--rail); border: 1px solid rgba(255,255,255,.1); box-shadow: 0 12px 28px rgba(0,0,0,.28); }
+      .rail-brand { display: none; }
       .brand-mark { display: grid; place-items: center; width: 30px; height: 30px; border: 1px solid rgba(216,173,91,.85); color: var(--gold); font-size: 10px; font-weight: 600; letter-spacing: .08em; }
-      .rail-group { width: 100%; padding: 10px 0; border-bottom: 1px solid var(--line); }
-      .rail-group:last-child { border-bottom: 0; margin-top: auto; }
-      .tool-button { position: relative; width: 44px; height: 44px; margin: 0 auto 6px; display: grid; place-items: center; border: 0; background: transparent; cursor: pointer; opacity: .68; transition: opacity .2s, background .2s, color .2s; }
-      .tool-button:last-child { margin-bottom: 0; }
+      .rail-group { display: flex; align-items: center; padding: 4px; }
+      .tool-button { position: relative; width: 44px; height: 44px; margin: 0 2px; display: grid; place-items: center; border: 0; background: transparent; cursor: pointer; opacity: .68; transition: opacity .2s, background .2s, color .2s; }
       .tool-button:hover, .tool-button.active { color: var(--gold); opacity: 1; background: rgba(255,255,255,.08); }
-      .tool-button.active::before { content: ""; position: absolute; left: -12px; width: 2px; height: 24px; background: var(--gold); }
+      .tool-button.active::before { content: ""; position: absolute; bottom: -5px; width: 18px; height: 2px; background: var(--gold); }
       .tool-button svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-      .tool-button .tool-label { position: absolute; left: 52px; top: 8px; display: none; white-space: nowrap; padding: 7px 9px; background: var(--panel); border: 1px solid var(--line); color: var(--text); font-size: 12px; }
+      .tool-button .tool-label { position: absolute; left: 50%; bottom: 52px; display: none; transform: translateX(-50%); white-space: nowrap; padding: 7px 9px; background: var(--panel); border: 1px solid var(--line); color: var(--text); font-size: 12px; }
       .tool-button:hover .tool-label { display: block; }
 
-      .topbar { position: fixed; z-index: 4; top: 18px; left: 92px; display: flex; align-items: center; gap: 14px; pointer-events: none; }
-      .topbar-copy { padding-left: 12px; border-left: 1px solid rgba(255,255,255,.28); }
-      .topbar-kicker { color: var(--gold); font-size: 10px; letter-spacing: .17em; text-transform: uppercase; }
-      .topbar-title { margin-top: 3px; font-size: 16px; font-weight: 500; letter-spacing: .02em; }
       .live-status { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: 12px; }
       .live-status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 0 3px rgba(103,196,182,.15); }
 
@@ -48,7 +42,7 @@
       .map-tool:hover { color: var(--gold); border-color: rgba(216,173,91,.7); }
       .map-tool svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
-      .search-panel { position: fixed; z-index: 6; left: 84px; top: 84px; width: min(360px, calc(100vw - 104px)); padding: 14px; background: var(--panel); border: 1px solid var(--line); box-shadow: 0 14px 36px rgba(0,0,0,.24); }
+      .search-panel { position: fixed; z-index: 6; left: 50%; bottom: 88px; top: auto; width: min(360px, calc(100vw - 40px)); transform: translateX(-50%); padding: 14px; background: var(--panel); border: 1px solid var(--line); box-shadow: 0 14px 36px rgba(0,0,0,.24); }
       .search-panel[hidden], .legend-panel[hidden] { display: none; }
       .search-label { display: block; margin-bottom: 8px; color: var(--muted); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
       .search-input { width: 100%; height: 36px; padding: 0 10px; border: 1px solid rgba(255,255,255,.16); outline: 0; background: rgba(0,0,0,.18); color: var(--text); font-size: 13px; }
@@ -59,13 +53,13 @@
       .search-result small { color: var(--muted); font-size: 11px; }
       .search-empty { padding: 12px 8px; color: var(--muted); font-size: 12px; }
 
-      .legend-panel { position: fixed; z-index: 4; right: 68px; bottom: 24px; width: 190px; padding: 14px; background: var(--panel); border: 1px solid var(--line); box-shadow: 0 14px 36px rgba(0,0,0,.24); }
+      .legend-panel { position: fixed; z-index: 4; left: 50%; right: auto; bottom: 88px; transform: translateX(-50%); width: 190px; padding: 14px; background: var(--panel); border: 1px solid var(--line); box-shadow: 0 14px 36px rgba(0,0,0,.24); }
       .legend-title { margin-bottom: 12px; color: var(--muted); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
       .legend-row { display: flex; align-items: center; gap: 8px; margin-top: 9px; color: rgba(244,244,241,.78); font-size: 12px; }
       .legend-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 3px rgba(216,173,91,.16); }
       .legend-dot.teal { background: var(--teal); box-shadow: 0 0 0 3px rgba(103,196,182,.15); }
 
-      .selection { position: fixed; z-index: 4; left: 84px; bottom: 24px; width: min(350px, calc(100vw - 170px)); display: none; padding: 16px 18px; background: var(--panel); border: 1px solid var(--line); box-shadow: 0 14px 36px rgba(0,0,0,.22); backdrop-filter: blur(14px); }
+      .selection { position: fixed; z-index: 4; left: 50%; bottom: 88px; width: min(350px, calc(100vw - 40px)); transform: translateX(-50%); display: none; padding: 16px 18px; background: var(--panel); border: 1px solid var(--line); box-shadow: 0 14px 36px rgba(0,0,0,.22); backdrop-filter: blur(14px); }
       .selection.visible { display: block; }
       .selection-kicker { color: var(--gold); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; }
       .selection strong { display: block; margin: 7px 0 4px; color: var(--text); font-size: 21px; font-weight: 500; }
@@ -74,20 +68,15 @@
       .actions { display: flex; gap: 8px; margin-top: 14px; }
       .action-button { height: 30px; padding: 0 11px; border: 1px solid rgba(216,173,91,.62); background: transparent; color: var(--gold); cursor: pointer; font-size: 12px; }
       .action-button:hover { background: rgba(216,173,91,.12); }
-      .map-status { position: fixed; z-index: 3; left: 84px; bottom: 12px; color: rgba(255,255,255,.45); font-size: 11px; pointer-events: none; }
+      .map-status { position: fixed; z-index: 3; left: 50%; bottom: 78px; transform: translateX(-50%); color: rgba(255,255,255,.45); font-size: 11px; pointer-events: none; }
       .tooltip { position: fixed; z-index: 8; display: none; padding: 7px 9px; background: var(--panel); border: 1px solid var(--line); color: var(--text); font-size: 12px; pointer-events: none; }
 
       @media (max-width: 600px) {
-        .side-rail { width: 56px; }
-        .topbar { left: 72px; top: 14px; gap: 9px; }
-        .topbar-title { font-size: 14px; }
-        .topbar-kicker { font-size: 9px; }
-        .live-status { display: none; }
-        .search-panel { left: 68px; width: calc(100vw - 80px); }
-        .selection { left: 68px; right: 12px; bottom: 12px; width: auto; }
-        .map-tools { right: 12px; bottom: 184px; }
-        .legend-panel { right: 12px; bottom: 184px; }
-        .map-status { left: 68px; bottom: 4px; }
+        .side-rail { bottom: 12px; }
+        .search-panel, .selection { bottom: 80px; width: calc(100vw - 24px); }
+        .map-tools { right: 12px; bottom: 88px; }
+        .legend-panel { bottom: 80px; }
+        .map-status { display: none; }
       }
 
       .embedded .side-rail,
@@ -123,13 +112,6 @@
         </button>
       </div>
     </aside>
-    <header class="topbar">
-      <div class="topbar-copy">
-        <div class="topbar-kicker">Global Family Office Map</div>
-        <div class="topbar-title">家族办公室情报地图</div>
-      </div>
-      <div class="live-status">687 家机构 · 282 个城市</div>
-    </header>
     <div class="search-panel" id="search-panel" hidden>
       <label class="search-label" for="search-input">搜索城市或国家</label>
       <input class="search-input" id="search-input" type="search" placeholder="例如：伦敦、美国" autocomplete="off" />
