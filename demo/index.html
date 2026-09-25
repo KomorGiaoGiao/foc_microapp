@@ -78,6 +78,15 @@
         .map-status { display: none; }
       }
 
+      /* The mini app owns the controls in embedded mode; the WebView renders only the globe. */
+      .embedded .side-rail,
+      .embedded .topbar,
+      .embedded .search-panel,
+      .embedded .legend-panel,
+      .embedded .map-tools,
+      .embedded .selection,
+      .embedded .map-status { display: none !important; }
+
     </style>
   </head>
   <body>
