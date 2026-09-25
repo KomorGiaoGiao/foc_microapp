@@ -7,6 +7,8 @@ window.KNOWLEDGE_ARTICLES["42-north"] = {
   location: "Grand Rapids, United States",
   type: "单一家族办公室",
   updatedAt: "2026-06-16",
+  sourceUrl: "https://cvq22kh9w1q.feishu.cn/docx/BApgdAa4Loj8CuxwIX8ccLMInKe",
+  recordId: "NO.012",
   readingTime: "约 18 分钟",
   summary: "从 Perrigo 乡村药厂的 CFO 到全球医药巨头的掌舵人，Mike Jandernoa 用 30 年完成了从零到 25 亿美元的商业跃迁。2011 年成立的 42 North Partners 不仅是 Jandernoa 家族财富管理的枢纽，更是一个以投资、创业和社区为三支柱的家族平台。",
   keywords: ["Jandernoa 家族", "new money", "单一家族办公室", "Perrigo 前 CEO", "三支柱架构", "二代全员接班"],

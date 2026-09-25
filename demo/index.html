@@ -407,6 +407,11 @@
         )?.[0] || null;
       }
 
+      function getKnowledgeBadge(knowledgeSlug) {
+        if (!knowledgeSlug) return "待补充";
+        return knowledgeCatalog[knowledgeSlug]?.sourceUrl ? "有研究" : "资料卡";
+      }
+
       function showSelection(name, description, knowledgeSlug = null, kicker = "Selected region") {
         selectedName.textContent = name;
         selectedDescription.textContent = description;
@@ -441,14 +446,16 @@
         selectedOfficeName = officeName;
         const knowledgeSlug = findKnowledgeSlugByOfficeName(officeName);
         const location = [point.city, point.country].filter(Boolean).join(" · ");
-        const researchStatus = knowledgeSlug ? "已有深度研究" : "深度研究待补充";
+        const researchStatus = knowledgeSlug
+          ? (getKnowledgeBadge(knowledgeSlug) === "有研究" ? "已有深度研究" : "已有资料卡")
+          : "深度研究待补充";
         showSelection(officeName, `${location} · ${researchStatus}`, knowledgeSlug, "Selected office");
         officeListPanel.hidden = getOfficeNames(point).length <= 1;
         if (!officeListPanel.hidden) {
           renderOfficeList(officeListSearch.value);
         }
         mapStatus.textContent = knowledgeSlug
-          ? "已选择家族办公室 · 可打开深度研究"
+          ? `已选择家族办公室 · ${getKnowledgeBadge(knowledgeSlug) === "有研究" ? "可打开深度研究" : "可查看资料卡"}`
           : "已选择家族办公室 · 该家办暂无深度研究";
       }
 
@@ -474,9 +481,9 @@
         }
 
         officeList.innerHTML = matches.map((officeName, index) => {
-          const hasResearch = Boolean(findKnowledgeSlugByOfficeName(officeName));
+          const knowledgeSlug = findKnowledgeSlugByOfficeName(officeName);
           const activeClass = selectedOfficeName === officeName ? " active" : "";
-          return `<button class="office-list-item${activeClass}" type="button" data-office-index="${index}"><span>${escapeHtml(officeName)}</span><span class="office-list-badge">${hasResearch ? "有研究" : "待补充"}</span></button>`;
+          return `<button class="office-list-item${activeClass}" type="button" data-office-index="${index}"><span>${escapeHtml(officeName)}</span><span class="office-list-badge">${getKnowledgeBadge(knowledgeSlug)}</span></button>`;
         }).join("");
 
         officeList.querySelectorAll(".office-list-item").forEach((button) => {
