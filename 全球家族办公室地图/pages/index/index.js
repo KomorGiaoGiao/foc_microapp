@@ -1,6 +1,6 @@
 Page({
   data: {
-    mapUrl: 'https://komorgiaogiao.github.io/demo/index.html?embedded=1',
+    mapUrl: 'https://komorgiaogiao.github.io/demo/index.html?embedded=1&ui=bottom-v2',
     searchOpen: false,
     searchQuery: '',
     detailOpen: false,
