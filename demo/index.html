@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Family Office Globe</title>
+    <style>
+      * { box-sizing: border-box; }
+      html, body { margin: 0; height: 100%; background: #050912; color: #e8eefc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      #globe { width: 100%; height: 100%; }
+      .hud { position: fixed; left: 24px; top: 24px; max-width: 320px; padding: 20px; border-radius: 18px; background: rgba(8, 14, 26, .82); border: 1px solid rgba(120, 160, 255, .22); backdrop-filter: blur(14px); }
+      .eyebrow { font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #7f9bff; }
+      h1 { margin: 8px 0 8px; font-size: 24px; line-height: 1.2; }
+      p { margin: 0; color: #a7b3cc; font-size: 14px; line-height: 1.5; }
+      .selected { margin-top: 16px; display: none; }
+      .selected.visible { display: block; }
+      .selected strong { display: block; margin-bottom: 4px; font-size: 18px; color: #fff; }
+      .actions { margin-top: 16px; display: flex; gap: 8px; }
+      button { cursor: pointer; border: 0; border-radius: 999px; padding: 8px 14px; color: #fff; background: linear-gradient(135deg, #4b7bff, #7c5cff); }
+      .ghost { background: rgba(255,255,255,.08); }
+      .tooltip { position: fixed; z-index: 3; display: none; padding: 8px 12px; border-radius: 999px; background: #0d1424; border: 1px solid rgba(120,160,255,.3); font-size: 13px; }
+    </style>
+  </head>
+  <body>
+    <div id="globe"></div>
+    <div class="hud">
+      <div class="eyebrow">Prototype</div>
+      <h1>家族办公室全球地图</h1>
+      <p>点击国家进入国家视角，点击光点查看城市点位。</p>
+      <div id="selection" class="selected">
+        <strong id="selected-name"></strong>
+        <p id="selected-description"></p>
+        <div class="actions">
+          <button id="back">返回地球</button>
+        </div>
+      </div>
+    </div>
+    <div id="tooltip" class="tooltip"></div>
+
+    <script src="vendor/globe.gl.min.js"></script>
+    <script src="data/countries.js"></script>
+    <script src="data/family-office-locations.js"></script>
+    <script>
+      const globeContainer = document.getElementById("globe");
+      const tooltip = document.getElementById("tooltip");
+      const selection = document.getElementById("selection");
+      const selectedName = document.getElementById("selected-name");
+      const selectedDescription = document.getElementById("selected-description");
+      const defaultView = { lat: 24, lng: 40, altitude: 2.6 };
+      let countries = null;
+
+      const offices = window.FAMILY_OFFICE_LOCATIONS || [];
+
+      const globe = Globe({ animateIn: true })(globeContainer)
+        .backgroundColor("#050912")
+        .showAtmosphere(true)
+        .atmosphereColor("#3d6bff")
+        .atmosphereAltitude(0.16)
+        .polygonAltitude(({ properties }) => properties.kind === "province" ? 0.032 : 0.012)
+        .polygonCapColor(({ properties }) => properties.kind === "province" ? "transparent" : "rgba(20, 32, 60, 0.72)")
+        .polygonSideColor(({ properties }) => properties.kind === "province" ? "transparent" : "rgba(70, 110, 255, 0.14)")
+        .polygonStrokeColor(({ properties }) => properties.kind === "province" ? "rgba(255, 209, 102, 0.95)" : "rgba(130, 170, 255, 0.48)")
+        .polygonLabel(({ properties }) => properties.name || properties.NAME)
+        .onPolygonClick(handleCountryClick)
+        .pointsData(offices)
+        .pointLat("lat")
+        .pointLng("lng")
+        .pointAltitude(0.035)
+        .pointRadius(({ count }) => Math.min(0.62, 0.28 + Math.sqrt(count || 1) * 0.035))
+        .pointColor(() => "#ffd166")
+        .pointLabel(({ city, country, count }) => `${city}${country ? ` · ${country}` : ""} · ${count} 家`)
+        .onPointClick(handleOfficeClick);
+
+      const globeControls = globe.controls();
+      globeControls.autoRotate = true;
+      globeControls.autoRotateSpeed = 0.18;
+      globeControls.enableDamping = true;
+
+      globe.pointOfView(defaultView, 0);
+
+      function handleCountryClick(polygon) {
+        const properties = polygon.properties || {};
+        if (properties.kind === "province") {
+          showSelection(properties.name || "行政区", `行政区：${properties.name}`);
+          return;
+        }
+
+        const name = properties.NAME || "Unknown";
+        globeControls.autoRotate = false;
+        const view = getCountryView(polygon);
+        globe.pointOfView(view, 900);
+        showSelection(name, "国家已选中");
+      }
+
+      function handleOfficeClick(point) {
+        globeControls.autoRotate = false;
+        globe.pointOfView({ lat: point.lat, lng: point.lng, altitude: 0.28 }, 900);
+        showSelection(point.city, `${point.country ? `${point.country} · ` : ""}${point.count} 家家族办公室`);
+      }
+
+      function showSelection(name, description) {
+        selectedName.textContent = name;
+        selectedDescription.textContent = description;
+        selection.classList.add("visible");
+      }
+
+      document.getElementById("back").addEventListener("click", () => {
+        if (countries) globe.polygonsData(countries.features);
+        selection.classList.remove("visible");
+        globeControls.autoRotate = true;
+        globe.pointOfView(defaultView, 900);
+      });
+
+      function getGeometryCoordinates(geometry) {
+        const coordinates = [];
+
+        function visit(value) {
+          if (!Array.isArray(value)) return;
+          if (typeof value[0] === "number" && typeof value[1] === "number") {
+            coordinates.push([value[0], value[1]]);
+            return;
+          }
+          value.forEach(visit);
+        }
+
+        visit(geometry?.coordinates);
+        return coordinates;
+      }
+
+      function normalizeLongitude(lng) {
+        return ((lng + 540) % 360) - 180;
+      }
+
+      function getCircularLongitudeRange(coordinates) {
+        if (!coordinates.length) return { span: 0, center: 0 };
+
+        const longitudes = coordinates
+          .map(([lng]) => (lng + 360) % 360)
+          .sort((a, b) => a - b);
+        let largestGap = -1;
+        let largestGapIndex = 0;
+
+        for (let index = 0; index < longitudes.length; index += 1) {
+          const next = index === longitudes.length - 1
+            ? longitudes[0] + 360
+            : longitudes[index + 1];
+          const gap = next - longitudes[index];
+          if (gap > largestGap) {
+            largestGap = gap;
+            largestGapIndex = index;
+          }
+        }
+
+        const start = longitudes[(largestGapIndex + 1) % longitudes.length];
+        const span = Math.min(360, 360 - largestGap);
+        return {
+          span,
+          center: normalizeLongitude(start + span / 2)
+        };
+      }
+
+      function getCountryView(polygon) {
+        const properties = polygon.properties || {};
+        const coordinates = getGeometryCoordinates(polygon.geometry);
+        const bounds = getGeometryBounds(polygon.geometry);
+
+        if (!bounds || !coordinates.length) {
+          return { lat: 0, lng: 0, altitude: 0.65 };
+        }
+
+        const longitudeRange = getCircularLongitudeRange(coordinates);
+        const latitudeSpan = bounds.maxLat - bounds.minLat;
+        const longitudeSpan = longitudeRange.span;
+        const geometryLat = (bounds.minLat + bounds.maxLat) / 2;
+        const geometryLng = longitudeRange.center;
+        const labelLat = Number(properties.LABEL_Y);
+        const labelLng = Number(properties.LABEL_X);
+        const hasLabelPoint = properties.LABEL_Y != null && properties.LABEL_X != null &&
+          Number.isFinite(labelLat) && Number.isFinite(labelLng);
+        const labelLngOffset = hasLabelPoint
+          ? Math.abs(((normalizeLongitude(labelLng) - geometryLng + 540) % 360) - 180)
+          : Infinity;
+        const useLabelPoint = hasLabelPoint &&
+          labelLngOffset <= Math.max(12, longitudeSpan * 0.25) &&
+          Math.abs(labelLat - geometryLat) <= Math.max(8, latitudeSpan * 0.25);
+        const lat = useLabelPoint ? labelLat : geometryLat;
+        const lng = useLabelPoint ? normalizeLongitude(labelLng) : geometryLng;
+        const longitudeAtLatitude = longitudeSpan * Math.max(0.25, Math.cos(lat * Math.PI / 180));
+        const countrySpan = Math.max(latitudeSpan, longitudeAtLatitude);
+        const narrowViewportFactor = Math.max(1, (globeContainer.clientHeight || 1) / (globeContainer.clientWidth || 1));
+        // Reserve room around the full country bounds so the globe does not crop them.
+        const fitRatio = countrySpan / 32;
+        const altitude = Math.min(
+          1.25,
+          Math.max(0.12, 0.12 + 0.58 * Math.pow(fitRatio, 1.15) * narrowViewportFactor)
+        );
+
+        return { lat, lng, altitude };
+      }
+
+      function showProvinceBoundaries(countryName, requestId) {
+        if (requestId !== selectionRequestId) return;
+
+        if (!countries) {
+          showSelection(countryName, "国家边界还没准备好");
+          return;
+        }
+
+        const iso3 = getCountryIso(countryName);
+        if (!iso3) {
+          showSelection(countryName, "暂无该国家的行政区数据");
+          return;
+        }
+
+        const cached = admin1Cache.get(iso3) || localAdmin1[iso3]?.features;
+        if (cached) {
+          admin1Cache.set(iso3, cached);
+          renderProvinces(countryName, cached);
+          return;
+        }
+
+        fetch(`https://www.geoboundaries.org/api/current/gbOpen/${iso3}/ADM1/`)
+          .then((response) => {
+            if (!response.ok) throw new Error(`ADM1 metadata request failed: ${response.status}`);
+            return response.json();
+          })
+          .then((metadata) => {
+            if (!metadata?.simplifiedGeometryGeoJSON) {
+              throw new Error("ADM1 metadata did not include a geometry URL");
+            }
+            const geoUrl = metadata.simplifiedGeometryGeoJSON.replace(
+              /^https:\/\/github\.com\/([^/]+)\/([^/]+)\/raw\/([^/]+)\/(.*)$/,
+              "https://raw.githubusercontent.com/$1/$2/$3/$4"
+            );
+            return fetch(geoUrl);
+          })
+          .then((response) => {
+            if (!response.ok) throw new Error(`ADM1 geometry request failed: ${response.status}`);
+            return response.json();
+          })
+          .then((data) => {
+            if (requestId !== selectionRequestId) return;
+            admin1Cache.set(iso3, data.features || []);
+            renderProvinces(countryName, data.features || []);
+          })
+          .catch(() => {
+            if (requestId === selectionRequestId) {
+              showSelection(countryName, "行政区数据加载失败");
+            }
+          });
+      }
+
+      function getGeometryBounds(geometry) {
+        const coordinates = getGeometryCoordinates(geometry);
+
+        if (!coordinates?.length) return null;
+
+        return coordinates.reduce(
+          (bounds, [lng, lat]) => ({
+            minLng: Math.min(bounds.minLng, lng),
+            maxLng: Math.max(bounds.maxLng, lng),
+            minLat: Math.min(bounds.minLat, lat),
+            maxLat: Math.max(bounds.maxLat, lat)
+          }),
+          { minLng: Infinity, maxLng: -Infinity, minLat: Infinity, maxLat: -Infinity }
+        );
+      }
+
+      function renderProvinces(countryName, provinces) {
+        const validProvinces = provinces.filter((feature) => {
+          const bounds = getGeometryBounds(feature.geometry);
+          return bounds && bounds.minLng >= -180 && bounds.maxLng <= 180 &&
+                 bounds.minLat >= -90 && bounds.maxLat <= 90;
+        });
+
+        const hiddenProvinces = validProvinces.map((feature) => ({
+          ...feature,
+          properties: {
+            ...feature.properties,
+            kind: "country",
+            name: feature.properties.shapeName
+          }
+        }));
+
+        const styledProvinces = validProvinces.map((feature) => ({
+          ...feature,
+          properties: {
+            ...feature.properties,
+            kind: "province",
+            name: feature.properties.shapeName
+          }
+        }));
+
+        globe.polygonsData([...countries.features, ...hiddenProvinces]);
+        setTimeout(() => globe.polygonsData([...countries.features, ...styledProvinces]), 80);
+        showSelection(countryName, `${countryName} · ${styledProvinces.length} 个行政区`);
+      }
+
+      function getCountryIso(countryName) {
+        const country = countries.features.find((feature) => feature.properties.NAME === countryName);
+        return country?.properties?.ISO_A3 && country.properties.ISO_A3 !== "-99"
+          ? country.properties.ISO_A3
+          : country?.properties?.ADM0_A3;
+      }
+
+      countries = window.COUNTRIES_GEOJSON;
+      globe.polygonsData(countries.features);
+
+      globeContainer.addEventListener("mousemove", (event) => {
+        tooltip.style.left = `${event.clientX + 12}px`;
+        tooltip.style.top = `${event.clientY + 12}px`;
+      });
+    </script>
+  </body>
+</html>

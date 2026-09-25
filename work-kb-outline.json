@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "document": {
+      "content": "<fragment mode=\"outline\">\n# 把一个问题，看得更深一点\n\n# 从哪里进入\n\n# 家办的五个支点\n\n# 别急着把它读完\n\n# 正在被认真阅读\n\n# 把信息变成线索\n\n# 把线索留在这里\n</fragment>",
+      "document_id": "Dnf5ddOy7oztURxRXRTc3ZdJnPe",
+      "revision_id": 3006
+    }
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.76",
+      "latest": "1.0.96",
+      "message": "lark-cli 1.0.96 available, current 1.0.76, run: lark-cli update"
+    }
+  }
+}

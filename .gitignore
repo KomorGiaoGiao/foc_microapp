@@ -1,0 +1,8 @@
+.DS_Store
+__MACOSX/
+.playwright-cli/
+output/playwright/
+node_modules/
+.env
+.env.*
+!.env.example
