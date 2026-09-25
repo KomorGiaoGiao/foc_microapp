@@ -41,6 +41,14 @@ Page({
     this.resetView();
   },
 
+  showMapInfo() {
+    this.setData({
+      detailOpen: true,
+      selectedName: '地图说明',
+      selectedDescription: '光点代表知识库中已解析坐标的家族办公室城市。'
+    });
+  },
+
   handleWebMessage(event) {
     const messages = Array.isArray(event.detail.data) ? event.detail.data : [event.detail.data];
     const message = messages[messages.length - 1] || {};
