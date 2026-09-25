@@ -76,17 +76,100 @@
       .selection strong { display: block; margin: 7px 0 4px; color: var(--text); font-size: 21px; font-weight: 500; }
       .selection p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
       .selection-meta { display: flex; gap: 16px; margin-top: 13px; padding-top: 11px; border-top: 1px solid rgba(255,255,255,.1); color: var(--muted); font-size: 11px; }
+      .office-list-panel { margin-top: 15px; padding-top: 13px; border-top: 1px solid rgba(255,255,255,.1); }
+      .office-list-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; color: rgba(245,245,245,.82); font-size: 12px; }
+      .office-list-count { color: var(--muted); font-size: 11px; }
+      .office-list-search { width: 100%; height: 32px; padding: 0 9px; border: 1px solid rgba(255,255,255,.18); border-radius: 8px; outline: 0; background: rgba(0,0,0,.2); color: var(--text); font-size: 12px; }
+      .office-list-search:focus { border-color: rgba(255,255,255,.72); }
+      .office-list { max-height: 208px; margin-top: 7px; overflow: auto; scrollbar-color: rgba(255,255,255,.3) transparent; }
+      .office-list-item { width: 100%; min-height: 37px; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 9px; border: 0; border-bottom: 1px solid rgba(255,255,255,.07); border-radius: 7px; background: transparent; color: rgba(245,245,245,.82); text-align: left; cursor: pointer; font-size: 12px; line-height: 1.35; }
+      .office-list-item:last-child { border-bottom: 0; }
+      .office-list-item:hover, .office-list-item.active { background: rgba(255,255,255,.1); color: var(--text); }
+      .office-list-item span:first-child { min-width: 0; overflow-wrap: anywhere; }
+      .office-list-badge { flex: 0 0 auto; padding: 3px 5px; border: 1px solid rgba(255,255,255,.2); border-radius: 5px; color: var(--muted); font-size: 9px; white-space: nowrap; }
+      .office-list-empty { padding: 12px 8px; color: var(--muted); font-size: 11px; }
       .actions { display: flex; gap: 8px; margin-top: 14px; }
       .action-button { height: 30px; padding: 0 11px; border: 1px solid rgba(255,255,255,.56); border-radius: 8px; background: rgba(255,255,255,.06); color: var(--accent); cursor: pointer; font-size: 12px; }
       .action-button:hover { background: rgba(255,255,255,.14); }
       .map-status { position: fixed; z-index: 3; left: 50%; bottom: 78px; transform: translateX(-50%); color: rgba(255,255,255,.45); font-size: 11px; pointer-events: none; }
 
+      .knowledge-reader { position: fixed; z-index: 20; inset: 0; display: grid; grid-template-rows: 58px 1fr; background: #111315; color: #eceeea; overflow: hidden; }
+      .knowledge-reader[hidden] { display: none; }
+      .knowledge-topbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 0 24px; border-bottom: 1px solid rgba(255,255,255,.12); background: rgba(17,19,21,.94); }
+      .knowledge-topbar-title { min-width: 0; overflow: hidden; color: rgba(236,238,234,.68); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+      .knowledge-close { width: 34px; height: 34px; display: grid; place-items: center; flex: 0 0 auto; border: 1px solid rgba(255,255,255,.18); border-radius: 9px; background: rgba(255,255,255,.06); color: #f4f5f1; cursor: pointer; font-size: 20px; line-height: 1; }
+      .knowledge-close:hover { background: rgba(255,255,255,.14); }
+      .knowledge-progress { position: absolute; z-index: 1; top: 57px; left: 0; width: 100%; height: 2px; background: rgba(255,255,255,.08); }
+      .knowledge-progress span { display: block; width: 0; height: 100%; background: #e5e7e2; transition: width .15s ease-out; }
+      .knowledge-layout { min-height: 0; display: grid; grid-template-columns: 210px minmax(0, 760px) 230px; justify-content: center; gap: 38px; padding: 42px 30px 70px; overflow: auto; scrollbar-color: rgba(255,255,255,.25) transparent; }
+      .knowledge-toc { position: sticky; top: 0; align-self: start; max-height: calc(100vh - 130px); overflow: auto; padding: 4px 0; }
+      .knowledge-toc-title { margin-bottom: 12px; color: rgba(236,238,234,.45); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; }
+      .knowledge-toc a { display: block; padding: 6px 9px; border-left: 1px solid rgba(255,255,255,.12); color: rgba(236,238,234,.56); font-size: 12px; line-height: 1.35; text-decoration: none; }
+      .knowledge-toc a:hover, .knowledge-toc a.active { border-left-color: #eceeea; color: #f4f5f1; background: rgba(255,255,255,.05); }
+      .knowledge-toc a.depth-3 { padding-left: 20px; font-size: 11px; }
+      .knowledge-article { min-width: 0; }
+      .knowledge-hero { padding-bottom: 32px; border-bottom: 1px solid rgba(255,255,255,.12); }
+      .knowledge-eyebrow { color: rgba(236,238,234,.46); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; }
+      .knowledge-hero h1 { max-width: 700px; margin: 12px 0 10px; color: #f4f5f1; font-size: clamp(30px, 4vw, 52px); font-weight: 500; line-height: 1.08; letter-spacing: 0; }
+      .knowledge-meta { display: flex; flex-wrap: wrap; gap: 7px 16px; color: rgba(236,238,234,.58); font-size: 12px; }
+      .knowledge-summary { margin: 24px 0 0; color: rgba(236,238,234,.82); font-size: 16px; line-height: 1.8; }
+      .knowledge-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 18px; }
+      .knowledge-tag { padding: 5px 9px; border: 1px solid rgba(255,255,255,.17); border-radius: 999px; color: rgba(236,238,234,.7); font-size: 11px; }
+      .knowledge-section { padding: 34px 0 0; scroll-margin-top: 24px; }
+      .knowledge-section h2 { margin: 0 0 17px; color: #f2f3ef; font-size: 24px; font-weight: 500; line-height: 1.25; }
+      .knowledge-section h3 { margin: 26px 0 10px; color: rgba(242,243,239,.9); font-size: 16px; font-weight: 500; }
+      .knowledge-paragraph { margin: 0 0 14px; color: rgba(236,238,234,.78); font-size: 15px; line-height: 1.85; }
+      .knowledge-image { margin: 20px 0; overflow: hidden; border: 1px solid rgba(255,255,255,.14); border-radius: 10px; background: #1a1d20; }
+      .knowledge-image img { display: block; width: 100%; max-height: 340px; object-fit: cover; opacity: .92; }
+      .knowledge-image.image-unavailable { min-height: 78px; display: grid; align-content: center; background: #1b1e21; }
+      .knowledge-image.image-unavailable::before { content: "资料图片暂不可用"; display: block; padding: 14px 12px 0; color: rgba(236,238,234,.38); font-size: 12px; }
+      .knowledge-image figcaption { padding: 9px 12px; color: rgba(236,238,234,.48); font-size: 11px; }
+      .knowledge-fact-table, .knowledge-comparison { width: 100%; border-collapse: collapse; margin: 15px 0 20px; overflow: hidden; border: 1px solid rgba(255,255,255,.14); font-size: 13px; }
+      .knowledge-fact-table th, .knowledge-fact-table td, .knowledge-comparison th, .knowledge-comparison td { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.1); text-align: left; vertical-align: top; }
+      .knowledge-fact-table tr:last-child td, .knowledge-comparison tr:last-child td { border-bottom: 0; }
+      .knowledge-fact-table th, .knowledge-comparison th { width: 34%; color: rgba(236,238,234,.5); background: rgba(255,255,255,.04); font-weight: 400; }
+      .knowledge-fact-table td, .knowledge-comparison td { color: rgba(236,238,234,.82); line-height: 1.55; }
+      .knowledge-insight, .knowledge-risk { margin: 19px 0; padding: 15px 17px; border-left: 2px solid rgba(236,238,234,.72); background: rgba(255,255,255,.055); }
+      .knowledge-risk { border-left-color: rgba(210,170,130,.9); background: rgba(130,93,62,.13); }
+      .knowledge-callout-label { margin-bottom: 6px; color: rgba(236,238,234,.52); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; }
+      .knowledge-insight p, .knowledge-risk p { margin: 0; color: rgba(236,238,234,.82); font-size: 14px; line-height: 1.7; }
+      .knowledge-timeline { position: relative; margin: 18px 0 4px 7px; padding-left: 22px; border-left: 1px solid rgba(255,255,255,.22); }
+      .knowledge-timeline-item { position: relative; padding: 0 0 20px; }
+      .knowledge-timeline-item::before { content: ""; position: absolute; top: 5px; left: -27px; width: 8px; height: 8px; border: 2px solid #e8eae6; border-radius: 50%; background: #111315; }
+      .knowledge-timeline-item strong { display: block; margin-bottom: 4px; color: rgba(244,245,241,.9); font-size: 13px; font-weight: 500; }
+      .knowledge-timeline-item span { color: rgba(236,238,234,.68); font-size: 13px; line-height: 1.6; }
+      .knowledge-network { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 18px 0; }
+      .knowledge-network-node { min-height: 54px; display: grid; place-items: center; padding: 9px; border: 1px solid rgba(255,255,255,.16); border-radius: 8px; background: rgba(255,255,255,.045); color: rgba(236,238,234,.78); font-size: 11px; line-height: 1.35; text-align: center; }
+      .knowledge-network-node.primary { grid-column: 1 / -1; border-color: rgba(255,255,255,.42); color: #f3f4f0; }
+      .knowledge-source-list { margin: 0; padding-left: 20px; color: rgba(236,238,234,.64); font-size: 12px; line-height: 1.7; }
+      .knowledge-source-list a { color: rgba(236,238,234,.84); }
+      .knowledge-aside { position: sticky; top: 0; align-self: start; }
+      .knowledge-aside-block { padding-bottom: 18px; margin-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,.12); }
+      .knowledge-aside-label { margin-bottom: 8px; color: rgba(236,238,234,.42); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; }
+      .knowledge-aside-value { color: rgba(236,238,234,.82); font-size: 13px; line-height: 1.6; }
+      .knowledge-reading-label { color: rgba(236,238,234,.5); font-size: 11px; }
+
       @media (max-width: 600px) {
         .side-rail { bottom: 12px; }
         .search-panel, .selection { bottom: 80px; width: calc(100vw - 24px); }
+        .office-list { max-height: 190px; }
         .map-tools { right: 12px; bottom: 88px; }
         .filter-panel, .stats-panel { bottom: 80px; width: calc(100vw - 24px); }
         .map-status { display: none; }
+        .knowledge-topbar { height: 52px; padding: 0 14px; }
+        .knowledge-progress { top: 51px; }
+        .knowledge-layout { display: block; padding: 25px 18px 46px; }
+        .knowledge-toc { position: static; max-height: none; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,.12); }
+        .knowledge-toc-title { margin-bottom: 8px; }
+        .knowledge-toc a { display: inline-block; margin: 0 5px 5px 0; padding: 5px 8px; border: 1px solid rgba(255,255,255,.14); border-radius: 999px; font-size: 11px; }
+        .knowledge-toc a.depth-3 { padding-left: 8px; font-size: 11px; }
+        .knowledge-hero h1 { font-size: 34px; }
+        .knowledge-summary { font-size: 14px; line-height: 1.75; }
+        .knowledge-section { padding-top: 28px; }
+        .knowledge-section h2 { font-size: 21px; }
+        .knowledge-paragraph { font-size: 14px; line-height: 1.8; }
+        .knowledge-aside { display: none; }
+        .knowledge-network { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       }
 
     </style>
@@ -153,21 +236,41 @@
       </button>
     </div>
     <div id="selection" class="selection">
-      <div class="selection-kicker">Selected region</div>
+      <div class="selection-kicker" id="selection-kicker">Selected region</div>
       <strong id="selected-name"></strong>
       <p id="selected-description"></p>
+      <div class="office-list-panel" id="office-list-panel" hidden>
+        <div class="office-list-heading"><span>选择家族办公室</span><span class="office-list-count" id="office-list-count"></span></div>
+        <input class="office-list-search" id="office-list-search" type="search" placeholder="筛选家办名称" autocomplete="off" />
+        <div class="office-list" id="office-list"></div>
+      </div>
       <div class="selection-meta"><span>地图数据</span><span>知识库同步</span></div>
-      <div class="actions"><button class="action-button" id="back">返回全球视角</button></div>
+      <div class="actions"><button class="action-button" id="back">返回全球视角</button><button class="action-button" id="read-knowledge" hidden>查看深度研究</button></div>
     </div>
     <div class="map-status" id="map-status">拖动旋转 · 滚轮缩放 · 点击国家查看</div>
+    <section class="knowledge-reader" id="knowledge-reader" hidden aria-label="家办知识库文章">
+      <div class="knowledge-topbar">
+        <div class="knowledge-topbar-title" id="knowledge-topbar-title">家族办公室深度研究</div>
+        <button class="knowledge-close" id="knowledge-close" type="button" title="关闭文章" aria-label="关闭文章">×</button>
+      </div>
+      <div class="knowledge-progress" aria-hidden="true"><span id="knowledge-progress-bar"></span></div>
+      <div class="knowledge-layout">
+        <nav class="knowledge-toc" id="knowledge-toc" aria-label="文章目录"></nav>
+        <article class="knowledge-article" id="knowledge-article"></article>
+        <aside class="knowledge-aside" id="knowledge-aside"></aside>
+      </div>
+    </section>
     <script src="vendor/globe.gl.min.js"></script>
     <script src="data/countries.js"></script>
     <script src="data/family-office-locations.js"></script>
+    <script src="data/knowledge/42-north.js"></script>
+    <script src="knowledge-reader.js"></script>
     <script>
       const globeContainer = document.getElementById("globe");
       const selection = document.getElementById("selection");
       const selectedName = document.getElementById("selected-name");
       const selectedDescription = document.getElementById("selected-description");
+      const readKnowledge = document.getElementById("read-knowledge");
       const mapStatus = document.getElementById("map-status");
       const searchPanel = document.getElementById("search-panel");
       const searchInput = document.getElementById("search-input");
@@ -177,12 +280,22 @@
       const countryFilter = document.getElementById("country-filter");
       const majorCitiesFilter = document.getElementById("major-cities-filter");
       const filterCount = document.getElementById("filter-count");
+      const selectionKicker = document.getElementById("selection-kicker");
+      const officeListPanel = document.getElementById("office-list-panel");
+      const officeListSearch = document.getElementById("office-list-search");
+      const officeList = document.getElementById("office-list");
+      const officeListCount = document.getElementById("office-list-count");
       let countries = null;
+      let selectedKnowledgeSlug = null;
+      let selectedPoint = null;
+      let selectedOfficeName = null;
       const isTouchDevice = Boolean(window.matchMedia?.("(pointer: coarse)").matches || navigator.maxTouchPoints > 0);
       const isMobileViewport = window.matchMedia?.("(max-width: 600px)").matches ?? window.innerWidth <= 600;
       const defaultView = { lat: 24, lng: 40, altitude: isMobileViewport ? 2.95 : 2.6 };
 
       const offices = window.FAMILY_OFFICE_LOCATIONS || [];
+
+      const knowledgeCatalog = window.KNOWLEDGE_ARTICLES || {};
 
       const globe = Globe({ animateIn: true })(globeContainer)
         .backgroundColor("#0b0c0e")
@@ -216,6 +329,7 @@
       globe.pointOfView(defaultView, 0);
 
       function handleCountryClick(polygon) {
+        clearOfficeSelection();
         const properties = polygon.properties || {};
         if (properties.kind === "province") {
           const name = properties.name || "行政区";
@@ -232,15 +346,36 @@
       }
 
       function handleOfficeClick(point) {
+        selectedPoint = point;
         globeControls.autoRotate = false;
         globe.pointOfView({ lat: point.lat, lng: point.lng, altitude: 0.28 }, 900);
-        const description = `${point.country ? `${point.country} · ` : ""}${point.count} 家家族办公室`;
-        showSelection(point.city, description);
+        const officeNames = getOfficeNames(point);
+
+        if (officeNames.length > 1) {
+          showCityOfficeList(point);
+          return;
+        }
+
+        selectOffice(point, officeNames[0] || point.city);
       }
 
-      function showSelection(name, description) {
+      function getOfficeNames(point) {
+        return [...new Set((point?.institutionNames || []).filter(Boolean).map((name) => String(name).trim()).filter(Boolean))];
+      }
+
+      function findKnowledgeSlugByOfficeName(officeName) {
+        const normalizedName = String(officeName || "").trim().toLowerCase();
+        return Object.entries(knowledgeCatalog).find(([, article]) =>
+          (article.officeNames || []).some((name) => String(name).trim().toLowerCase() === normalizedName)
+        )?.[0] || null;
+      }
+
+      function showSelection(name, description, knowledgeSlug = null, kicker = "Selected region") {
         selectedName.textContent = name;
         selectedDescription.textContent = description;
+        selectedKnowledgeSlug = knowledgeSlug;
+        readKnowledge.hidden = !knowledgeSlug;
+        selectionKicker.textContent = kicker;
         selection.classList.add("visible");
         searchPanel.hidden = true;
         filterPanel.hidden = true;
@@ -248,11 +383,91 @@
         mapStatus.textContent = "已定位 · 点击返回按钮回到全球视角";
       }
 
+      function showCityOfficeList(point) {
+        const officeNames = getOfficeNames(point);
+        selectedOfficeName = null;
+        showSelection(
+          point.city,
+          `${point.country ? `${point.country} · ` : ""}${officeNames.length} 家家族办公室，请选择一家查看详情`,
+          null,
+          "City offices"
+        );
+        officeListPanel.hidden = false;
+        officeListCount.textContent = `${officeNames.length} 家`;
+        officeListSearch.value = "";
+        renderOfficeList("");
+        mapStatus.textContent = "已定位 · 请选择具体家族办公室";
+      }
+
+      function selectOffice(point, officeName) {
+        selectedPoint = point;
+        selectedOfficeName = officeName;
+        const knowledgeSlug = findKnowledgeSlugByOfficeName(officeName);
+        const location = [point.city, point.country].filter(Boolean).join(" · ");
+        const researchStatus = knowledgeSlug ? "已有深度研究" : "深度研究待补充";
+        showSelection(officeName, `${location} · ${researchStatus}`, knowledgeSlug, "Selected office");
+        officeListPanel.hidden = getOfficeNames(point).length <= 1;
+        if (!officeListPanel.hidden) {
+          renderOfficeList(officeListSearch.value);
+        }
+        mapStatus.textContent = knowledgeSlug
+          ? "已选择家族办公室 · 可打开深度研究"
+          : "已选择家族办公室 · 该家办暂无深度研究";
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function renderOfficeList(query = "") {
+        if (!selectedPoint) return;
+        const officeNames = getOfficeNames(selectedPoint);
+        const normalizedQuery = String(query).trim().toLowerCase();
+        const matches = officeNames.filter((officeName) => !normalizedQuery || officeName.toLowerCase().includes(normalizedQuery));
+        officeListCount.textContent = normalizedQuery ? `${matches.length}/${officeNames.length} 家` : `${officeNames.length} 家`;
+
+        if (!matches.length) {
+          officeList.innerHTML = '<div class="office-list-empty">没有找到匹配的家办</div>';
+          return;
+        }
+
+        officeList.innerHTML = matches.map((officeName, index) => {
+          const hasResearch = Boolean(findKnowledgeSlugByOfficeName(officeName));
+          const activeClass = selectedOfficeName === officeName ? " active" : "";
+          return `<button class="office-list-item${activeClass}" type="button" data-office-index="${index}"><span>${escapeHtml(officeName)}</span><span class="office-list-badge">${hasResearch ? "有研究" : "待补充"}</span></button>`;
+        }).join("");
+
+        officeList.querySelectorAll(".office-list-item").forEach((button) => {
+          button.addEventListener("click", (event) => {
+            event.stopPropagation();
+            selectOffice(selectedPoint, matches[Number(button.dataset.officeIndex)]);
+          });
+        });
+      }
+
+      function clearOfficeSelection() {
+        selectedPoint = null;
+        selectedOfficeName = null;
+        officeListPanel.hidden = true;
+        officeListSearch.value = "";
+        officeList.innerHTML = "";
+        officeListCount.textContent = "";
+      }
+
       function closeFloatingPanels() {
         searchPanel.hidden = true;
         filterPanel.hidden = true;
         statsPanel.hidden = true;
         selection.classList.remove("visible");
+        readKnowledge.hidden = true;
+        selectedKnowledgeSlug = null;
+        selectionKicker.textContent = "Selected region";
+        clearOfficeSelection();
       }
 
       function resetView() {
@@ -311,6 +526,22 @@
         closeFloatingPanels();
       });
 
+      function openKnowledgeArticle(slug) {
+        if (!window.KnowledgeReader.open(slug)) return;
+        closeFloatingPanels();
+        mapStatus.textContent = "正在阅读家办深度研究";
+      }
+
+      function closeKnowledgeArticle() {
+        window.KnowledgeReader.close();
+        mapStatus.textContent = "拖动旋转 · 滚轮缩放 · 点击国家查看";
+      }
+
+      readKnowledge.addEventListener("click", () => openKnowledgeArticle(selectedKnowledgeSlug));
+      document.addEventListener("knowledge:closed", () => {
+        mapStatus.textContent = "拖动旋转 · 滚轮缩放 · 点击国家查看";
+      });
+
       function getFilteredOffices() {
         const country = countryFilter.value;
         const majorOnly = majorCitiesFilter.checked;
@@ -347,6 +578,7 @@
       });
 
       searchInput.addEventListener("input", (event) => renderSearchResults(event.target.value));
+      officeListSearch.addEventListener("input", (event) => renderOfficeList(event.target.value));
 
       function renderSearchResults(query) {
         const normalizedQuery = query.trim().toLowerCase();
