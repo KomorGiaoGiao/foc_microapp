@@ -5,36 +5,149 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Family Office Globe</title>
     <style>
+      :root {
+        --ink: #111416;
+        --rail: rgba(28, 31, 33, .96);
+        --panel: rgba(27, 30, 32, .92);
+        --line: rgba(255, 255, 255, .12);
+        --text: #f4f4f1;
+        --muted: rgba(244, 244, 241, .58);
+        --soft: rgba(244, 244, 241, .1);
+        --gold: #d8ad5b;
+        --teal: #67c4b6;
+      }
+
       * { box-sizing: border-box; }
-      html, body { margin: 0; height: 100%; background: #050912; color: #e8eefc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      html, body { margin: 0; height: 100%; overflow: hidden; background: var(--ink); color: var(--text); font-family: -apple-system, "SF UI Text", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; }
+      button, input { font: inherit; }
+      button { color: inherit; }
       #globe { width: 100%; height: 100%; }
-      .hud { position: fixed; left: 24px; top: 24px; max-width: 320px; padding: 20px; border-radius: 18px; background: rgba(8, 14, 26, .82); border: 1px solid rgba(120, 160, 255, .22); backdrop-filter: blur(14px); }
-      .eyebrow { font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #7f9bff; }
-      h1 { margin: 8px 0 8px; font-size: 24px; line-height: 1.2; }
-      p { margin: 0; color: #a7b3cc; font-size: 14px; line-height: 1.5; }
-      .selected { margin-top: 16px; display: none; }
-      .selected.visible { display: block; }
-      .selected strong { display: block; margin-bottom: 4px; font-size: 18px; color: #fff; }
-      .actions { margin-top: 16px; display: flex; gap: 8px; }
-      button { cursor: pointer; border: 0; border-radius: 999px; padding: 8px 14px; color: #fff; background: linear-gradient(135deg, #4b7bff, #7c5cff); }
-      .ghost { background: rgba(255,255,255,.08); }
-      .tooltip { position: fixed; z-index: 3; display: none; padding: 8px 12px; border-radius: 999px; background: #0d1424; border: 1px solid rgba(120,160,255,.3); font-size: 13px; }
+
+      .side-rail { position: fixed; z-index: 5; inset: 0 auto 0 0; width: 68px; display: flex; flex-direction: column; align-items: center; background: var(--rail); border-right: 1px solid rgba(255,255,255,.08); }
+      .rail-brand { width: 100%; height: 72px; display: grid; place-items: center; border-bottom: 1px solid var(--line); }
+      .brand-mark { display: grid; place-items: center; width: 30px; height: 30px; border: 1px solid rgba(216,173,91,.85); color: var(--gold); font-size: 10px; font-weight: 600; letter-spacing: .08em; }
+      .rail-group { width: 100%; padding: 10px 0; border-bottom: 1px solid var(--line); }
+      .rail-group:last-child { border-bottom: 0; margin-top: auto; }
+      .tool-button { position: relative; width: 44px; height: 44px; margin: 0 auto 6px; display: grid; place-items: center; border: 0; background: transparent; cursor: pointer; opacity: .68; transition: opacity .2s, background .2s, color .2s; }
+      .tool-button:last-child { margin-bottom: 0; }
+      .tool-button:hover, .tool-button.active { color: var(--gold); opacity: 1; background: rgba(255,255,255,.08); }
+      .tool-button.active::before { content: ""; position: absolute; left: -12px; width: 2px; height: 24px; background: var(--gold); }
+      .tool-button svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+      .tool-button .tool-label { position: absolute; left: 52px; top: 8px; display: none; white-space: nowrap; padding: 7px 9px; background: var(--panel); border: 1px solid var(--line); color: var(--text); font-size: 12px; }
+      .tool-button:hover .tool-label { display: block; }
+
+      .topbar { position: fixed; z-index: 4; top: 18px; left: 92px; display: flex; align-items: center; gap: 14px; pointer-events: none; }
+      .topbar-copy { padding-left: 12px; border-left: 1px solid rgba(255,255,255,.28); }
+      .topbar-kicker { color: var(--gold); font-size: 10px; letter-spacing: .17em; text-transform: uppercase; }
+      .topbar-title { margin-top: 3px; font-size: 16px; font-weight: 500; letter-spacing: .02em; }
+      .live-status { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: 12px; }
+      .live-status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 0 3px rgba(103,196,182,.15); }
+
+      .map-tools { position: fixed; z-index: 4; right: 20px; bottom: 24px; display: flex; flex-direction: column; gap: 6px; }
+      .map-tool { width: 34px; height: 34px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.14); background: rgba(17,20,22,.82); color: rgba(255,255,255,.82); cursor: pointer; font-size: 18px; line-height: 1; }
+      .map-tool:hover { color: var(--gold); border-color: rgba(216,173,91,.7); }
+      .map-tool svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+      .search-panel { position: fixed; z-index: 6; left: 84px; top: 84px; width: min(360px, calc(100vw - 104px)); padding: 14px; background: var(--panel); border: 1px solid var(--line); box-shadow: 0 14px 36px rgba(0,0,0,.24); }
+      .search-panel[hidden], .legend-panel[hidden] { display: none; }
+      .search-label { display: block; margin-bottom: 8px; color: var(--muted); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+      .search-input { width: 100%; height: 36px; padding: 0 10px; border: 1px solid rgba(255,255,255,.16); outline: 0; background: rgba(0,0,0,.18); color: var(--text); font-size: 13px; }
+      .search-input:focus { border-color: rgba(216,173,91,.72); }
+      .search-results { margin-top: 8px; max-height: 220px; overflow: auto; }
+      .search-result { width: 100%; padding: 9px 8px; display: flex; justify-content: space-between; gap: 12px; border: 0; border-bottom: 1px solid rgba(255,255,255,.08); background: transparent; color: var(--text); text-align: left; cursor: pointer; font-size: 13px; }
+      .search-result:hover { background: rgba(255,255,255,.08); }
+      .search-result small { color: var(--muted); font-size: 11px; }
+      .search-empty { padding: 12px 8px; color: var(--muted); font-size: 12px; }
+
+      .legend-panel { position: fixed; z-index: 4; right: 68px; bottom: 24px; width: 190px; padding: 14px; background: var(--panel); border: 1px solid var(--line); box-shadow: 0 14px 36px rgba(0,0,0,.24); }
+      .legend-title { margin-bottom: 12px; color: var(--muted); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+      .legend-row { display: flex; align-items: center; gap: 8px; margin-top: 9px; color: rgba(244,244,241,.78); font-size: 12px; }
+      .legend-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 3px rgba(216,173,91,.16); }
+      .legend-dot.teal { background: var(--teal); box-shadow: 0 0 0 3px rgba(103,196,182,.15); }
+
+      .selection { position: fixed; z-index: 4; left: 84px; bottom: 24px; width: min(350px, calc(100vw - 170px)); display: none; padding: 16px 18px; background: var(--panel); border: 1px solid var(--line); box-shadow: 0 14px 36px rgba(0,0,0,.22); backdrop-filter: blur(14px); }
+      .selection.visible { display: block; }
+      .selection-kicker { color: var(--gold); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; }
+      .selection strong { display: block; margin: 7px 0 4px; color: var(--text); font-size: 21px; font-weight: 500; }
+      .selection p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+      .selection-meta { display: flex; gap: 16px; margin-top: 13px; padding-top: 11px; border-top: 1px solid rgba(255,255,255,.1); color: var(--muted); font-size: 11px; }
+      .actions { display: flex; gap: 8px; margin-top: 14px; }
+      .action-button { height: 30px; padding: 0 11px; border: 1px solid rgba(216,173,91,.62); background: transparent; color: var(--gold); cursor: pointer; font-size: 12px; }
+      .action-button:hover { background: rgba(216,173,91,.12); }
+      .map-status { position: fixed; z-index: 3; left: 84px; bottom: 12px; color: rgba(255,255,255,.45); font-size: 11px; pointer-events: none; }
+      .tooltip { position: fixed; z-index: 8; display: none; padding: 7px 9px; background: var(--panel); border: 1px solid var(--line); color: var(--text); font-size: 12px; pointer-events: none; }
+
+      @media (max-width: 600px) {
+        .side-rail { width: 56px; }
+        .topbar { left: 72px; top: 14px; gap: 9px; }
+        .topbar-title { font-size: 14px; }
+        .topbar-kicker { font-size: 9px; }
+        .live-status { display: none; }
+        .search-panel { left: 68px; width: calc(100vw - 80px); }
+        .selection { left: 68px; right: 12px; bottom: 12px; width: auto; }
+        .map-tools { right: 12px; bottom: 184px; }
+        .legend-panel { right: 12px; bottom: 184px; }
+        .map-status { left: 68px; bottom: 4px; }
+      }
     </style>
   </head>
   <body>
     <div id="globe"></div>
-    <div class="hud">
-      <div class="eyebrow">Prototype</div>
-      <h1>家族办公室全球地图</h1>
-      <p>点击国家进入国家视角，点击光点查看城市点位。</p>
-      <div id="selection" class="selected">
-        <strong id="selected-name"></strong>
-        <p id="selected-description"></p>
-        <div class="actions">
-          <button id="back">返回地球</button>
-        </div>
+    <aside class="side-rail" aria-label="地图工具">
+      <div class="rail-brand"><span class="brand-mark">FO</span></div>
+      <div class="rail-group">
+        <button class="tool-button active" id="overview" title="全球视角" aria-label="全球视角">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.8 12h16.4M12 3.5c2.1 2.3 3.2 5.1 3.2 8.5s-1.1 6.2-3.2 8.5c-2.1-2.3-3.2-5.1-3.2-8.5S9.9 5.8 12 3.5Z"/></svg>
+          <span class="tool-label">全球视角</span>
+        </button>
+        <button class="tool-button" id="search-toggle" title="搜索" aria-label="搜索">
+          <svg viewBox="0 0 24 24"><circle cx="10.7" cy="10.7" r="6.2"/><path d="m15.4 15.4 5 5"/></svg>
+          <span class="tool-label">搜索</span>
+        </button>
+        <button class="tool-button" id="legend-toggle" title="图例" aria-label="图例">
+          <svg viewBox="0 0 24 24"><path d="M4 5.5h16v13H4z"/><path d="M8 9h8M8 12h5M8 15h8"/></svg>
+          <span class="tool-label">图例</span>
+        </button>
       </div>
+      <div class="rail-group">
+        <button class="tool-button" id="info-toggle" title="说明" aria-label="说明">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 10.5v5M12 7.7h.01"/></svg>
+          <span class="tool-label">说明</span>
+        </button>
+      </div>
+    </aside>
+    <header class="topbar">
+      <div class="topbar-copy">
+        <div class="topbar-kicker">Global Family Office Map</div>
+        <div class="topbar-title">家族办公室情报地图</div>
+      </div>
+      <div class="live-status">687 家机构 · 282 个城市</div>
+    </header>
+    <div class="search-panel" id="search-panel" hidden>
+      <label class="search-label" for="search-input">搜索城市或国家</label>
+      <input class="search-input" id="search-input" type="search" placeholder="例如：伦敦、美国" autocomplete="off" />
+      <div class="search-results" id="search-results"></div>
     </div>
+    <div class="legend-panel" id="legend-panel" hidden>
+      <div class="legend-title">图例</div>
+      <div class="legend-row"><span class="legend-dot"></span>家族办公室城市</div>
+      <div class="legend-row"><span class="legend-dot teal"></span>选中位置</div>
+    </div>
+    <div class="map-tools" aria-label="地图控制">
+      <button class="map-tool" id="zoom-in" title="放大" aria-label="放大">+</button>
+      <button class="map-tool" id="zoom-out" title="缩小" aria-label="缩小">−</button>
+      <button class="map-tool" id="reset-view" title="复位视角" aria-label="复位视角">
+        <svg viewBox="0 0 24 24"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 5.5v4h4"/></svg>
+      </button>
+    </div>
+    <div id="selection" class="selection">
+      <div class="selection-kicker">Selected region</div>
+      <strong id="selected-name"></strong>
+      <p id="selected-description"></p>
+      <div class="selection-meta"><span>地图数据</span><span>知识库同步</span></div>
+      <div class="actions"><button class="action-button" id="back">返回全球视角</button></div>
+    </div>
+    <div class="map-status" id="map-status">拖动旋转 · 滚轮缩放 · 点击国家查看</div>
     <div id="tooltip" class="tooltip"></div>
 
     <script src="vendor/globe.gl.min.js"></script>
@@ -46,6 +159,11 @@
       const selection = document.getElementById("selection");
       const selectedName = document.getElementById("selected-name");
       const selectedDescription = document.getElementById("selected-description");
+      const mapStatus = document.getElementById("map-status");
+      const searchPanel = document.getElementById("search-panel");
+      const searchInput = document.getElementById("search-input");
+      const searchResults = document.getElementById("search-results");
+      const legendPanel = document.getElementById("legend-panel");
       const defaultView = { lat: 24, lng: 40, altitude: 2.6 };
       let countries = null;
 
@@ -102,14 +220,77 @@
         selectedName.textContent = name;
         selectedDescription.textContent = description;
         selection.classList.add("visible");
+        mapStatus.textContent = "已定位 · 点击返回按钮回到全球视角";
       }
 
-      document.getElementById("back").addEventListener("click", () => {
+      function resetView() {
         if (countries) globe.polygonsData(countries.features);
         selection.classList.remove("visible");
         globeControls.autoRotate = true;
         globe.pointOfView(defaultView, 900);
+        mapStatus.textContent = "拖动旋转 · 滚轮缩放 · 点击国家查看";
+      }
+
+      document.getElementById("back").addEventListener("click", resetView);
+      document.getElementById("reset-view").addEventListener("click", resetView);
+      document.getElementById("overview").addEventListener("click", resetView);
+
+      document.getElementById("zoom-in").addEventListener("click", () => {
+        const view = globe.pointOfView();
+        globe.pointOfView({ ...view, altitude: Math.max(0.1, view.altitude * 0.78) }, 320);
       });
+
+      document.getElementById("zoom-out").addEventListener("click", () => {
+        const view = globe.pointOfView();
+        globe.pointOfView({ ...view, altitude: Math.min(3.6, view.altitude * 1.28) }, 320);
+      });
+
+      document.getElementById("search-toggle").addEventListener("click", () => {
+        searchPanel.hidden = !searchPanel.hidden;
+        legendPanel.hidden = true;
+        if (!searchPanel.hidden) {
+          searchInput.focus();
+          renderSearchResults("");
+        }
+      });
+
+      document.getElementById("legend-toggle").addEventListener("click", () => {
+        legendPanel.hidden = !legendPanel.hidden;
+        searchPanel.hidden = true;
+      });
+
+      document.getElementById("info-toggle").addEventListener("click", () => {
+        showSelection("关于这张地图", "数据来自家族办公室知识库，光点代表已解析坐标的城市。 ");
+      });
+
+      searchInput.addEventListener("input", (event) => renderSearchResults(event.target.value));
+
+      function renderSearchResults(query) {
+        const normalizedQuery = query.trim().toLowerCase();
+        const matches = offices
+          .filter((point) => !normalizedQuery || `${point.city} ${point.country}`.toLowerCase().includes(normalizedQuery))
+          .slice(0, 8);
+
+        if (!matches.length) {
+          searchResults.innerHTML = '<div class="search-empty">没有找到匹配的城市或国家</div>';
+          return;
+        }
+
+        searchResults.innerHTML = matches.map((point, index) => `
+          <button class="search-result" data-result-index="${index}">
+            <span>${point.city}</span>
+            <small>${point.country || "全球"} · ${point.count} 家</small>
+          </button>
+        `).join("");
+
+        searchResults.querySelectorAll(".search-result").forEach((button) => {
+          button.addEventListener("click", () => {
+            const point = matches[Number(button.dataset.resultIndex)];
+            searchPanel.hidden = true;
+            handleOfficeClick(point);
+          });
+        });
+      }
 
       function getGeometryCoordinates(geometry) {
         const coordinates = [];
