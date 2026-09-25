@@ -195,7 +195,7 @@ page {
   justify-content: center;
   height: 64px;
   padding: 6px 10px 7px;
-  background: rgba(26, 27, 29, .86);
+  background: rgba(26, 27, 29, .88);
   border-top: 1px solid rgba(255, 255, 255, .1);
   border-radius: 14px 14px 0 0;
   backdrop-filter: blur(18px);
@@ -209,23 +209,28 @@ page {
   justify-content: center;
   width: 76px;
   height: 52px;
-  color: rgba(245, 245, 245, .68);
-  border-radius: 8px;
+  color: rgba(245, 245, 245, .74);
+  border-radius: 0;
   font-size: 11px;
   line-height: 1.2;
+}
+
+.bottom-action:active {
+  color: #ffffff;
+  background: transparent;
 }
 
 .bottom-icon {
   position: relative;
   display: block;
-  width: 23px;
-  height: 23px;
-  margin-bottom: 3px;
-  color: rgba(245, 245, 245, .9);
+  width: 24px;
+  height: 24px;
+  margin-bottom: 2px;
+  color: rgba(245, 245, 245, .92);
 }
 
 .icon-globe {
-  border: 2px solid currentColor;
+  border: 1.7px solid currentColor;
   border-radius: 50%;
 }
 
@@ -234,7 +239,7 @@ page {
   left: 2px;
   right: 2px;
   top: 9px;
-  height: 3px;
+  height: 4px;
   border-top: 1px solid currentColor;
   border-bottom: 1px solid currentColor;
   border-radius: 50%;
@@ -242,10 +247,10 @@ page {
 
 .icon-globe-lng {
   position: absolute;
-  left: 6px;
+  left: 7px;
   top: 1px;
   width: 7px;
-  height: 17px;
+  height: 19px;
   border-right: 1px solid currentColor;
   border-left: 1px solid currentColor;
   border-radius: 50%;
@@ -255,32 +260,32 @@ page {
   position: absolute;
   left: 3px;
   top: 3px;
-  width: 11px;
-  height: 11px;
-  border: 2px solid currentColor;
+  width: 13px;
+  height: 13px;
+  border: 1.8px solid currentColor;
   border-radius: 50%;
 }
 
 .icon-search-handle {
   position: absolute;
-  left: 14px;
-  top: 15px;
+  left: 15px;
+  top: 16px;
   width: 7px;
-  border-top: 2px solid currentColor;
+  border-top: 1.8px solid currentColor;
   transform: rotate(45deg);
   transform-origin: left center;
 }
 
 .icon-legend {
   padding: 4px 3px;
-  border: 2px solid currentColor;
-  border-radius: 1px;
+  border: 1.8px solid currentColor;
+  border-radius: 0;
 }
 
 .icon-legend-line {
-  height: 2px;
-  margin-bottom: 3px;
-  border-top: 1px solid currentColor;
+  height: 3px;
+  margin-bottom: 2px;
+  border-top: 1.2px solid currentColor;
 }
 
 .icon-legend-line.line-two {
@@ -288,7 +293,7 @@ page {
 }
 
 .icon-info {
-  border: 2px solid currentColor;
+  border: 1.8px solid currentColor;
   border-radius: 50%;
   text-align: center;
 }

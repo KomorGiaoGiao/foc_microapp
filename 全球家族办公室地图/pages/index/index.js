@@ -29,7 +29,7 @@ function collectRings(geometry, rings) {
 
 function simplifyRing(ring) {
   if (!ring || ring.length < 2) return ring || [];
-  const step = Math.max(1, Math.ceil(ring.length / 100));
+  const step = Math.max(1, Math.ceil(ring.length / 180));
   const simplified = ring.filter((_, index) => index % step === 0);
   const last = ring[ring.length - 1];
   if (simplified[simplified.length - 1] !== last) simplified.push(last);
@@ -104,10 +104,18 @@ Page({
     const y = Math.sin(latRad) * Math.cos(lat0) - cosLat * Math.cos(dLng) * Math.sin(lat0);
     const z = Math.sin(latRad) * Math.sin(lat0) + cosLat * Math.cos(dLng) * Math.cos(lat0);
     const radius = Math.min(this.viewport.width, this.viewport.height) * 0.43 * this.view.zoom;
+    const center = this.getGlobeCenter();
     return {
       x: this.viewport.width / 2 + x * radius,
-      y: this.viewport.height / 2 - y * radius,
+      y: center.y - y * radius,
       z
+    };
+  },
+
+  getGlobeCenter() {
+    return {
+      x: this.viewport.width / 2,
+      y: this.viewport.height * 0.53
     };
   },
 
@@ -122,8 +130,9 @@ Page({
     ctx.setFillStyle('#08090b');
     ctx.fillRect(0, 0, width, height);
 
-    const cx = width / 2;
-    const cy = height / 2;
+    const center = this.getGlobeCenter();
+    const cx = center.x;
+    const cy = center.y;
     ctx.beginPath();
     ctx.arc(cx, cy, radius + 9, 0, Math.PI * 2);
     ctx.setFillStyle('rgba(150, 155, 162, .08)');
