@@ -55,8 +55,15 @@
       .filter-panel, .stats-panel { position: fixed; z-index: 4; left: 50%; bottom: 88px; transform: translateX(-50%); width: min(300px, calc(100vw - 40px)); padding: 14px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 14px 36px rgba(0,0,0,.24); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
       .panel-kicker { margin-bottom: 12px; color: var(--muted); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
       .filter-field { display: block; margin-bottom: 12px; color: var(--muted); font-size: 12px; }
-      .filter-select { width: 100%; height: 36px; margin-top: 7px; padding: 0 9px; border: 1px solid rgba(255,255,255,.18); border-radius: 8px; outline: 0; background: rgba(0,0,0,.2); color: var(--text); font-size: 13px; }
-      .filter-select:focus { border-color: rgba(255,255,255,.72); }
+      .country-picker { position: relative; margin-top: 7px; }
+      .country-picker-trigger { width: 100%; height: 36px; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 0 9px; border: 1px solid rgba(255,255,255,.18); border-radius: 8px; outline: 0; background: rgba(0,0,0,.2); color: var(--text); cursor: pointer; font-size: 13px; text-align: left; }
+      .country-picker-trigger:hover, .country-picker-trigger[aria-expanded="true"] { border-color: rgba(255,255,255,.72); }
+      .country-picker-chevron { color: var(--muted); font-size: 16px; line-height: 1; }
+      .country-picker-menu { position: absolute; z-index: 8; bottom: calc(100% + 6px); left: 0; right: 0; max-height: min(240px, 40vh); overflow-y: auto; padding: 4px; border: 1px solid var(--line); border-radius: 9px; background: rgba(29,30,32,.98); box-shadow: 0 14px 30px rgba(0,0,0,.4); scrollbar-color: rgba(255,255,255,.3) transparent; }
+      .country-picker-menu[hidden] { display: none; }
+      .country-picker-option { width: 100%; min-height: 32px; display: block; padding: 7px 8px; border: 0; border-radius: 6px; background: transparent; color: rgba(245,245,245,.78); cursor: pointer; font-size: 12px; text-align: left; }
+      .country-picker-option:hover, .country-picker-option[aria-selected="true"] { background: rgba(255,255,255,.12); color: var(--text); }
+      .filter-select-native { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; opacity: 0; pointer-events: none; }
       .filter-check { display: flex; align-items: center; gap: 8px; color: rgba(244,244,241,.78); font-size: 12px; cursor: pointer; }
       .filter-check input { accent-color: var(--accent); }
       .filter-footer { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 14px; padding-top: 11px; border-top: 1px solid rgba(255,255,255,.1); }
@@ -204,8 +211,15 @@
     </div>
     <div class="filter-panel" id="filter-panel" hidden>
       <div class="panel-kicker">筛选点位</div>
-      <label class="filter-field" for="country-filter">国家 / 地区
-        <select class="filter-select" id="country-filter">
+      <label class="filter-field">国家 / 地区
+        <div class="country-picker" id="country-picker">
+          <button class="country-picker-trigger" id="country-picker-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+            <span id="country-filter-label">全部国家 / 地区</span>
+            <span class="country-picker-chevron" aria-hidden="true">⌄</span>
+          </button>
+          <div class="country-picker-menu" id="country-picker-menu" role="listbox" hidden></div>
+        </div>
+        <select class="filter-select-native" id="country-filter" tabindex="-1" aria-hidden="true">
           <option value="all">全部国家 / 地区</option>
         </select>
       </label>
@@ -278,6 +292,10 @@
       const filterPanel = document.getElementById("filter-panel");
       const statsPanel = document.getElementById("stats-panel");
       const countryFilter = document.getElementById("country-filter");
+      const countryPicker = document.getElementById("country-picker");
+      const countryPickerTrigger = document.getElementById("country-picker-trigger");
+      const countryPickerLabel = document.getElementById("country-filter-label");
+      const countryPickerMenu = document.getElementById("country-picker-menu");
       const majorCitiesFilter = document.getElementById("major-cities-filter");
       const filterCount = document.getElementById("filter-count");
       const selectionKicker = document.getElementById("selection-kicker");
@@ -463,6 +481,7 @@
         searchPanel.hidden = true;
         filterPanel.hidden = true;
         statsPanel.hidden = true;
+        closeCountryPicker();
         selection.classList.remove("visible");
         readKnowledge.hidden = true;
         selectedKnowledgeSlug = null;
@@ -474,6 +493,7 @@
         if (countries) globe.polygonsData(countries.features);
         globe.pointsData(offices);
         countryFilter.value = "all";
+        syncCountryPicker();
         majorCitiesFilter.checked = false;
         filterCount.textContent = "显示全部城市";
         closeFloatingPanels();
@@ -526,6 +546,51 @@
         closeFloatingPanels();
       });
 
+      function closeCountryPicker() {
+        countryPickerMenu.hidden = true;
+        countryPickerTrigger.setAttribute("aria-expanded", "false");
+      }
+
+      function syncCountryPicker() {
+        const selectedOption = countryFilter.options[countryFilter.selectedIndex];
+        countryPickerLabel.textContent = selectedOption?.textContent || "全部国家 / 地区";
+        countryPickerTrigger.setAttribute("aria-expanded", String(!countryPickerMenu.hidden));
+        countryPickerMenu.querySelectorAll(".country-picker-option").forEach((optionButton) => {
+          const isSelected = optionButton.dataset.value === countryFilter.value;
+          optionButton.setAttribute("aria-selected", String(isSelected));
+        });
+      }
+
+      function renderCountryPicker() {
+        countryPickerMenu.innerHTML = "";
+        [...countryFilter.options].forEach((option) => {
+          const optionButton = document.createElement("button");
+          optionButton.className = "country-picker-option";
+          optionButton.type = "button";
+          optionButton.setAttribute("role", "option");
+          optionButton.dataset.value = option.value;
+          optionButton.textContent = option.textContent;
+          optionButton.addEventListener("click", (event) => {
+            event.stopPropagation();
+            countryFilter.value = option.value;
+            countryFilter.dispatchEvent(new Event("change", { bubbles: true }));
+            closeCountryPicker();
+          });
+          countryPickerMenu.appendChild(optionButton);
+        });
+        syncCountryPicker();
+      }
+
+      countryPickerTrigger.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const willOpen = countryPickerMenu.hidden;
+        countryPickerMenu.hidden = !willOpen;
+        countryPickerTrigger.setAttribute("aria-expanded", String(willOpen));
+        if (willOpen) {
+          countryPickerMenu.querySelector(`[data-value="${CSS.escape(countryFilter.value)}"]`)?.scrollIntoView({ block: "nearest" });
+        }
+      });
+
       function openKnowledgeArticle(slug) {
         if (!window.KnowledgeReader.open(slug)) return;
         closeFloatingPanels();
@@ -561,6 +626,7 @@
       function populatePanels() {
         const countriesList = [...new Set(offices.map((point) => point.country || "全球"))].sort((a, b) => a.localeCompare(b));
         countryFilter.insertAdjacentHTML("beforeend", countriesList.map((country) => `<option value="${country}">${country}</option>`).join(""));
+        renderCountryPicker();
         const total = offices.reduce((sum, point) => sum + Number(point.count || 0), 0);
         document.getElementById("total-offices").textContent = total.toLocaleString("zh-CN");
         document.getElementById("total-cities").textContent = offices.length.toLocaleString("zh-CN");
@@ -569,10 +635,14 @@
         document.getElementById("top-cities").innerHTML = topCities.map((point) => `<div class="top-city"><span>${point.city}</span><small>${point.count} 家</small></div>`).join("");
       }
 
-      countryFilter.addEventListener("change", applyFilters);
+      countryFilter.addEventListener("change", () => {
+        syncCountryPicker();
+        applyFilters();
+      });
       majorCitiesFilter.addEventListener("change", applyFilters);
       document.getElementById("clear-filter").addEventListener("click", () => {
         countryFilter.value = "all";
+        syncCountryPicker();
         majorCitiesFilter.checked = false;
         applyFilters();
       });
