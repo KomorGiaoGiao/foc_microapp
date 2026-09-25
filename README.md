@@ -7,8 +7,10 @@
 ```text
 demo/
   index.html                    地球网页入口
+  knowledge-reader.js           多组件知识库阅读器
   data/countries.js             国家边界数据
   data/family-office-locations.js  家族办公室城市数据
+  data/knowledge/*.js           每篇家办研究文章，独立维护
   vendor/globe.gl.min.js        globe.gl 依赖
 
 全球家族办公室地图/

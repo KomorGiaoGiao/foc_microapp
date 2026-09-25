@@ -245,6 +245,8 @@
     <script src="vendor/globe.gl.min.js"></script>
     <script src="data/countries.js"></script>
     <script src="data/family-office-locations.js"></script>
+    <script src="data/knowledge/42-north.js"></script>
+    <script src="knowledge-reader.js"></script>
     <script>
       const globeContainer = document.getElementById("globe");
       const selection = document.getElementById("selection");
@@ -260,13 +262,6 @@
       const countryFilter = document.getElementById("country-filter");
       const majorCitiesFilter = document.getElementById("major-cities-filter");
       const filterCount = document.getElementById("filter-count");
-      const knowledgeReader = document.getElementById("knowledge-reader");
-      const knowledgeTopbarTitle = document.getElementById("knowledge-topbar-title");
-      const knowledgeArticle = document.getElementById("knowledge-article");
-      const knowledgeToc = document.getElementById("knowledge-toc");
-      const knowledgeAside = document.getElementById("knowledge-aside");
-      const knowledgeProgressBar = document.getElementById("knowledge-progress-bar");
-      const knowledgeLayout = document.querySelector(".knowledge-layout");
       let countries = null;
       let selectedKnowledgeSlug = null;
       const isTouchDevice = Boolean(window.matchMedia?.("(pointer: coarse)").matches || navigator.maxTouchPoints > 0);
@@ -275,139 +270,7 @@
 
       const offices = window.FAMILY_OFFICE_LOCATIONS || [];
 
-      const knowledgeCatalog = {
-        "42-north": {
-          officeNames: ["42 North Partners"],
-          eyebrow: "家族办公室深度研究",
-          title: "42 North Partners · Jandernoa 家族",
-          location: "Grand Rapids, United States",
-          type: "单一家族办公室",
-          updatedAt: "2026-06-16",
-          readingTime: "约 12 分钟",
-          summary: "从 Perrigo 乡村药厂的 CFO 到全球医药巨头的掌舵人，Mike Jandernoa 用 30 年完成了从零到 25 亿美元的商业跃迁。2011 年成立的 42 North Partners 不仅是 Jandernoa 家族财富管理的枢纽，更是一个以投资、创业和社区为三支柱的家族平台。",
-          keywords: ["Jandernoa 家族", "new money", "单一家族办公室", "二代全员接班", "中西部投资网络"],
-          aside: [
-            ["关联家族", "Jandernoa 家族"],
-            ["总部", "美国密歇根州 Grand Rapids"],
-            ["财富来源", "Perrigo Company"],
-            ["研究状态", "公开资料整理"]
-          ],
-          sections: [
-            {
-              id: "core-info",
-              title: "一、核心信息",
-              blocks: [
-                { type: "factTable", rows: [
-                  ["机构名称", "42 North Partners"],
-                  ["成立时间", "2011 年"],
-                  ["机构类型", "单一家族办公室（SFO）"],
-                  ["关联家族", "Jandernoa 家族"],
-                  ["总部", "美国密歇根州 Grand Rapids"],
-                  ["投资策略", "中低端市场 PE 基金投资 + 共同投资"],
-                  ["核心团队", "约 16 人，含 3 名家族成员"],
-                  ["家族代际", "二代参与"]
-                ]},
-                { type: "insight", label: "核心洞察", text: "三个儿子分别掌管投资、创业和社区三大支柱，形成了少见的二代全员参与设计。" },
-                { type: "network", nodes: ["Mike & Sue Jandernoa", "42 North Partners", "投资业务", "创业支持", "社区事务", "Bridge Street Capital", "Hopen Life Science", "Jandernoa Foundation"] }
-              ]
-            },
-            {
-              id: "family-background",
-              title: "二、家族背景",
-              blocks: [
-                { type: "heading", title: "财富起源" },
-                { type: "paragraph", text: "Jandernoa 家族的财富核心来自 Perrigo。Mike Jandernoa 并非企业创始人，而是从 CFO 起步，通过管理层收购、上市和长期经营完成了从职业经理人到企业所有者的身份转变。" },
-                { type: "timeline", items: [
-                  ["1887", "Perrigo 在密歇根州成立"],
-                  ["1981", "管理层参与首次杠杆收购"],
-                  ["1988", "再次完成管理层收购"],
-                  ["1991", "Perrigo 在纳斯达克上市"],
-                  ["2011", "42 North Partners 成立"]
-                ]},
-                { type: "risk", label: "数据盲区", text: "家族总财富和具体信托安排未公开披露。文章中的规模数据需要与来源和时间一起阅读。" }
-              ]
-            },
-            {
-              id: "founder-story",
-              title: "三、创始人发家史",
-              blocks: [
-                { type: "paragraph", text: "1979 年，28 岁的注册会计师 Mike Jandernoa 加入密歇根乡村小镇 Allegan 的 Perrigo。38 年后，Perrigo 已成长为全球 OTC 制药企业，而他也把经营经验延伸到了家族办公室、PE 基金和创业生态。" },
-                { type: "heading", title: "第二曲线" },
-                { type: "paragraph", text: "Jandernoa 的第二曲线不是复制另一家 Perrigo，而是围绕家族和西密歇根构建投资、创业支持和社区网络。" },
-                { type: "insight", label: "阅读提示", text: "这类文章不只记录家办做了什么，也会解释家族财富如何形成、组织如何演进，以及作者认为其中哪些经验值得借鉴。" }
-              ]
-            },
-            {
-              id: "succession",
-              title: "四、代际传承",
-              blocks: [
-                { type: "factTable", rows: [
-                  ["一代", "Mike Jandernoa · 创始合伙人"],
-                  ["二代长子", "Carl Jandernoa · 投资业务主管"],
-                  ["二代次子", "Rob Jandernoa · 创业业务主管"],
-                  ["二代三子", "Steve Jandernoa · 社区事务主管"]
-                ]},
-                { type: "paragraph", text: "这套传承安排不是简单的职位交接，而是将家族办公室拆成三条业务线，让三个二代成员分别负责投资、创业和社区。" },
-                { type: "insight", label: "核心洞察", text: "文章把它概括为功能性分治：维持家族凝聚力，同时给每位二代成员独立的发展路径。" }
-              ]
-            },
-            {
-              id: "office-evolution",
-              title: "五、家办演变",
-              blocks: [
-                { type: "paragraph", text: "42 North 保持单一家族办公室的私密性，同时通过外部 PE、生命科学和天使投资平台进入更广泛的资本生态。" },
-                { type: "timeline", items: [
-                  ["1993", "Jandernoa Foundation 成立"],
-                  ["2005", "进入生命科学投资"],
-                  ["2009", "启动创业导师计划 JEM"],
-                  ["2011", "42 North Partners 正式成立"],
-                  ["2016", "三个儿子全部回归家族平台"]
-                ]}
-              ]
-            },
-            {
-              id: "investment",
-              title: "六、投资哲学与资产配置",
-              blocks: [
-                { type: "paragraph", text: "公开资料呈现的投资风格是关系优先、长期持有和主场深耕，重点关注北美中低端市场 PE 基金与共同投资机会。" },
-                { type: "comparison", columns: ["板块", "说明", "风险属性"], rows: [
-                  ["PE 基金投资", "中低端市场并购基金 LP 配置", "中高风险"],
-                  ["共同投资", "与 PE 基金跟投具体标的", "集中度较高"],
-                  ["生命科学", "通过 Hopen Life Science 布局", "高风险、高潜在回报"],
-                  ["流动性资产", "公开资料未披露", "未知"]
-                ]},
-                { type: "risk", label: "数据边界", text: "单一家族办公室通常不公开 IRR、回报倍数和完整 AUM，展示时应保留‘未公开披露’而不是用估算值替代。" }
-              ]
-            },
-            {
-              id: "takeaways",
-              title: "七、对亚洲家族的启示",
-              blocks: [
-                { type: "paragraph", text: "文章最后把案例转化为可借鉴经验，也明确列出不能直接复制的法律、税务和社会网络条件。" },
-                { type: "comparison", columns: ["维度", "42 North Partners", "典型中国 SFO"], rows: [
-                  ["财富来源", "单一企业 Perrigo", "房地产、制造业或互联网等多源"],
-                  ["二代教育", "Deloitte、UBS、EY 等外部机构", "海外留学或家族企业内部培养"],
-                  ["投资范围", "中西部区域深耕", "更偏向全球化配置"],
-                  ["透明度", "极低，公开业绩有限", "通常同样较低"]
-                ]}
-              ]
-            },
-            {
-              id: "sources",
-              title: "八、信息来源与风险",
-              blocks: [
-                { type: "paragraph", text: "文章将官网、基金会、行业协会、媒体报道和 SEC 文件放在末尾，并单独列出董事会争议、政治捐款、财富集中和接班风险。" },
-                { type: "sources", items: [
-                  ["42 North Partners 官网", "https://www.42np.com"],
-                  ["Ford Presidential Foundation", "https://geraldrfordfoundation.org/trustees/michael-jandernoa/"],
-                  ["Crain's Grand Rapids", "https://www.crainsgrandrapids.com/news/health-care/jandernoa-withdraws-from-perrigo-after-36-years-will-focus-on-family-office/"],
-                  ["University of Michigan News", "https://news.umich.edu/mike-and-sue-jandernoa-give-4-3-million-to-u-m/"]
-                ]}
-              ]
-            }
-          ]
-        }
-      };
+      const knowledgeCatalog = window.KNOWLEDGE_ARTICLES || {};
 
       const globe = Globe({ animateIn: true })(globeContainer)
         .backgroundColor("#0b0c0e")
@@ -547,66 +410,20 @@
         closeFloatingPanels();
       });
 
-      function escapeHtml(value) {
-        return String(value ?? "")
-          .replaceAll("&", "&amp;")
-          .replaceAll("<", "&lt;")
-          .replaceAll(">", "&gt;")
-          .replaceAll('"', "&quot;")
-          .replaceAll("'", "&#039;");
-      }
-
-      function renderKnowledgeBlock(block) {
-        if (block.type === "paragraph") return `<p class="knowledge-paragraph">${escapeHtml(block.text)}</p>`;
-        if (block.type === "heading") return `<h3>${escapeHtml(block.title)}</h3>`;
-        if (block.type === "image") return `<figure class="knowledge-image"><img src="${escapeHtml(block.src)}" alt="${escapeHtml(block.alt)}" loading="lazy" onerror="this.closest('figure').classList.add('image-unavailable'); this.remove();" /><figcaption>${escapeHtml(block.caption || block.alt)}</figcaption></figure>`;
-        if (block.type === "factTable") return `<table class="knowledge-fact-table"><tbody>${block.rows.map(([key, value]) => `<tr><th>${escapeHtml(key)}</th><td>${escapeHtml(value)}</td></tr>`).join("")}</tbody></table>`;
-        if (block.type === "comparison") return `<table class="knowledge-comparison"><thead><tr>${block.columns.map((column) => `<th>${escapeHtml(column)}</th>`).join("")}</tr></thead><tbody>${block.rows.map((row) => `<tr>${row.map((value) => `<td>${escapeHtml(value)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
-        if (block.type === "insight" || block.type === "risk") return `<aside class="knowledge-${block.type}"><div class="knowledge-callout-label">${escapeHtml(block.label)}</div><p>${escapeHtml(block.text)}</p></aside>`;
-        if (block.type === "timeline") return `<div class="knowledge-timeline">${block.items.map(([year, text]) => `<div class="knowledge-timeline-item"><strong>${escapeHtml(year)}</strong><span>${escapeHtml(text)}</span></div>`).join("")}</div>`;
-        if (block.type === "network") return `<div class="knowledge-network">${block.nodes.map((node, index) => `<div class="knowledge-network-node${index === 0 ? " primary" : ""}">${escapeHtml(node)}</div>`).join("")}</div>`;
-        if (block.type === "sources") return `<ol class="knowledge-source-list">${block.items.map(([name, url]) => `<li><a href="${escapeHtml(url)}" target="_blank" rel="noreferrer">${escapeHtml(name)}</a></li>`).join("")}</ol>`;
-        return "";
-      }
-
-      function renderKnowledgeArticle(article) {
-        knowledgeTopbarTitle.textContent = article.title;
-        knowledgeArticle.innerHTML = `
-          <header class="knowledge-hero" id="article-top">
-            <div class="knowledge-eyebrow">${escapeHtml(article.eyebrow)}</div>
-            <h1>${escapeHtml(article.title)}</h1>
-            <div class="knowledge-meta"><span>${escapeHtml(article.location)}</span><span>${escapeHtml(article.type)}</span><span>整理时间：${escapeHtml(article.updatedAt)}</span><span class="knowledge-reading-label">${escapeHtml(article.readingTime)}</span></div>
-            <p class="knowledge-summary">${escapeHtml(article.summary)}</p>
-            <div class="knowledge-tags">${article.keywords.map((keyword) => `<span class="knowledge-tag">${escapeHtml(keyword)}</span>`).join("")}</div>
-          </header>
-          ${article.sections.map((section) => `<section class="knowledge-section" id="${escapeHtml(section.id)}"><h2>${escapeHtml(section.title)}</h2>${section.blocks.map(renderKnowledgeBlock).join("")}</section>`).join("")}
-        `;
-        knowledgeToc.innerHTML = `<div class="knowledge-toc-title">文章目录</div><a href="#article-top">开篇摘要</a>${article.sections.map((section) => `<a href="#${escapeHtml(section.id)}">${escapeHtml(section.title)}</a>`).join("")}`;
-        knowledgeAside.innerHTML = article.aside.map(([label, value]) => `<div class="knowledge-aside-block"><div class="knowledge-aside-label">${escapeHtml(label)}</div><div class="knowledge-aside-value">${escapeHtml(value)}</div></div>`).join("");
-        knowledgeLayout.scrollTop = 0;
-        knowledgeProgressBar.style.width = "0%";
-      }
-
       function openKnowledgeArticle(slug) {
-        const article = knowledgeCatalog[slug];
-        if (!article) return;
-        renderKnowledgeArticle(article);
-        knowledgeReader.hidden = false;
+        if (!window.KnowledgeReader.open(slug)) return;
         closeFloatingPanels();
         mapStatus.textContent = "正在阅读家办深度研究";
       }
 
       function closeKnowledgeArticle() {
-        knowledgeReader.hidden = true;
+        window.KnowledgeReader.close();
         mapStatus.textContent = "拖动旋转 · 滚轮缩放 · 点击国家查看";
       }
 
       readKnowledge.addEventListener("click", () => openKnowledgeArticle(selectedKnowledgeSlug));
-      document.getElementById("knowledge-close").addEventListener("click", closeKnowledgeArticle);
-      knowledgeLayout.addEventListener("scroll", () => {
-        const scrollable = knowledgeLayout.scrollHeight - knowledgeLayout.clientHeight;
-        const progress = scrollable > 0 ? Math.min(100, (knowledgeLayout.scrollTop / scrollable) * 100) : 0;
-        knowledgeProgressBar.style.width = `${progress}%`;
+      document.addEventListener("knowledge:closed", () => {
+        mapStatus.textContent = "拖动旋转 · 滚轮缩放 · 点击国家查看";
       });
 
       function getFilteredOffices() {
