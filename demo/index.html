@@ -42,7 +42,7 @@
       .map-tool svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
       .search-panel { position: fixed; z-index: 6; left: 50%; bottom: 88px; top: auto; width: min(360px, calc(100vw - 40px)); transform: translateX(-50%); padding: 14px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 14px 36px rgba(0,0,0,.24); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
-      .search-panel[hidden], .legend-panel[hidden] { display: none; }
+      .search-panel[hidden], .filter-panel[hidden], .stats-panel[hidden] { display: none; }
       .search-label { display: block; margin-bottom: 8px; color: var(--muted); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
       .search-input { width: 100%; height: 36px; padding: 0 10px; border: 1px solid rgba(255,255,255,.18); border-radius: 8px; outline: 0; background: rgba(0,0,0,.2); color: var(--text); font-size: 13px; }
       .search-input:focus { border-color: rgba(255,255,255,.72); }
@@ -52,11 +52,23 @@
       .search-result small { color: var(--muted); font-size: 11px; }
       .search-empty { padding: 12px 8px; color: var(--muted); font-size: 12px; }
 
-      .legend-panel { position: fixed; z-index: 4; left: 50%; right: auto; bottom: 88px; transform: translateX(-50%); width: 190px; padding: 14px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 14px 36px rgba(0,0,0,.24); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
-      .legend-title { margin-bottom: 12px; color: var(--muted); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
-      .legend-row { display: flex; align-items: center; gap: 8px; margin-top: 9px; color: rgba(244,244,241,.78); font-size: 12px; }
-      .legend-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px rgba(255,255,255,.16); }
-      .legend-dot.teal { background: #a6a9ad; box-shadow: 0 0 0 3px rgba(166,169,173,.18); }
+      .filter-panel, .stats-panel { position: fixed; z-index: 4; left: 50%; bottom: 88px; transform: translateX(-50%); width: min(300px, calc(100vw - 40px)); padding: 14px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 14px 36px rgba(0,0,0,.24); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+      .panel-kicker { margin-bottom: 12px; color: var(--muted); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+      .filter-field { display: block; margin-bottom: 12px; color: var(--muted); font-size: 12px; }
+      .filter-select { width: 100%; height: 36px; margin-top: 7px; padding: 0 9px; border: 1px solid rgba(255,255,255,.18); border-radius: 8px; outline: 0; background: rgba(0,0,0,.2); color: var(--text); font-size: 13px; }
+      .filter-select:focus { border-color: rgba(255,255,255,.72); }
+      .filter-check { display: flex; align-items: center; gap: 8px; color: rgba(244,244,241,.78); font-size: 12px; cursor: pointer; }
+      .filter-check input { accent-color: var(--accent); }
+      .filter-footer { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 14px; padding-top: 11px; border-top: 1px solid rgba(255,255,255,.1); }
+      .filter-count { color: var(--muted); font-size: 11px; }
+      .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+      .stat-item { min-width: 0; padding: 9px 8px; border: 1px solid rgba(255,255,255,.1); border-radius: 9px; background: rgba(255,255,255,.045); }
+      .stat-item strong { display: block; color: var(--text); font-size: 17px; font-weight: 500; }
+      .stat-item span { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; white-space: nowrap; }
+      .stats-title { margin: 14px 0 7px; color: var(--muted); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+      .top-city { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,.08); color: rgba(244,244,241,.82); font-size: 12px; }
+      .top-city:last-child { border-bottom: 0; }
+      .top-city small { color: var(--muted); font-size: 11px; }
 
       .selection { position: fixed; z-index: 4; left: 50%; bottom: 88px; width: min(350px, calc(100vw - 40px)); transform: translateX(-50%); display: none; padding: 16px 18px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 14px 36px rgba(0,0,0,.22); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
       .selection.visible { display: block; }
@@ -73,7 +85,7 @@
         .side-rail { bottom: 12px; }
         .search-panel, .selection { bottom: 80px; width: calc(100vw - 24px); }
         .map-tools { right: 12px; bottom: 88px; }
-        .legend-panel { bottom: 80px; }
+        .filter-panel, .stats-panel { bottom: 80px; width: calc(100vw - 24px); }
         .map-status { display: none; }
       }
 
@@ -84,23 +96,21 @@
     <aside class="side-rail" aria-label="地图工具">
       <div class="rail-brand"><span class="brand-mark">FO</span></div>
       <div class="rail-group">
-        <button class="tool-button active" id="overview" title="全球视角" aria-label="全球视角">
+        <button class="tool-button active" id="overview" title="总览" aria-label="总览">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.8 12h16.4M12 3.5c2.1 2.3 3.2 5.1 3.2 8.5s-1.1 6.2-3.2 8.5c-2.1-2.3-3.2-5.1-3.2-8.5S9.9 5.8 12 3.5Z"/></svg>
-          <span class="tool-label">全球视角</span>
+          <span class="tool-label">总览</span>
         </button>
         <button class="tool-button" id="search-toggle" title="搜索" aria-label="搜索">
           <svg viewBox="0 0 24 24"><circle cx="10.7" cy="10.7" r="6.2"/><path d="m15.4 15.4 5 5"/></svg>
           <span class="tool-label">搜索</span>
         </button>
-        <button class="tool-button" id="legend-toggle" title="图例" aria-label="图例">
-          <svg viewBox="0 0 24 24"><path d="M4 5.5h16v13H4z"/><path d="M8 9h8M8 12h5M8 15h8"/></svg>
-          <span class="tool-label">图例</span>
+        <button class="tool-button" id="filter-toggle" title="筛选" aria-label="筛选">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+          <span class="tool-label">筛选</span>
         </button>
-      </div>
-      <div class="rail-group">
-        <button class="tool-button" id="info-toggle" title="说明" aria-label="说明">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 10.5v5M12 7.7h.01"/></svg>
-          <span class="tool-label">说明</span>
+        <button class="tool-button" id="stats-toggle" title="数据" aria-label="数据">
+          <svg viewBox="0 0 24 24"><path d="M5 19V9M12 19V5M19 19v-7"/></svg>
+          <span class="tool-label">数据</span>
         </button>
       </div>
     </aside>
@@ -109,10 +119,31 @@
       <input class="search-input" id="search-input" type="search" placeholder="例如：伦敦、美国" autocomplete="off" />
       <div class="search-results" id="search-results"></div>
     </div>
-    <div class="legend-panel" id="legend-panel" hidden>
-      <div class="legend-title">图例</div>
-      <div class="legend-row"><span class="legend-dot"></span>家族办公室城市</div>
-      <div class="legend-row"><span class="legend-dot teal"></span>选中位置</div>
+    <div class="filter-panel" id="filter-panel" hidden>
+      <div class="panel-kicker">筛选点位</div>
+      <label class="filter-field" for="country-filter">国家 / 地区
+        <select class="filter-select" id="country-filter">
+          <option value="all">全部国家 / 地区</option>
+        </select>
+      </label>
+      <label class="filter-check" for="major-cities-filter">
+        <input id="major-cities-filter" type="checkbox" />
+        只看重点城市（5 家以上）
+      </label>
+      <div class="filter-footer">
+        <span class="filter-count" id="filter-count">显示全部城市</span>
+        <button class="action-button" id="clear-filter" type="button">清除筛选</button>
+      </div>
+    </div>
+    <div class="stats-panel" id="stats-panel" hidden>
+      <div class="panel-kicker">数据概览</div>
+      <div class="stats-grid">
+        <div class="stat-item"><strong id="total-offices">0</strong><span>家族办公室</span></div>
+        <div class="stat-item"><strong id="total-cities">0</strong><span>城市</span></div>
+        <div class="stat-item"><strong id="total-countries">0</strong><span>国家 / 地区</span></div>
+      </div>
+      <div class="stats-title">城市分布</div>
+      <div id="top-cities"></div>
     </div>
     <div class="map-tools" aria-label="地图控制">
       <button class="map-tool" id="zoom-in" title="放大" aria-label="放大">+</button>
@@ -141,10 +172,15 @@
       const searchPanel = document.getElementById("search-panel");
       const searchInput = document.getElementById("search-input");
       const searchResults = document.getElementById("search-results");
-      const legendPanel = document.getElementById("legend-panel");
-      const defaultView = { lat: 24, lng: 40, altitude: 2.6 };
+      const filterPanel = document.getElementById("filter-panel");
+      const statsPanel = document.getElementById("stats-panel");
+      const countryFilter = document.getElementById("country-filter");
+      const majorCitiesFilter = document.getElementById("major-cities-filter");
+      const filterCount = document.getElementById("filter-count");
       let countries = null;
       const isTouchDevice = Boolean(window.matchMedia?.("(pointer: coarse)").matches || navigator.maxTouchPoints > 0);
+      const isMobileViewport = window.matchMedia?.("(max-width: 600px)").matches ?? window.innerWidth <= 600;
+      const defaultView = { lat: 24, lng: 40, altitude: isMobileViewport ? 2.95 : 2.6 };
 
       const offices = window.FAMILY_OFFICE_LOCATIONS || [];
 
@@ -207,18 +243,24 @@
         selectedDescription.textContent = description;
         selection.classList.add("visible");
         searchPanel.hidden = true;
-        legendPanel.hidden = true;
+        filterPanel.hidden = true;
+        statsPanel.hidden = true;
         mapStatus.textContent = "已定位 · 点击返回按钮回到全球视角";
       }
 
       function closeFloatingPanels() {
         searchPanel.hidden = true;
-        legendPanel.hidden = true;
+        filterPanel.hidden = true;
+        statsPanel.hidden = true;
         selection.classList.remove("visible");
       }
 
       function resetView() {
         if (countries) globe.polygonsData(countries.features);
+        globe.pointsData(offices);
+        countryFilter.value = "all";
+        majorCitiesFilter.checked = false;
+        filterCount.textContent = "显示全部城市";
         closeFloatingPanels();
         globeControls.autoRotate = !isTouchDevice;
         globe.pointOfView(defaultView, 900);
@@ -241,7 +283,8 @@
 
       document.getElementById("search-toggle").addEventListener("click", () => {
         searchPanel.hidden = !searchPanel.hidden;
-        legendPanel.hidden = true;
+        filterPanel.hidden = true;
+        statsPanel.hidden = true;
         selection.classList.remove("visible");
         if (!searchPanel.hidden) {
           searchInput.focus();
@@ -249,21 +292,58 @@
         }
       });
 
-      document.getElementById("legend-toggle").addEventListener("click", () => {
-        legendPanel.hidden = !legendPanel.hidden;
+      document.getElementById("filter-toggle").addEventListener("click", () => {
+        filterPanel.hidden = !filterPanel.hidden;
         searchPanel.hidden = true;
+        statsPanel.hidden = true;
         selection.classList.remove("visible");
       });
 
-      document.getElementById("info-toggle").addEventListener("click", () => {
+      document.getElementById("stats-toggle").addEventListener("click", () => {
+        statsPanel.hidden = !statsPanel.hidden;
         searchPanel.hidden = true;
-        legendPanel.hidden = true;
-        showSelection("关于这张地图", "数据来自家族办公室知识库，光点代表已解析坐标的城市。 ");
+        filterPanel.hidden = true;
+        selection.classList.remove("visible");
       });
 
       document.addEventListener("click", (event) => {
-        if (event.target.closest(".side-rail, .search-panel, .legend-panel, .selection, .map-tools")) return;
+        if (event.target.closest(".side-rail, .search-panel, .filter-panel, .stats-panel, .selection, .map-tools")) return;
         closeFloatingPanels();
+      });
+
+      function getFilteredOffices() {
+        const country = countryFilter.value;
+        const majorOnly = majorCitiesFilter.checked;
+        return offices.filter((point) => {
+          const countryMatch = country === "all" || (point.country || "全球") === country;
+          const sizeMatch = !majorOnly || Number(point.count || 0) >= 5;
+          return countryMatch && sizeMatch;
+        });
+      }
+
+      function applyFilters() {
+        const filtered = getFilteredOffices();
+        globe.pointsData(filtered);
+        filterCount.textContent = `显示 ${filtered.length} 个城市`;
+      }
+
+      function populatePanels() {
+        const countriesList = [...new Set(offices.map((point) => point.country || "全球"))].sort((a, b) => a.localeCompare(b));
+        countryFilter.insertAdjacentHTML("beforeend", countriesList.map((country) => `<option value="${country}">${country}</option>`).join(""));
+        const total = offices.reduce((sum, point) => sum + Number(point.count || 0), 0);
+        document.getElementById("total-offices").textContent = total.toLocaleString("zh-CN");
+        document.getElementById("total-cities").textContent = offices.length.toLocaleString("zh-CN");
+        document.getElementById("total-countries").textContent = countriesList.length.toLocaleString("zh-CN");
+        const topCities = [...offices].sort((a, b) => Number(b.count || 0) - Number(a.count || 0)).slice(0, 5);
+        document.getElementById("top-cities").innerHTML = topCities.map((point) => `<div class="top-city"><span>${point.city}</span><small>${point.count} 家</small></div>`).join("");
+      }
+
+      countryFilter.addEventListener("change", applyFilters);
+      majorCitiesFilter.addEventListener("change", applyFilters);
+      document.getElementById("clear-filter").addEventListener("click", () => {
+        countryFilter.value = "all";
+        majorCitiesFilter.checked = false;
+        applyFilters();
       });
 
       searchInput.addEventListener("input", (event) => renderSearchResults(event.target.value));
@@ -400,6 +480,7 @@
 
       countries = window.COUNTRIES_GEOJSON;
       globe.polygonsData(countries.features);
+      populatePanels();
     </script>
   </body>
 </html>
