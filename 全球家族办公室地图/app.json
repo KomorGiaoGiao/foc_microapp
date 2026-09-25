@@ -4,8 +4,9 @@
   ],
   "window":{
     "backgroundTextStyle":"light",
-    "navigationBarBackgroundColor": "#fff",
+    "navigationStyle": "custom",
+    "navigationBarBackgroundColor": "#111416",
     "navigationBarTitleText": "",
-    "navigationBarTextStyle":"black"
+    "navigationBarTextStyle":"white"
   }
 }
