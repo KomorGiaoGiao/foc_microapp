@@ -1,1 +1,33 @@
-<web-view src="{{mapUrl}}"></web-view>
+<view class="screen">
+  <view class="topbar">
+    <view class="brand-mark">FO</view>
+    <view class="brand-copy">
+      <text class="brand-kicker">GLOBAL FAMILY OFFICE MAP</text>
+      <text class="brand-title">家族办公室情报地图</text>
+    </view>
+    <view class="top-actions">
+      <view class="top-action" bindtap="toggleSearch" aria-label="搜索">⌕</view>
+      <view class="top-action" bindtap="resetView" aria-label="复位视角">◎</view>
+    </view>
+  </view>
+
+  <view class="search-panel" tt:if="{{searchOpen}}">
+    <input class="search-input" value="{{searchQuery}}" bindinput="handleSearchInput" confirm-type="search" placeholder="搜索城市或国家" />
+    <view class="search-action" bindtap="submitSearch">定位</view>
+  </view>
+
+  <view class="map-frame">
+    <web-view id="map-webview" src="{{mapUrl}}" bindmessage="handleWebMessage"></web-view>
+  </view>
+
+  <view class="detail-panel" tt:if="{{detailOpen}}">
+    <view class="detail-kicker">SELECTED REGION</view>
+    <text class="detail-title">{{selectedName}}</text>
+    <text class="detail-description">{{selectedDescription}}</text>
+    <view class="detail-meta">
+      <text>地图数据</text>
+      <text>知识库同步</text>
+    </view>
+    <view class="detail-close" bindtap="closeDetail">返回全球视角</view>
+  </view>
+</view>
