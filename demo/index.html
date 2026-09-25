@@ -100,9 +100,9 @@
       .action-button:hover { background: rgba(255,255,255,.14); }
       .map-status { position: fixed; z-index: 3; left: 50%; bottom: 78px; transform: translateX(-50%); color: rgba(255,255,255,.45); font-size: 11px; pointer-events: none; }
 
-      .knowledge-reader { position: fixed; z-index: 20; inset: 0; display: grid; grid-template-rows: 58px 1fr; background: #111315; color: #eceeea; overflow: hidden; }
+      .knowledge-reader { position: fixed; z-index: 20; inset: 0; display: block; background: #111315; color: #eceeea; overflow: hidden; }
       .knowledge-reader[hidden] { display: none; }
-      .knowledge-topbar { position: relative; z-index: 32; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 0 24px; border-bottom: 1px solid rgba(255,255,255,.14); background: rgba(17,19,21,.58); box-shadow: inset 0 -1px 0 rgba(255,255,255,.035), 0 8px 24px rgba(0,0,0,.12); backdrop-filter: blur(24px) saturate(140%); -webkit-backdrop-filter: blur(24px) saturate(140%); }
+      .knowledge-topbar { position: relative; z-index: 32; height: 58px; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 0 24px; border-bottom: 1px solid rgba(255,255,255,.16); background: rgba(29,30,32,.68); box-shadow: 0 12px 28px rgba(0,0,0,.2); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
       .knowledge-topbar-leading { min-width: 0; display: flex; align-items: center; gap: 14px; }
       .knowledge-toc-toggle { display: none; width: 34px; height: 34px; align-items: center; justify-content: center; padding: 0; border: 1px solid rgba(255,255,255,.2); border-radius: 9px; background: rgba(255,255,255,.07); color: rgba(244,245,241,.86); cursor: pointer; }
       .knowledge-toc-toggle:hover, .knowledge-toc-toggle[aria-expanded="true"] { background: rgba(255,255,255,.14); }
@@ -113,7 +113,7 @@
       .knowledge-progress { position: absolute; z-index: 1; top: 57px; left: 0; width: 100%; height: 2px; background: rgba(255,255,255,.08); }
       .knowledge-progress span { display: block; width: 0; height: 100%; background: #e5e7e2; transition: width .15s ease-out; }
       .knowledge-toc-backdrop { display: none; }
-      .knowledge-layout { min-height: 0; display: grid; grid-template-columns: 210px minmax(0, 760px) 230px; justify-content: center; gap: 38px; padding: 42px 30px 70px; overflow: auto; scrollbar-color: rgba(255,255,255,.25) transparent; }
+      .knowledge-layout { position: absolute; z-index: 0; inset: 0; min-height: 0; display: grid; grid-template-columns: 210px minmax(0, 760px) 230px; justify-content: center; gap: 38px; padding: 100px 30px 70px; overflow: auto; scrollbar-color: rgba(255,255,255,.25) transparent; }
       .knowledge-toc { position: sticky; top: 0; align-self: start; max-height: calc(100vh - 130px); overflow: auto; padding: 4px 0; }
       .knowledge-toc-title { margin-bottom: 12px; color: rgba(236,238,234,.45); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; }
       .knowledge-toc a { display: block; padding: 6px 9px; border-left: 1px solid rgba(255,255,255,.12); color: rgba(236,238,234,.56); font-size: 12px; line-height: 1.35; text-decoration: none; }
@@ -169,7 +169,7 @@
         .knowledge-topbar-leading { gap: 10px; }
         .knowledge-toc-toggle { display: inline-flex; flex: 0 0 auto; }
         .knowledge-progress { top: 51px; }
-        .knowledge-layout { display: block; padding: 25px 18px 46px; }
+        .knowledge-layout { display: block; padding: 77px 18px 46px; }
         .knowledge-toc { position: fixed; z-index: 31; top: 52px; bottom: auto; left: 0; width: min(292px, 84vw); height: calc(100vh - 52px); max-height: none; margin: 0; padding: 22px 18px 30px; overflow: auto; border-right: 1px solid rgba(255,255,255,.14); background: #171a1d; box-shadow: 18px 0 42px rgba(0,0,0,.3); transform: translateX(-105%); transition: transform .24s ease; }
         .knowledge-toc.is-open { transform: translateX(0); }
         .knowledge-toc-backdrop { position: fixed; z-index: 30; top: 52px; right: 0; bottom: 0; left: 0; display: block; border: 0; background: rgba(0,0,0,.52); cursor: pointer; }
