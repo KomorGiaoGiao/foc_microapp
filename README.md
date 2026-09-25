@@ -21,7 +21,7 @@ demo/
 抖音小程序加载的网页地址是：
 
 ```text
-https://komorgiaogiao.github.io/demo/map.html
+https://komorgiaogiao.github.io/foc_microapp/demo/index.html
 ```
 
 `index.html` 是本地打开网页时的快捷入口。网页中的地球、按钮、搜索、图例和详情面板都由 `demo/index.html` 负责。
