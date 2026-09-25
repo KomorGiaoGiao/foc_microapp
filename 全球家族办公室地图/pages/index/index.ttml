@@ -1,7 +1,5 @@
 <view class="screen">
-  <view class="map-frame">
-    <web-view id="map-webview" src="{{mapUrl}}" bindmessage="handleWebMessage"></web-view>
-  </view>
+  <web-view id="map-webview" src="{{mapUrl}}" bindmessage="handleWebMessage"></web-view>
 
   <view class="search-panel" tt:if="{{searchOpen}}">
     <input class="search-input" value="{{searchQuery}}" bindinput="handleSearchInput" confirm-type="search" placeholder="搜索城市或国家" />
