@@ -21,7 +21,7 @@
       html, body { margin: 0; height: 100%; overflow: hidden; background: var(--ink); color: var(--text); font-family: -apple-system, "SF UI Text", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; }
       button, input { font: inherit; }
       button { color: inherit; }
-      #globe { width: 100%; height: 100%; }
+      #globe { width: 100%; height: 100%; touch-action: none; }
 
       .side-rail { position: fixed; z-index: 5; left: 50%; bottom: 18px; width: auto; height: 54px; display: flex; align-items: center; transform: translateX(-50%); background: var(--rail); border: 1px solid rgba(255,255,255,.1); box-shadow: 0 12px 28px rgba(0,0,0,.28); }
       .rail-brand { display: none; }
@@ -150,6 +150,7 @@
       const defaultView = { lat: 24, lng: 40, altitude: 2.6 };
       let countries = null;
       const embeddedMode = new URLSearchParams(window.location.search).get("embedded") === "1";
+      const isTouchDevice = Boolean(window.matchMedia?.("(pointer: coarse)").matches || navigator.maxTouchPoints > 0);
 
       if (embeddedMode) document.body.classList.add("embedded");
 
@@ -163,9 +164,9 @@
 
       const globe = Globe({ animateIn: true })(globeContainer)
         .backgroundColor("#050912")
-        .showAtmosphere(true)
+        .showAtmosphere(!isTouchDevice)
         .atmosphereColor("#3d6bff")
-        .atmosphereAltitude(0.16)
+        .atmosphereAltitude(isTouchDevice ? 0.1 : 0.16)
         .polygonAltitude(({ properties }) => properties.kind === "province" ? 0.032 : 0.012)
         .polygonCapColor(({ properties }) => properties.kind === "province" ? "transparent" : "rgba(20, 32, 60, 0.72)")
         .polygonSideColor(({ properties }) => properties.kind === "province" ? "transparent" : "rgba(70, 110, 255, 0.14)")
@@ -182,9 +183,13 @@
         .onPointClick(handleOfficeClick);
 
       const globeControls = globe.controls();
-      globeControls.autoRotate = true;
+      globeControls.autoRotate = !isTouchDevice;
       globeControls.autoRotateSpeed = 0.18;
-      globeControls.enableDamping = true;
+      globeControls.enableDamping = !isTouchDevice;
+      globeControls.rotateSpeed = isTouchDevice ? 0.55 : 0.8;
+      globeControls.zoomSpeed = isTouchDevice ? 0.65 : 1;
+      const renderer = typeof globe.renderer === "function" ? globe.renderer() : null;
+      renderer?.setPixelRatio(Math.min(window.devicePixelRatio || 1, isTouchDevice ? 1.25 : 1.75));
 
       globe.pointOfView(defaultView, 0);
 
@@ -218,13 +223,21 @@
         selectedName.textContent = name;
         selectedDescription.textContent = description;
         selection.classList.add("visible");
+        searchPanel.hidden = true;
+        legendPanel.hidden = true;
         mapStatus.textContent = "已定位 · 点击返回按钮回到全球视角";
+      }
+
+      function closeFloatingPanels() {
+        searchPanel.hidden = true;
+        legendPanel.hidden = true;
+        selection.classList.remove("visible");
       }
 
       function resetView() {
         if (countries) globe.polygonsData(countries.features);
-        selection.classList.remove("visible");
-        globeControls.autoRotate = true;
+        closeFloatingPanels();
+        globeControls.autoRotate = !isTouchDevice;
         globe.pointOfView(defaultView, 900);
         mapStatus.textContent = "拖动旋转 · 滚轮缩放 · 点击国家查看";
         postMapMessage({ type: "viewReset" });
@@ -247,6 +260,7 @@
       document.getElementById("search-toggle").addEventListener("click", () => {
         searchPanel.hidden = !searchPanel.hidden;
         legendPanel.hidden = true;
+        selection.classList.remove("visible");
         if (!searchPanel.hidden) {
           searchInput.focus();
           renderSearchResults("");
@@ -256,10 +270,18 @@
       document.getElementById("legend-toggle").addEventListener("click", () => {
         legendPanel.hidden = !legendPanel.hidden;
         searchPanel.hidden = true;
+        selection.classList.remove("visible");
       });
 
       document.getElementById("info-toggle").addEventListener("click", () => {
+        searchPanel.hidden = true;
+        legendPanel.hidden = true;
         showSelection("关于这张地图", "数据来自家族办公室知识库，光点代表已解析坐标的城市。 ");
+      });
+
+      document.addEventListener("click", (event) => {
+        if (event.target.closest(".side-rail, .search-panel, .legend-panel, .selection, .map-tools")) return;
+        closeFloatingPanels();
       });
 
       searchInput.addEventListener("input", (event) => renderSearchResults(event.target.value));
