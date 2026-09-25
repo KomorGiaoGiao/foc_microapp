@@ -5,7 +5,7 @@
   "window":{
     "backgroundTextStyle":"light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "全球家族办公室地图",
+    "navigationBarTitleText": "",
     "navigationBarTextStyle":"black"
   }
 }
