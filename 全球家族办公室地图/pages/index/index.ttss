@@ -1,16 +1,9 @@
-.intro {
-  margin: 30px;
-  text-align: center;
+page {
+  width: 100%;
+  height: 100%;
 }
 
-.icon-wrapper {
-  display: flex;
-  justify-content: center;
-  padding: 40px 0 0px;
-}
-
-.icon-image {
-  width: 80px;
-  height: 80px;
-  border-radius: 20px;
+web-view {
+  width: 100%;
+  height: 100%;
 }

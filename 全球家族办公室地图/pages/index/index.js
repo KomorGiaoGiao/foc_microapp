@@ -1,10 +1,5 @@
-const app = getApp()
-
 Page({
   data: {
-
-  },
-  onLoad: function () {
-    console.log('Welcome to Mini Code')
+    mapUrl: 'https://komorgiaogiao.github.io/foc_microapp/demo/index.html'
   },
 })
