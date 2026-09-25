@@ -1,6 +1,5 @@
 (function () {
   const reader = document.getElementById("knowledge-reader");
-  const topbarTitle = document.getElementById("knowledge-topbar-title");
   const articleRoot = document.getElementById("knowledge-article");
   const tocRoot = document.getElementById("knowledge-toc");
   const asideRoot = document.getElementById("knowledge-aside");
@@ -33,7 +32,6 @@
   }
 
   function render(article) {
-    topbarTitle.textContent = article.title;
     articleRoot.innerHTML = `
       <header class="knowledge-hero" id="article-top">
         <div class="knowledge-eyebrow">${escapeHtml(article.eyebrow)}</div>
