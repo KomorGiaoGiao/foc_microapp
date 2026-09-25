@@ -1,67 +1,44 @@
 <view class="screen">
-  <canvas
-    id="globe-canvas"
-    canvas-id="globe-canvas"
-    class="globe-canvas"
-    bindtouchstart="handleTouchStart"
-    bindtouchmove="handleTouchMove"
-    bindtouchend="handleTouchEnd"
-    bindtouchcancel="handleTouchEnd"
-  ></canvas>
+  <web-view id="map-webview" src="{{mapUrl}}" bindmessage="handleWebMessage"></web-view>
 
   <view class="search-panel" tt:if="{{searchOpen}}">
     <input class="search-input" value="{{searchQuery}}" bindinput="handleSearchInput" confirm-type="search" placeholder="搜索城市或国家" />
     <view class="search-action" bindtap="submitSearch">定位</view>
   </view>
 
-  <view class="detail-panel" tt:if="{{detailOpen}}">
-    <text class="detail-kicker">SELECTED REGION</text>
-    <text class="detail-title">{{selectedName}}</text>
-    <text class="detail-description">{{selectedDescription}}</text>
-    <view class="detail-meta">
-      <text>地图数据</text>
-      <text>知识库同步</text>
-    </view>
-    <view class="detail-close" bindtap="closeDetail">返回全球视角</view>
-  </view>
+  <cover-view class="detail-panel" tt:if="{{detailOpen}}">
+    <cover-view class="detail-kicker">SELECTED REGION</cover-view>
+    <cover-view class="detail-title">{{selectedName}}</cover-view>
+    <cover-view class="detail-description">{{selectedDescription}}</cover-view>
+    <cover-view class="detail-meta">
+      <cover-view>地图数据</cover-view>
+      <cover-view>知识库同步</cover-view>
+    </cover-view>
+    <cover-view class="detail-close" bindtap="closeDetail">返回全球视角</cover-view>
+  </cover-view>
 
-  <view class="legend-panel" tt:if="{{legendOpen}}">
-    <text class="legend-title">图例</text>
-    <view class="legend-row"><view class="legend-dot"></view><text>家族办公室城市</text></view>
-    <view class="legend-row"><view class="legend-dot muted"></view><text>当前选中位置</text></view>
-  </view>
+  <cover-view class="legend-panel" tt:if="{{legendOpen}}">
+    <cover-view class="legend-title">图例</cover-view>
+    <cover-view class="legend-row"><cover-view class="legend-dot"></cover-view>家族办公室城市</cover-view>
+    <cover-view class="legend-row"><cover-view class="legend-dot muted"></cover-view>选中位置</cover-view>
+  </cover-view>
 
-  <view class="zoom-tools">
-    <view class="zoom-button" bindtap="zoomIn">+</view>
-    <view class="zoom-button" bindtap="zoomOut">−</view>
-  </view>
-
-  <view class="bottom-bar">
-    <view class="bottom-action" bindtap="resetView">
-      <view class="bottom-icon icon-globe">
-        <view class="icon-globe-lat"></view>
-        <view class="icon-globe-lng"></view>
-      </view>
-      <text>全球</text>
-    </view>
-    <view class="bottom-action" bindtap="toggleSearch">
-      <view class="bottom-icon icon-search">
-        <view class="icon-search-circle"></view>
-        <view class="icon-search-handle"></view>
-      </view>
-      <text>搜索</text>
-    </view>
-    <view class="bottom-action" bindtap="toggleLegend">
-      <view class="bottom-icon icon-legend">
-        <view class="icon-legend-line line-one"></view>
-        <view class="icon-legend-line line-two"></view>
-        <view class="icon-legend-line line-three"></view>
-      </view>
-      <text>图例</text>
-    </view>
-    <view class="bottom-action" bindtap="showMapInfo">
-      <view class="bottom-icon icon-info"><text class="icon-info-i">i</text></view>
-      <text>说明</text>
-    </view>
-  </view>
+  <cover-view class="bottom-bar">
+    <cover-view class="bottom-action" bindtap="resetView">
+      <cover-view class="bottom-icon">◎</cover-view>
+      <cover-view>全球</cover-view>
+    </cover-view>
+    <cover-view class="bottom-action" bindtap="toggleSearch">
+      <cover-view class="bottom-icon">⌕</cover-view>
+      <cover-view>搜索</cover-view>
+    </cover-view>
+    <cover-view class="bottom-action" bindtap="toggleLegend">
+      <cover-view class="bottom-icon">▤</cover-view>
+      <cover-view>图例</cover-view>
+    </cover-view>
+    <cover-view class="bottom-action" bindtap="showMapInfo">
+      <cover-view class="bottom-icon">ⓘ</cover-view>
+      <cover-view>说明</cover-view>
+    </cover-view>
+  </cover-view>
 </view>
