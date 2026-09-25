@@ -131,6 +131,13 @@
       .knowledge-section h2 { margin: 0 0 17px; color: #f2f3ef; font-size: 24px; font-weight: 500; line-height: 1.25; }
       .knowledge-section h3 { margin: 26px 0 10px; color: rgba(242,243,239,.9); font-size: 16px; font-weight: 500; }
       .knowledge-paragraph { margin: 0 0 14px; color: rgba(236,238,234,.78); font-size: 15px; line-height: 1.85; }
+      .knowledge-markdown-list { margin: 0 0 16px; padding-left: 22px; color: rgba(236,238,234,.78); font-size: 15px; line-height: 1.8; }
+      .knowledge-markdown-list li { padding-left: 4px; margin: 4px 0; }
+      .knowledge-markdown-quote { margin: 16px 0; padding: 12px 14px; border-left: 2px solid rgba(245,245,245,.45); background: rgba(255,255,255,.045); color: rgba(236,238,234,.72); }
+      .knowledge-markdown-quote p { margin: 0 0 8px; }
+      .knowledge-markdown-quote p:last-child { margin-bottom: 0; }
+      .knowledge-code { margin: 16px 0; padding: 12px 14px; overflow-x: auto; border: 1px solid rgba(255,255,255,.12); border-radius: 8px; background: rgba(0,0,0,.28); color: rgba(236,238,234,.78); font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space: pre-wrap; }
+      .knowledge-divider { margin: 22px 0; border: 0; border-top: 1px solid rgba(255,255,255,.1); }
       .knowledge-image { margin: 20px 0; overflow: hidden; border: 1px solid rgba(255,255,255,.14); border-radius: 10px; background: #1a1d20; }
       .knowledge-image img { display: block; width: 100%; max-height: 340px; object-fit: cover; opacity: .92; }
       .knowledge-image.image-unavailable { min-height: 78px; display: grid; align-content: center; background: #1b1e21; }
@@ -288,6 +295,7 @@
     <script src="vendor/globe.gl.min.js"></script>
     <script src="data/countries.js"></script>
     <script src="data/family-office-locations.js"></script>
+    <script src="data/knowledge/index.js"></script>
     <script src="data/knowledge/42-north.js"></script>
     <script src="knowledge-reader.js"></script>
     <script>
@@ -602,10 +610,18 @@
         }
       });
 
-      function openKnowledgeArticle(slug) {
-        if (!window.KnowledgeReader.open(slug)) return;
+      async function openKnowledgeArticle(slug) {
+        if (!slug) return;
+        readKnowledge.disabled = true;
+        mapStatus.textContent = "正在加载家办文章";
+        const opened = await window.KnowledgeReader.open(slug);
+        readKnowledge.disabled = false;
+        if (!opened) {
+          mapStatus.textContent = "文章暂时无法加载";
+          return;
+        }
         closeFloatingPanels();
-        mapStatus.textContent = "正在阅读家办深度研究";
+        mapStatus.textContent = "正在阅读家办研究";
       }
 
       function closeKnowledgeArticle() {
