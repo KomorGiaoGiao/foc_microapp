@@ -76,6 +76,18 @@
       .selection strong { display: block; margin: 7px 0 4px; color: var(--text); font-size: 21px; font-weight: 500; }
       .selection p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
       .selection-meta { display: flex; gap: 16px; margin-top: 13px; padding-top: 11px; border-top: 1px solid rgba(255,255,255,.1); color: var(--muted); font-size: 11px; }
+      .office-list-panel { margin-top: 15px; padding-top: 13px; border-top: 1px solid rgba(255,255,255,.1); }
+      .office-list-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; color: rgba(245,245,245,.82); font-size: 12px; }
+      .office-list-count { color: var(--muted); font-size: 11px; }
+      .office-list-search { width: 100%; height: 32px; padding: 0 9px; border: 1px solid rgba(255,255,255,.18); border-radius: 8px; outline: 0; background: rgba(0,0,0,.2); color: var(--text); font-size: 12px; }
+      .office-list-search:focus { border-color: rgba(255,255,255,.72); }
+      .office-list { max-height: 208px; margin-top: 7px; overflow: auto; scrollbar-color: rgba(255,255,255,.3) transparent; }
+      .office-list-item { width: 100%; min-height: 37px; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 9px; border: 0; border-bottom: 1px solid rgba(255,255,255,.07); border-radius: 7px; background: transparent; color: rgba(245,245,245,.82); text-align: left; cursor: pointer; font-size: 12px; line-height: 1.35; }
+      .office-list-item:last-child { border-bottom: 0; }
+      .office-list-item:hover, .office-list-item.active { background: rgba(255,255,255,.1); color: var(--text); }
+      .office-list-item span:first-child { min-width: 0; overflow-wrap: anywhere; }
+      .office-list-badge { flex: 0 0 auto; padding: 3px 5px; border: 1px solid rgba(255,255,255,.2); border-radius: 5px; color: var(--muted); font-size: 9px; white-space: nowrap; }
+      .office-list-empty { padding: 12px 8px; color: var(--muted); font-size: 11px; }
       .actions { display: flex; gap: 8px; margin-top: 14px; }
       .action-button { height: 30px; padding: 0 11px; border: 1px solid rgba(255,255,255,.56); border-radius: 8px; background: rgba(255,255,255,.06); color: var(--accent); cursor: pointer; font-size: 12px; }
       .action-button:hover { background: rgba(255,255,255,.14); }
@@ -140,6 +152,7 @@
       @media (max-width: 600px) {
         .side-rail { bottom: 12px; }
         .search-panel, .selection { bottom: 80px; width: calc(100vw - 24px); }
+        .office-list { max-height: 190px; }
         .map-tools { right: 12px; bottom: 88px; }
         .filter-panel, .stats-panel { bottom: 80px; width: calc(100vw - 24px); }
         .map-status { display: none; }
@@ -223,9 +236,14 @@
       </button>
     </div>
     <div id="selection" class="selection">
-      <div class="selection-kicker">Selected region</div>
+      <div class="selection-kicker" id="selection-kicker">Selected region</div>
       <strong id="selected-name"></strong>
       <p id="selected-description"></p>
+      <div class="office-list-panel" id="office-list-panel" hidden>
+        <div class="office-list-heading"><span>选择家族办公室</span><span class="office-list-count" id="office-list-count"></span></div>
+        <input class="office-list-search" id="office-list-search" type="search" placeholder="筛选家办名称" autocomplete="off" />
+        <div class="office-list" id="office-list"></div>
+      </div>
       <div class="selection-meta"><span>地图数据</span><span>知识库同步</span></div>
       <div class="actions"><button class="action-button" id="back">返回全球视角</button><button class="action-button" id="read-knowledge" hidden>查看深度研究</button></div>
     </div>
@@ -262,8 +280,15 @@
       const countryFilter = document.getElementById("country-filter");
       const majorCitiesFilter = document.getElementById("major-cities-filter");
       const filterCount = document.getElementById("filter-count");
+      const selectionKicker = document.getElementById("selection-kicker");
+      const officeListPanel = document.getElementById("office-list-panel");
+      const officeListSearch = document.getElementById("office-list-search");
+      const officeList = document.getElementById("office-list");
+      const officeListCount = document.getElementById("office-list-count");
       let countries = null;
       let selectedKnowledgeSlug = null;
+      let selectedPoint = null;
+      let selectedOfficeName = null;
       const isTouchDevice = Boolean(window.matchMedia?.("(pointer: coarse)").matches || navigator.maxTouchPoints > 0);
       const isMobileViewport = window.matchMedia?.("(max-width: 600px)").matches ?? window.innerWidth <= 600;
       const defaultView = { lat: 24, lng: 40, altitude: isMobileViewport ? 2.95 : 2.6 };
@@ -304,6 +329,7 @@
       globe.pointOfView(defaultView, 0);
 
       function handleCountryClick(polygon) {
+        clearOfficeSelection();
         const properties = polygon.properties || {};
         if (properties.kind === "province") {
           const name = properties.name || "行政区";
@@ -320,29 +346,117 @@
       }
 
       function handleOfficeClick(point) {
+        selectedPoint = point;
         globeControls.autoRotate = false;
         globe.pointOfView({ lat: point.lat, lng: point.lng, altitude: 0.28 }, 900);
-        const description = `${point.country ? `${point.country} · ` : ""}${point.count} 家家族办公室`;
-        showSelection(point.city, description, findKnowledgeSlug(point));
+        const officeNames = getOfficeNames(point);
+
+        if (officeNames.length > 1) {
+          showCityOfficeList(point);
+          return;
+        }
+
+        selectOffice(point, officeNames[0] || point.city);
       }
 
-      function findKnowledgeSlug(point) {
-        const names = point?.institutionNames || [];
+      function getOfficeNames(point) {
+        return [...new Set((point?.institutionNames || []).filter(Boolean).map((name) => String(name).trim()).filter(Boolean))];
+      }
+
+      function findKnowledgeSlugByOfficeName(officeName) {
+        const normalizedName = String(officeName || "").trim().toLowerCase();
         return Object.entries(knowledgeCatalog).find(([, article]) =>
-          article.officeNames.some((officeName) => names.some((name) => name.toLowerCase() === officeName.toLowerCase()))
+          (article.officeNames || []).some((name) => String(name).trim().toLowerCase() === normalizedName)
         )?.[0] || null;
       }
 
-      function showSelection(name, description, knowledgeSlug = null) {
+      function showSelection(name, description, knowledgeSlug = null, kicker = "Selected region") {
         selectedName.textContent = name;
         selectedDescription.textContent = description;
         selectedKnowledgeSlug = knowledgeSlug;
         readKnowledge.hidden = !knowledgeSlug;
+        selectionKicker.textContent = kicker;
         selection.classList.add("visible");
         searchPanel.hidden = true;
         filterPanel.hidden = true;
         statsPanel.hidden = true;
         mapStatus.textContent = "已定位 · 点击返回按钮回到全球视角";
+      }
+
+      function showCityOfficeList(point) {
+        const officeNames = getOfficeNames(point);
+        selectedOfficeName = null;
+        showSelection(
+          point.city,
+          `${point.country ? `${point.country} · ` : ""}${officeNames.length} 家家族办公室，请选择一家查看详情`,
+          null,
+          "City offices"
+        );
+        officeListPanel.hidden = false;
+        officeListCount.textContent = `${officeNames.length} 家`;
+        officeListSearch.value = "";
+        renderOfficeList("");
+        mapStatus.textContent = "已定位 · 请选择具体家族办公室";
+      }
+
+      function selectOffice(point, officeName) {
+        selectedPoint = point;
+        selectedOfficeName = officeName;
+        const knowledgeSlug = findKnowledgeSlugByOfficeName(officeName);
+        const location = [point.city, point.country].filter(Boolean).join(" · ");
+        const researchStatus = knowledgeSlug ? "已有深度研究" : "深度研究待补充";
+        showSelection(officeName, `${location} · ${researchStatus}`, knowledgeSlug, "Selected office");
+        officeListPanel.hidden = getOfficeNames(point).length <= 1;
+        if (!officeListPanel.hidden) {
+          renderOfficeList(officeListSearch.value);
+        }
+        mapStatus.textContent = knowledgeSlug
+          ? "已选择家族办公室 · 可打开深度研究"
+          : "已选择家族办公室 · 该家办暂无深度研究";
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function renderOfficeList(query = "") {
+        if (!selectedPoint) return;
+        const officeNames = getOfficeNames(selectedPoint);
+        const normalizedQuery = String(query).trim().toLowerCase();
+        const matches = officeNames.filter((officeName) => !normalizedQuery || officeName.toLowerCase().includes(normalizedQuery));
+        officeListCount.textContent = normalizedQuery ? `${matches.length}/${officeNames.length} 家` : `${officeNames.length} 家`;
+
+        if (!matches.length) {
+          officeList.innerHTML = '<div class="office-list-empty">没有找到匹配的家办</div>';
+          return;
+        }
+
+        officeList.innerHTML = matches.map((officeName, index) => {
+          const hasResearch = Boolean(findKnowledgeSlugByOfficeName(officeName));
+          const activeClass = selectedOfficeName === officeName ? " active" : "";
+          return `<button class="office-list-item${activeClass}" type="button" data-office-index="${index}"><span>${escapeHtml(officeName)}</span><span class="office-list-badge">${hasResearch ? "有研究" : "待补充"}</span></button>`;
+        }).join("");
+
+        officeList.querySelectorAll(".office-list-item").forEach((button) => {
+          button.addEventListener("click", (event) => {
+            event.stopPropagation();
+            selectOffice(selectedPoint, matches[Number(button.dataset.officeIndex)]);
+          });
+        });
+      }
+
+      function clearOfficeSelection() {
+        selectedPoint = null;
+        selectedOfficeName = null;
+        officeListPanel.hidden = true;
+        officeListSearch.value = "";
+        officeList.innerHTML = "";
+        officeListCount.textContent = "";
       }
 
       function closeFloatingPanels() {
@@ -352,6 +466,8 @@
         selection.classList.remove("visible");
         readKnowledge.hidden = true;
         selectedKnowledgeSlug = null;
+        selectionKicker.textContent = "Selected region";
+        clearOfficeSelection();
       }
 
       function resetView() {
@@ -462,6 +578,7 @@
       });
 
       searchInput.addEventListener("input", (event) => renderSearchResults(event.target.value));
+      officeListSearch.addEventListener("input", (event) => renderOfficeList(event.target.value));
 
       function renderSearchResults(query) {
         const normalizedQuery = query.trim().toLowerCase();
