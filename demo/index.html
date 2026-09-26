@@ -219,7 +219,7 @@
     </aside>
     <div class="search-panel" id="search-panel" hidden>
       <label class="search-label" for="search-input">搜索城市或国家</label>
-      <input class="search-input" id="search-input" type="search" placeholder="例如：伦敦、美国" autocomplete="off" />
+        <input class="search-input" id="search-input" type="search" placeholder="搜索城市、国家或家办名称" autocomplete="off" />
       <div class="search-results" id="search-results"></div>
     </div>
     <div class="filter-panel" id="filter-panel" hidden>
@@ -335,6 +335,37 @@
       const offices = window.FAMILY_OFFICE_LOCATIONS || [];
 
       const knowledgeCatalog = window.KNOWLEDGE_ARTICLES || {};
+      const searchAliases = {
+        "纽约": "new york", "伦敦": "london", "芝加哥": "chicago", "达拉斯": "dallas",
+        "新加坡": "singapore", "香港": "hong kong", "旧金山": "san francisco", "迪拜": "dubai",
+        "洛杉矶": "los angeles", "日内瓦": "geneva", "苏黎世": "zurich", "巴黎": "paris",
+        "东京": "tokyo", "北京": "beijing", "上海": "shanghai", "深圳": "shenzhen",
+        "悉尼": "sydney", "墨尔本": "melbourne", "多伦多": "toronto", "温哥华": "vancouver",
+        "莫斯科": "moscow", "孟买": "mumbai", "德里": "delhi", "首尔": "seoul",
+        "台北": "taipei", "吉隆坡": "kuala lumpur", "曼谷": "bangkok", "雅加达": "jakarta",
+        "圣保罗": "sao paulo", "迈阿密": "miami", "波士顿": "boston", "休斯顿": "houston",
+        "西雅图": "seattle", "华盛顿": "washington", "开罗": "cairo", "利雅得": "riyadh",
+        "多哈": "doha", "阿姆斯特丹": "amsterdam", "法兰克福": "frankfurt", "米兰": "milan",
+        "罗马": "rome", "马德里": "madrid", "卢森堡": "luxembourg", "美国": "united states",
+        "英国": "united kingdom", "中国": "china", "加拿大": "canada", "澳大利亚": "australia",
+        "瑞士": "switzerland", "法国": "france", "德国": "germany", "阿联酋": "united arab emirates",
+        "日本": "japan", "韩国": "south korea", "印度": "india", "俄罗斯": "russia",
+        "意大利": "italy", "西班牙": "spain", "荷兰": "netherlands", "南非": "south africa"
+      };
+
+      function normalizeSearchText(value) {
+        return String(value || "")
+          .normalize("NFKD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase()
+          .replace(/[^\p{L}\p{N}]+/gu, "");
+      }
+
+      function getSearchTerms(query) {
+        const raw = String(query || "").trim().toLowerCase();
+        const alias = searchAliases[raw];
+        return [...new Set([normalizeSearchText(query), normalizeSearchText(alias)].filter(Boolean))];
+      }
 
       function getPolygonStrokeColor(polygon) {
         const properties = polygon.properties || {};
@@ -748,13 +779,36 @@
       officeListSearch.addEventListener("input", (event) => renderOfficeList(event.target.value));
 
       function renderSearchResults(query) {
-        const normalizedQuery = query.trim().toLowerCase();
+        const terms = getSearchTerms(query);
+        const normalizedQuery = normalizeSearchText(query);
         const matches = offices
-          .filter((point) => !normalizedQuery || `${point.city} ${point.country}`.toLowerCase().includes(normalizedQuery))
-          .slice(0, 8);
+          .map((point) => {
+            const city = normalizeSearchText(point.city);
+            const country = normalizeSearchText(point.country || "全球");
+            const countryCode = normalizeSearchText(point.countryCode);
+            const institutions = (point.institutionNames || []).map(normalizeSearchText);
+            let score = normalizedQuery ? 0 : 1;
+
+            terms.forEach((term) => {
+              if (!term) return;
+              if (city === term) score = Math.max(score, 100);
+              else if (city.startsWith(term)) score = Math.max(score, 85);
+              else if (city.includes(term)) score = Math.max(score, 75);
+              if (country === term || countryCode === term) score = Math.max(score, 90);
+              else if (country.startsWith(term)) score = Math.max(score, 78);
+              else if (country.includes(term)) score = Math.max(score, 68);
+              if (institutions.some((name) => name === term)) score = Math.max(score, 95);
+              else if (institutions.some((name) => name.includes(term))) score = Math.max(score, 65);
+            });
+
+            return { point, score };
+          })
+          .filter(({ score }) => score > 0)
+          .sort((a, b) => b.score - a.score || Number(b.point.count || 0) - Number(a.point.count || 0))
+          .map(({ point }) => point);
 
         if (!matches.length) {
-          searchResults.innerHTML = '<div class="search-empty">没有找到匹配的城市或国家</div>';
+          searchResults.innerHTML = '<div class="search-empty">没有找到匹配的城市、国家或家办</div>';
           return;
         }
 
