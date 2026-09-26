@@ -8,6 +8,7 @@
   const tocToggle = document.getElementById("knowledge-toc-toggle");
   const tocBackdrop = document.getElementById("knowledge-toc-backdrop");
   const articles = window.KNOWLEDGE_ARTICLES || {};
+  let closeTimer = null;
 
   function escapeHtml(value) {
     return String(value ?? "")
@@ -175,16 +176,30 @@
   async function open(slug) {
     const article = await loadArticle(slug);
     if (!article) return false;
+    if (closeTimer !== null) {
+      window.clearTimeout(closeTimer);
+      closeTimer = null;
+    }
     reader.hidden = false;
+    reader.classList.remove("is-closing");
     render(article);
     closeToc();
+    window.requestAnimationFrame(() => reader.classList.add("is-visible"));
     return true;
   }
 
   function close() {
     closeToc();
-    reader.hidden = true;
-    document.dispatchEvent(new CustomEvent("knowledge:closed"));
+    reader.classList.remove("is-visible");
+    reader.classList.add("is-closing");
+    const finishClose = () => {
+      reader.hidden = true;
+      reader.classList.remove("is-closing");
+      closeTimer = null;
+      document.dispatchEvent(new CustomEvent("knowledge:closed"));
+    };
+    const delay = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ? 0 : 280;
+    closeTimer = window.setTimeout(finishClose, delay);
   }
 
   document.getElementById("knowledge-close").addEventListener("click", close);
