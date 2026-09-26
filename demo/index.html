@@ -326,6 +326,8 @@
       let selectedKnowledgeSlug = null;
       let selectedPoint = null;
       let selectedOfficeName = null;
+      let selectedCountry = null;
+      let selectedOfficePoint = null;
       const isTouchDevice = Boolean(window.matchMedia?.("(pointer: coarse)").matches || navigator.maxTouchPoints > 0);
       const isMobileViewport = window.matchMedia?.("(max-width: 600px)").matches ?? window.innerWidth <= 600;
       const defaultView = { lat: 24, lng: 40, altitude: isMobileViewport ? 2.95 : 2.6 };
@@ -333,6 +335,45 @@
       const offices = window.FAMILY_OFFICE_LOCATIONS || [];
 
       const knowledgeCatalog = window.KNOWLEDGE_ARTICLES || {};
+
+      function getPolygonStrokeColor(polygon) {
+        const properties = polygon.properties || {};
+        if (properties.kind === "province") return "rgba(245, 245, 245, 0.9)";
+        return polygon === selectedCountry
+          ? "rgba(255, 255, 255, 0.96)"
+          : "rgba(190, 195, 200, 0.5)";
+      }
+
+      function getPointRadius(point) {
+        const baseRadius = Math.min(0.62, 0.28 + Math.sqrt(point.count || 1) * 0.035);
+        return point === selectedOfficePoint ? baseRadius * 1.22 : baseRadius;
+      }
+
+      function getBoundaryPaths(geometry) {
+        const paths = [];
+
+        function visit(value) {
+          if (!Array.isArray(value) || !value.length) return;
+          if (Array.isArray(value[0]) && typeof value[0][0] === "number" && typeof value[0][1] === "number") {
+            paths.push({
+              points: value.map(([lng, lat]) => ({ lat, lng: normalizeLongitude(lng) }))
+            });
+            return;
+          }
+          value.forEach(visit);
+        }
+
+        visit(geometry?.coordinates);
+        return paths;
+      }
+
+      function updateMapHighlights() {
+        globe
+          .pathsData(selectedCountry ? getBoundaryPaths(selectedCountry.geometry) : [])
+          .ringsData(selectedOfficePoint ? [selectedOfficePoint] : [])
+          .polygonStrokeColor(getPolygonStrokeColor)
+          .pointRadius(getPointRadius);
+      }
 
       const globe = Globe({ animateIn: true })(globeContainer)
         .backgroundColor("#0b0c0e")
@@ -342,17 +383,33 @@
         .polygonAltitude(({ properties }) => properties.kind === "province" ? 0.032 : 0.012)
         .polygonCapColor(({ properties }) => properties.kind === "province" ? "transparent" : "rgba(45, 48, 52, 0.76)")
         .polygonSideColor(({ properties }) => properties.kind === "province" ? "transparent" : "rgba(180, 185, 190, 0.14)")
-        .polygonStrokeColor(({ properties }) => properties.kind === "province" ? "rgba(245, 245, 245, 0.9)" : "rgba(190, 195, 200, 0.5)")
+        .polygonStrokeColor(getPolygonStrokeColor)
         .polygonLabel(({ properties }) => properties.name || properties.NAME)
         .onPolygonClick(handleCountryClick)
         .pointsData(offices)
         .pointLat("lat")
         .pointLng("lng")
         .pointAltitude(0.035)
-        .pointRadius(({ count }) => Math.min(0.62, 0.28 + Math.sqrt(count || 1) * 0.035))
+        .pointRadius(getPointRadius)
         .pointColor(() => "#f5f5f5")
         .pointLabel(({ city, country, count }) => `${city}${country ? ` · ${country}` : ""} · ${count} 家`)
-        .onPointClick(handleOfficeClick);
+        .onPointClick(handleOfficeClick)
+        .pathsData([])
+        .pathPoints("points")
+        .pathPointLat("lat")
+        .pathPointLng("lng")
+        .pathColor(() => "rgba(255, 255, 255, 0.96)")
+        .pathStroke(1.35)
+        .pathDashLength(0.12)
+        .pathDashGap(0.08)
+        .pathDashAnimateTime(1500)
+        .ringsData([])
+        .ringLat("lat")
+        .ringLng("lng")
+        .ringColor(() => ["rgba(255, 255, 255, 0.95)", "rgba(255, 255, 255, 0)"])
+        .ringMaxRadius(1.45)
+        .ringPropagationSpeed(1.15)
+        .ringRepeatPeriod(1250);
 
       const globeControls = globe.controls();
       globeControls.autoRotate = !isTouchDevice;
@@ -367,6 +424,9 @@
 
       function handleCountryClick(polygon) {
         clearOfficeSelection();
+        selectedCountry = polygon.properties?.kind === "province" ? null : polygon;
+        selectedOfficePoint = null;
+        updateMapHighlights();
         const properties = polygon.properties || {};
         if (properties.kind === "province") {
           const name = properties.name || "行政区";
@@ -384,6 +444,9 @@
 
       function handleOfficeClick(point) {
         selectedPoint = point;
+        selectedCountry = null;
+        selectedOfficePoint = point;
+        updateMapHighlights();
         globeControls.autoRotate = false;
         globe.pointOfView({ lat: point.lat, lng: point.lng, altitude: 0.28 }, 900);
         const officeNames = getOfficeNames(point);
@@ -518,6 +581,9 @@
       function resetView() {
         if (countries) globe.polygonsData(countries.features);
         globe.pointsData(offices);
+        selectedCountry = null;
+        selectedOfficePoint = null;
+        updateMapHighlights();
         countryFilter.value = "all";
         syncCountryPicker();
         majorCitiesFilter.checked = false;
