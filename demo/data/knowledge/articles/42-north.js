@@ -1,6 +1,7 @@
 window.KNOWLEDGE_ARTICLES = window.KNOWLEDGE_ARTICLES || {};
 
 window.KNOWLEDGE_ARTICLES["42-north"] = {
+  slug: "42-north",
   officeNames: ["42 North Partners"],
   eyebrow: "家族办公室深度研究",
   title: "42 North Partners · Jandernoa 家族",
@@ -12,202 +13,40 @@ window.KNOWLEDGE_ARTICLES["42-north"] = {
   readingTime: "约 18 分钟",
   summary: "从 Perrigo 乡村药厂的 CFO 到全球医药巨头的掌舵人，Mike Jandernoa 用 30 年完成了从零到 25 亿美元的商业跃迁。2011 年成立的 42 North Partners 不仅是 Jandernoa 家族财富管理的枢纽，更是一个以投资、创业和社区为三支柱的家族平台。",
   keywords: ["Jandernoa 家族", "new money", "单一家族办公室", "Perrigo 前 CEO", "三支柱架构", "二代全员接班"],
-  aside: [
-    ["关联家族", "Jandernoa 家族"],
-    ["总部", "美国密歇根州 Grand Rapids"],
-    ["财富来源", "Perrigo Company"],
-    ["研究状态", "公开资料整理"]
-  ],
+  aside: [["关联家族", "Jandernoa 家族"], ["总部", "美国密歇根州 Grand Rapids"], ["财富来源", "Perrigo Company"], ["研究状态", "飞书深度研究"]],
   sections: [
     {
-      id: "core-info",
-      title: "一、核心信息",
-      blocks: [
-        { type: "factTable", rows: [
-          ["机构名称", "42 North Partners"],
-          ["成立时间", "2011 年"],
-          ["机构类型", "单一家族办公室（SFO）"],
-          ["关联家族", "Jandernoa 家族"],
-          ["创始人", "Mike Jandernoa & Sue Jandernoa"],
-          ["总部", "美国密歇根州 Grand Rapids"],
-          ["公开投资规模", "约 2 亿美元的西密歇根投资组合（2016 年报道）"],
-          ["投资策略", "中低端市场 PE 基金投资 + 共同投资，聚焦北美"],
-          ["核心团队", "约 16 人，含 3 名家族成员"],
-          ["家族代际", "创办人 → 三名二代成员"]
-        ]},
-        { type: "paragraph", text: "42 North Partners 是一家总部位于密歇根州 Grand Rapids 的单一家族办公室。它不向外部客户募资，而是服务于 Jandernoa 家族自己的资本、创业支持和社区事务。" },
-        { type: "insight", label: "核心洞察", text: "三个儿子分别掌管投资、创业和社区三大支柱，形成了少见的二代全员参与设计。" },
-        { type: "network", nodes: ["Mike & Sue Jandernoa", "42 North Partners", "投资业务", "创业支持", "社区事务", "Bridge Street Capital", "Hopen Life Science", "Jandernoa Foundation"] }
-      ]
+      id: "summary", title: "研究摘要", blocks: [{ type: "markdown", markdown: "> 本报告为家办圈知识库内容，基于公开信息整理。\n> 整理时间：2026 年 6 月 | 核心人物：Mike Jandernoa——前 Perrigo 公司 CEO\n\n从 Perrigo 乡村药厂的 CFO 到全球医药巨头的掌舵人，Mike Jandernoa 用 30 年完成了从零到 25 亿美元的商业跃迁。2011 年成立的 42 North Partners 不仅是 Jandernoa 家族财富管理的枢纽，更是一个三子共同参与、以投资、创业和社区三支柱驱动的家族平台。\n\n这家总部位于密歇根 Grand Rapids 的单一家族办公室，以约 2 亿美元的西密歇根投资组合深耕中西部中低端市场 PE 基金和共同投资，同时通过 Bridge Street Capital、Hopen Life Science 和 Grand Angels 等生态机构构建了西密歇根的创业资本网络。其独特之处在于：创始人将三个儿子带回故乡，分别掌管投资、创业和社区三条业务线，完成了罕见的二代全员参与设计。\n\n这是一种典型的管理型致富路径：Mike 并非 Perrigo 的创始人，而是从 CFO 起步，通过两次管理层收购、一次上市和长期经营获得所有权。家办成立后，三个儿子分别进入投资、创业和社区三条业务线，形成家族成员负责方向、职业经理人负责执行的轻型 SFO。\n\n公开资料没有披露完整 AUM、家族净资产、信托安排或投资回报。文中涉及的规模数字均应与来源和时间一起阅读。\n\n---" }]
     },
     {
-      id: "family-background",
-      title: "二、家族背景",
-      blocks: [
-        { type: "heading", title: "姓氏渊源" },
-        { type: "paragraph", text: "Jandernoa 是一个荷兰裔姓氏，家族在 20 世纪早期移民至美国中西部，落脚于密歇根州。Grand Rapids 本身具有浓厚的荷兰裔移民传统，也形成了 DeVos、Van Andel、Meijer 等家族长期共存的本地资本网络。" },
-        { type: "heading", title: "财富起源" },
-        { type: "paragraph", text: "Jandernoa 家族的财富完全来自 Perrigo。Mike Jandernoa 并非企业创始人，而是从 CFO 起步，通过两次管理层收购、一次上市和长期经营完成了从职业经理人到企业所有者的身份转变。" },
-        { type: "timeline", items: [
-          ["1887", "Perrigo 在密歇根州 Allegan 成立，最初是家庭用药制造商"],
-          ["1981", "管理层参与首次杠杆收购"],
-          ["1988", "管理层从 Gro Group 手中买回公司"],
-          ["1991", "Perrigo 在纳斯达克上市"],
-          ["2015", "年营收达到约 53.5 亿美元，全球员工超过 13,000 人"],
-          ["2017", "Mike Jandernoa 退出 Perrigo 董事会"]
-        ]},
-        { type: "risk", label: "数据盲区", text: "家族总财富、个人净资产、信托架构和股权分配未公开披露。公开报道中的规模数字需要和来源及时间一起阅读。" },
-        { type: "insight", label: "分析视角", text: "这是典型的管理型致富路径：财富不是来自创始家族继承，而是来自职业经理人通过运营、收购和上市获得所有权。" }
-      ]
+      id: "一-核心信息卡", title: "一、 核心信息卡", blocks: [{ type: "markdown", markdown: "| 维度 | 详情 |\n|-|-|\n| **机构名称** | 42 North Partners |\n| **成立时间** | 2011 年 |\n| **机构类型** | 单一家族办公室（SFO） |\n| **关联家族** | Jandernoa 家族 |\n| **创始人** | Mike Jandernoa 与 Sue Jandernoa |\n| **总部** | 美国密歇根州 Grand Rapids |\n| **公开投资规模** | 约 2 亿美元的西密歇根投资组合（2016 年报道） |\n| **投资策略** | 中低端市场 PE 基金投资与共同投资，聚焦北美 |\n| **核心团队** | 约 16 人，其中 3 名家族成员 |\n| **财富来源** | Perrigo Company（OTC 制药） |\n| **家族代际** | 创办人 → 三名二代成员 |\n\n**核心洞察：** Jandernoa 家族最令人印象深刻之处在于二代融合的深度。三个儿子不仅全部回到家族平台，而且分别掌管投资、创业和社区三大支柱。大多数 SFO 要么让二代只参与投资决策，要么用职业经理人填补关键岗位；42 North 选择了更彻底的家族化路径，同时保留职业团队执行日常运营。\n\n---" }]
     },
     {
-      id: "founder-story",
-      title: "三、创始人发家史",
-      blocks: [
-        { type: "paragraph", text: "1979 年，28 岁的注册会计师 Mike Jandernoa 从 BDO Seidman 离职，加入密歇根乡村小镇 Allegan 的 Perrigo 任 CFO。当时公司只有约 300 名员工；多年后，Perrigo 已成长为全球 OTC 制药巨头。" },
-        { type: "timeline", items: [
-          ["1972", "密歇根大学本科毕业"],
-          ["1972–1979", "在 BDO Seidman 担任注册会计师"],
-          ["1979", "加入 Perrigo 任 CFO"],
-          ["1983", "升任 President"],
-          ["1986", "成为 CEO"],
-          ["1991", "兼任董事会主席，Perrigo 完成 IPO"],
-          ["2000", "退休并卸任 CEO"],
-          ["2011", "创立 42 North Partners"],
-          ["2017", "退出 Perrigo 董事会，转向家族平台"]
-        ]},
-        { type: "heading", title: "白手起家型的叙事张力" },
-        { type: "paragraph", text: "Mike Jandernoa 的关键转折有两个：第一次管理层收购让他获得了早期股权激励；第二次管理层收购则让他获得了更实质性的控制权。他还推动 Perrigo 建立消费者营销部门，在自有品牌药品包装上使用“Compare to the national brand”的策略。" },
-        { type: "heading", title: "第二曲线" },
-        { type: "paragraph", text: "他的第二曲线不是复制另一家 Perrigo，而是围绕家族和西密歇根构建生态体系：2005 年进入生命科学投资，2009 年启动创业导师计划 JEM，随后参与 Bridge Street Capital Partners 和 Grand Angels 等平台。" },
-        { type: "insight", label: "作者判断", text: "这些平台既是投资延伸，也是家族获取创业者、交易机会和地方声誉的长期网络。" }
-      ]
+      id: "二-家族背景", title: "二、 家族背景", blocks: [{ type: "markdown", markdown: "### 姓氏与地域\n\nJandernoa 是一个荷兰裔姓氏，起源可追溯到荷兰弗里斯兰地区。家族在 20 世纪早期移民至美国中西部，落脚于密歇根州，这是荷兰裔移民在美国的传统定居地之一。Grand Rapids 具有浓厚的荷兰文化传统，也形成了 DeVos、Van Andel、Meijer 等家族长期共存的本地资本网络。\n\n### 财富起源\n\nJandernoa 家族的财富完全来自 Perrigo。Mike Jandernoa 并非企业创始人，而是从 CFO 起步，通过两次管理层收购、一次上市和长期经营完成了从职业经理人到企业所有者的身份转变。\n\n| 关键节点 | 时间 | 细节 |\n|-|-|-|\n| Perrigo 创立 | 1887 | 在密歇根州 Allegan 成立，最初为家庭用药制造商 |\n| 首次 LBO | 1981 | Mike Jandernoa 参与管理层收购 Perrigo |\n| 再次 LBO | 1988 | 管理层从 Gro Group 手中买回公司 |\n| IPO | 1991 | Perrigo 在纳斯达克上市，代码 PRGO |\n| 巅峰 | 2015 | 年营收约 53.5 亿美元，全球员工超过 13,000 人 |\n| 退出董事会 | 2017 | Mike 因主动投资者压力离任 |\n\nMike 在 2004 年 SEC 文件中持有 Perrigo 约 9.2% 的流通股。Perrigo 从 1991 年 IPO 到 2015 年经历多轮股票拆分和股价上涨，即使 Mike 在 2000 至 2017 年间逐步减持，其持股价值仍构成家族财富的核心基础。\n\n> **数据盲区：** Jandernoa 家族总财富和 Mike 的个人净资产未公开披露。公开估值从 5,000 万美元到 1 亿美元以上不等，但由于 Perrigo 在 1991 至 2015 年间经历了巨大市值增长，且 Mike 持有大量股权到 2017 年，实际财富应远超公开资料能够直接推导的数额。\n\n**分析视角：** 这是典型的管理型致富路径。Mike 不是 Perrigo 的创始人，而是作为职业经理人通过两次 LBO 和一次 IPO 积累所有权。这种“经理人到股东”的路径在美国中西部制造企业中并不罕见，但与 DeVos、Van Andel 等创始家族的财富起源不同，Jandernoa 家族更强调运营能力和创业者精神。\n\n---" }]
     },
     {
-      id: "succession",
-      title: "四、代际传承",
-      blocks: [
-        { type: "factTable", rows: [
-          ["G1 一代", "Mike Jandernoa · 创始合伙人 · Perrigo 前 CEO / Chairman"],
-          ["G1 一代", "Sue Jandernoa · 创始合伙人 · 30 年教龄教师"],
-          ["G2 长子", "Carl Jandernoa · 合伙人 · 投资业务主管"],
-          ["G2 次子", "Rob Jandernoa · 合伙人 · 创业业务主管"],
-          ["G2 三子", "Steve Jandernoa · 合伙人 · 社区事务主管"]
-        ]},
-        { type: "paragraph", text: "三个儿子在 Deloitte、UBS、EY、KPMG、银行和创业公司等外部机构积累经验后，先后回到西密歇根并进入家族平台。" },
-        { type: "paragraph", text: "Carl 的背景更接近投资决策，Rob 负责创业生态和 JEM，Steve 则负责社区事务。家族办公室因此形成投资、创业、社区三条业务线。" },
-        { type: "insight", label: "核心洞察", text: "文章把这套安排概括为功能性分治：既维持家族凝聚力，又给每位二代成员独立的发展路径。" },
-        { type: "risk", label: "接班风险", text: "三个支柱分别依赖一名二代成员。如果其中一人离开，业务连续性和家族内部的职责平衡都可能受到影响。" }
-      ]
+      id: "三-创始人发家史", title: "三、 创始人发家史", blocks: [{ type: "markdown", markdown: "### 创始人画像\n\n1979 年，一位 28 岁的注册会计师从 BDO Seidman 辞职，加入密歇根乡村小镇 Allegan 一家只有约 300 名员工的区域性药厂做 CFO。他叫 Mike Jandernoa。38 年后，当他离开这家公司董事会时，Perrigo 已成长为年收入约 53.5 亿美元、在全球拥有 13,000 名员工的 OTC 制药巨头。在这个过程中，Jandernoa 经历了两次杠杆收购、一次上市、总部迁移和跨境注册，但 Allegan 工厂始终是他的经营原点。\n\n### 关键时间线\n\n| 年份 | 事件 |\n|-|-|\n| 1972 | 密歇根大学本科毕业 |\n| 1972–1979 | 在 BDO Seidman 担任注册会计师 |\n| 1979 | 加入 Perrigo 任 CFO |\n| 1981 | 升任销售与财务执行副总裁，参与首次 LBO |\n| 1983 | 升任 President |\n| 1986 | 成为 CEO，Perrigo 被 Gro Group 收购 |\n| 1988 | 领导管理层第二次 LBO 买回公司 |\n| 1991 | 兼任董事会主席，Perrigo 完成 IPO |\n| 2000 | 退休并卸任 CEO |\n| 2011 | 创立 42 North Partners |\n| 2017 | 退出 Perrigo 董事会，转向家族平台 |\n\n### 叙事张力：白手起家型\n\nMike 的关键转折有两个：第一次管理层收购让他获得早期股权激励；第二次管理层收购让他获得更实质性的控制权。他还推动 Perrigo 建立消费者营销部门，在自有品牌药品包装上使用“Compare to the national brand”的策略。这个决策让 Perrigo 能够基于消费者对自有品牌的态度做运营判断，并逐渐成为全球最大的自有品牌 OTC 药品制造商之一。\n\n**核心洞察：** 当许多私营制造企业满足于 B2B 关系时，Mike 选择直接面向消费者建立营销能力。这一选择改变了自有品牌药品的市场表达，也体现了他把财务管理、运营和消费者洞察结合起来的能力。两次 LBO 则说明他敢于在周期不确定时使用资本工具获取控制权。\n\n### 第二曲线\n\n他的第二曲线不是复制另一家 Perrigo，而是围绕家族和西密歇根构建生态体系：2005 年参与创立 Hopen Life Science Ventures，进入生命科学投资；2009 年启动 Jandernoa Entrepreneurial Mentoring（JEM），布局创业教育；2011 年创立 42 North Partners，将个人投资资产系统化；2010 年代又参与 Bridge Street Capital Partners 和 Grand Angels，扩展到 PE 和天使投资。\n\n**作者判断：** 这些平台既是投资延伸，也是家族获取创业者、交易机会和地方声誉的长期网络。42 North 的第二曲线因此不是再创办一家 Perrigo，而是把家族资本、创业支持和地方关系组织成可持续的平台。\n\n---" }]
     },
     {
-      id: "office-evolution",
-      title: "五、家办演变",
-      blocks: [
-        { type: "timeline", items: [
-          ["1993", "Jandernoa Foundation 成立，慈善平台开始制度化"],
-          ["2005", "Hopen Life Science Ventures 成立，延伸到生命科学投资"],
-          ["2009", "Jandernoa Entrepreneurial Mentoring（JEM）启动"],
-          ["2011", "42 North Partners LLC 成立，SFO 正式化"],
-          ["约 2012", "Bridge Street Capital Partners 形成 PE 投资平台"],
-          ["2016", "三个儿子全部回归加入 42 North"],
-          ["2017", "Mike 退出 Perrigo 董事会，全面转向家族平台"]
-        ]},
-        { type: "paragraph", text: "42 North 一直保持单一家族办公室模式，没有向外部客户开放或转型为多家族办公室。但通过 Bridge Street Capital、Grand Angels 和 Hopen Life Science，它又间接进入了更广泛的资本生态。" },
-        { type: "heading", title: "税务与法律架构" },
-        { type: "paragraph", text: "公开资料显示 42 North Partners 注册为美国特拉华州有限责任公司，在 Grand Rapids 运营；Jandernoa Foundation 则作为美国 501(c)(3) 私人基金会运作。具体信托、双层控股和跨境安排没有公开披露。" },
-        { type: "insight", label: "地缘观察", text: "留在 Grand Rapids 使 42 North 能够利用中西部较低的运营成本和本地社会资本，深耕全国性 PE 基金容易忽略的中低端市场交易。" }
-      ]
+      id: "四-代际传承", title: "四、 代际传承", blocks: [{ type: "markdown", markdown: "| 代际 | 姓名 | 角色 | 背景 |\n|-|-|-|-|\n| G1 | Mike Jandernoa | 42 North 创始合伙人、JEM 创始人 | Perrigo 前 CEO / Chairman |\n| G1 | Sue Jandernoa | 42 North 创始合伙人 | 30 年教龄教师 |\n| G2 | Carl Jandernoa | 合伙人，投资业务主管 | Deloitte、UBS、Bridge Street Capital |\n| G2 | Rob Jandernoa | 合伙人，创业业务主管 | 银行、销售、创业公司 |\n| G2 | Steve Jandernoa | 合伙人，社区事务主管 | EY、KPMG |\n\nJandernoa 家族的传承属于平稳交班型，但独特之处在于三子分工、各掌一柱。Carl 在 Deloitte 和 UBS 工作后加入 Bridge Street Capital Partners；Rob 有银行、销售和创业经历；Steve 则在 EY 和 KPMG 从事公共会计。2016 年，三个儿子先后回到西密歇根并参与 42 North 的运营。\n\n如今，Carl 领导投资活动，Rob 领导创业活动，Steve 领导社区活动。三个岗位分别对应家办的资本配置、JEM 创业生态和基金会及社区事务，形成家族成员主导方向、职业经理人负责执行的结构。\n\n**核心洞察：** 42 North 的代际传承不是简单的接班，而是一种功能性分治。Mike 将 SFO 的三大支柱分别交给三个儿子，既避免兄弟争权，又创造了三个独立的成长路径。这种安排的前提是家族财富规模足够大且业务多元，能够支撑三条独立的业务线。\n\n> **数据盲区：** Jandernoa 家族的信托架构和股权分配未公开。42 North 的 LLC 法人结构不要求公开受益所有人信息。\n\n> **接班风险：** 三个支柱分别依赖一名二代成员。如果其中一人离开，业务连续性和家族内部的职责平衡都可能受到影响。\n\n---" }]
     },
     {
-      id: "team",
-      title: "六、核心团队",
-      blocks: [
-        { type: "factTable", rows: [
-          ["Mike Jandernoa", "创始合伙人 · Perrigo CEO / Chairman 背景"],
-          ["Carl Jandernoa", "合伙人 · 投资活动主管"],
-          ["Rob Jandernoa", "合伙人 · 创业活动主管"],
-          ["Steve Jandernoa", "合伙人 · 社区活动主管"],
-          ["职业经理人团队", "CFO、Portfolio Manager、Controller、会计、行政和家族顾问"]
-        ]},
-        { type: "paragraph", text: "公开团队信息显示，42 North 不是完全由家族成员运营。三个家族成员与约十三名职业员工共同构成团队，家族负责方向和关键决策，职业经理人承担财务、组合管理和日常运营。" },
-        { type: "insight", label: "组织信号", text: "家族成员占比不高，但分工集中在关键业务线，体现出家族控制和职业化执行之间的平衡。" }
-      ]
+      id: "五-家办演变", title: "五、 家办演变", blocks: [{ type: "markdown", markdown: "### 关键时间线\n\n| 时间 | 事件 | 阶段 | 意义 |\n|-|-|-|-|\n| 1993 | Jandernoa Foundation 成立 | 慈善平台建立 | 财富管理初步制度化 |\n| 2005 | Hopen Life Science Ventures 成立 | 延伸投资能力 | 进入生命科学 VC |\n| 2009 | JEM 启动 | 创业生态布局 | 从财富管理到知识输出 |\n| 2011 | 42 North Partners LLC 成立 | SFO 正式化 | 系统化管理家族资产 |\n| 约 2012 | Bridge Street Capital Partners 成立 | PE 基金 | 深耕中低端市场 |\n| 2016 | 三个儿子全部回归 | 二代融合 | 完成团队家族化 |\n| 2017 | Mike 退出 Perrigo 董事会 | 全面转型 | 将精力转向 42 North |\n\n42 North 一直保持单一家族办公室模式，没有向外部客户开放或向多家族办公室转型。这与 Grand Rapids 地区部分家族资本平台的路径不同。但通过 Bridge Street Capital、Grand Angels 和 Hopen Life Science，它又间接进入了更广泛的资本生态。\n\n### 模式演进\n\n这种“ SFO + 外部基金联合创始人”的模式，让 Jandernoa 家族既能保持 SFO 的私密性，又能通过外部基金撬动更广泛的投资网络和交易机会。42 North 负责家族资本和家族平台，外部基金则承担更专业的市场化投资和创业生态职能。\n\n### 税务与法律架构\n\n公开资料显示 42 North Partners 注册为美国特拉华州有限责任公司，在密歇根州 Grand Rapids 运营；Jandernoa Foundation 作为美国 501(c)(3) 私人基金会运作。Perrigo 在 2013 年通过收购 Elan Corporation 迁址爱尔兰都柏林，成为爱尔兰注册的税务居民，但这属于 Perrigo 管理层的企业安排，并非 42 North 的家族架构。具体信托、双层控股和跨境安排没有公开披露。\n\n### 地缘与监管环境\n\nGrand Rapids 提供了较低的运营和人才成本，也拥有密集的荷兰裔家族资本网络。美国单一家族办公室通常不需要注册为投资顾问，42 North 因此可以用较小的团队保持灵活运营。\n\n**地缘观察：** 留在 Grand Rapids 使 42 North 能够利用中西部的本地社会资本，深耕全国性 PE 基金容易忽略的中低端市场交易。许多交易规模约为 1,000 万至 2.5 亿美元，对全国性大型 PE 基金太小，但对本地家族办公室仍有足够的信息优势和投后价值创造空间。\n\n---" }]
     },
     {
-      id: "investment",
-      title: "七、投资哲学与资产配置",
-      blocks: [
-        { type: "paragraph", text: "42 North 的公开投资表述强调信任、价值观一致和长期价值。其策略不是追逐全球最热门赛道，而是利用家族在西密歇根和美国中西部的本地关系、行业经验和交易网络。" },
-        { type: "comparison", columns: ["原则", "文章中的表现"], rows: [
-          ["关系优先", "选择价值观和长期目标一致的合作伙伴"],
-          ["主场深耕", "聚焦美国中西部和中低端市场"],
-          ["双轨配置", "既投资 PE 基金，也参与共同投资"],
-          ["长期持有", "不以固定退出期限作为唯一目标"],
-          ["生态协同", "通过 JEM、Bridge Street 和 Hopen Life Science 获取 deal flow"]
-        ]},
-        { type: "comparison", columns: ["资产板块", "说明", "风险属性"], rows: [
-          ["PE 基金投资", "中低端市场并购基金 LP 配置", "中高风险、长锁定期"],
-          ["共同投资", "与 PE 基金共同跟投具体标的", "集中度较高"],
-          ["VC / 生命科学", "通过 Hopen Life Science 布局", "高风险、高潜在回报"],
-          ["现金 / 流动性资产", "公开资料未披露", "未知"]
-        ]},
-        { type: "risk", label: "数据边界", text: "单一家族办公室通常不公开 IRR、回报倍数和完整 AUM。公开报道中的约 2 亿美元只对应西密歇根投资组合，不能直接当作完整家族资产规模。" }
-      ]
+      id: "六-核心团队", title: "六、 核心团队", blocks: [{ type: "markdown", markdown: "### 家族成员\n\n| 人物 | 角色 | 背景 |\n|-|-|-|\n| Mike Jandernoa | 创始合伙人 | Perrigo CEO / Chairman、CPA |\n| Carl Jandernoa | 合伙人，投资主管 | Deloitte、UBS、Bridge Street Capital |\n| Rob Jandernoa | 合伙人，创业主管 | 银行、销售、创业公司 |\n| Steve Jandernoa | 合伙人，社区主管 | EY、KPMG |\n\n### 职业经理人团队\n\n| 人物/团队 | 职责与背景 |\n|-|-|\n| Joel Bosch | CFO 与 Portfolio Manager，前 EY 资深人士 |\n| Will Helander | Portfolio Manager，曾任 RDV Corp、CION Investments |\n| Brandon Eisentrager | JEM 项目 Executive Director |\n| Tessa Miller | Controller，前 Plante Moran |\n| Nate DeVries / Yunseo Lazzar | Senior Accountant |\n| Erin Bergman / Janet Dekkinga | 行政、办公室管理与 Grant Coordination |\n| Bill Lawrence / John Meilner | Board Member 与 Family Advisor |\n\n公开团队信息显示，42 North 不是完全由家族成员运营。三个家族成员与约十三名职业员工共同构成团队，家族负责方向和关键决策，职业经理人承担财务、组合管理、JEM 项目和日常运营。\n\n**组织信号：** 家族成员占比约 18%，但分工集中在关键业务线，体现出家族控制和职业化执行之间的平衡。真正的决策权仍集中在 Mike 及家族合伙人手中，而职业经理人负责把三条业务线转化为稳定的组织流程。\n\n---" }]
     },
     {
-      id: "global-position",
-      title: "八、全球家办坐标",
-      blocks: [
-        { type: "comparison", columns: ["维度", "42 North Partners", "对比家办"], rows: [
-          ["AUM 档次", "小型 SFO，公开规模低于 10 亿美元", "Grand Rapids 的大型家族资本平台"],
-          ["地理", "Grand Rapids, Michigan", "同样深耕美国中西部"],
-          ["财富来源", "Perrigo OTC 制药", "消费品、制造业或多元企业资产"],
-          ["策略", "中低端市场 PE + 社区深耕", "VC、PE、房地产多元化"],
-          ["二代参与", "三个儿子全员参与", "家族成员和职业经理人混合"],
-          ["隐私度", "极高", "取决于家族公开度"]
-        ]},
-        { type: "paragraph", text: "42 North 在全球 SFO 版图中属于规模较小但高度集中的类别。它的竞争力不在全球资产覆盖，而在本地主场信息优势、家族关系和长期持有能力。" }
-      ]
+      id: "七-投资哲学", title: "七、 投资哲学", blocks: [{ type: "markdown", markdown: "### 核心理念\n\n42 North Partners 官网的投资表述强调：与值得信任、价值观一致且目标一致的企业伙伴合作，共同创造长期价值。这意味着投资不只是财务回报，也包含关系质量、价值观匹配和长期合作。\n\n### 风险态度\n\n从 Mike 在 Perrigo 时代两次 LBO 的历史可以看出，他对杠杆和周期性机会持开放态度。但 42 North 的公开策略更强调稳健：专注北美中低端市场 PE 基金和共同投资，不追逐高风险的高科技初创或新兴市场投机。\n\n### 投资原则清单\n\n1. **关系优先：** 只与价值观和长期目标一致的合伙人合作。\n2. **中低端市场深耕：** 聚焦北美约 1,000 万至 2.5 亿美元的中低端市场。\n3. **基金投资与共同投资双轨制：** 既配置精选 PE 基金，也直接共同投资具体标的。\n4. **地理集中：** 优先美国中西部，尤其是西密歇根。\n5. **长期持有：** 不设固定退出期限，把时间作为价值创造工具。\n6. **生态协同：** 通过 JEM、Bridge Street、Hopen Life Science 等平台形成交易机会和信息优势。\n7. **家族直接参与：** 重要投资决策经过家族成员审议。\n\n**核心判断：** 42 North 最独特的投资立场是“主场深度”优先于“全球广度”。Jandernoa 家族认为，西密歇根的本地人脉、行业知识和私人关系网络足以产生优于市场平均水平的中低端市场 PE 机会。这一策略的隐含前提是中西部交易存在信息不对称，而 42 North 能够利用这种不对称获利。\n\n---" }]
     },
     {
-      id: "asia-insights",
-      title: "九、对亚洲家族的启示",
-      blocks: [
-        { type: "comparison", columns: ["可借鉴经验", "具体含义"], rows: [
-          ["三支柱架构", "将投资、企业运营、慈善或社区事务拆成独立模块"],
-          ["外部历练后回归", "让二代先在 Deloitte、UBS、EY 等机构积累专业经验"],
-          ["SFO + 外部基金", "保持家族资本私密性，同时借助外部平台扩大 deal flow"],
-          ["创业导师计划", "把慈善、创业支持和潜在投资网络连接起来"],
-          ["区域深耕", "在资产规模有限时，优先利用本地和行业信息优势"]
-        ]},
-        { type: "risk", label: "不可直接复制", text: "美国 LLC、501(c)(3) 基金会、税务环境和西密歇根的社会资本网络，都不能直接移植到中国。可以借鉴的是组织原则，而不是法律工具本身。" },
-        { type: "comparison", columns: ["维度", "42 North Partners", "典型中国 SFO"], rows: [
-          ["财富来源", "单一企业 Perrigo", "房地产、制造业、互联网等多源"],
-          ["二代教育", "外部机构历练", "海外留学或家族企业内部培养"],
-          ["投资范围", "区域集中", "更偏全球化配置"],
-          ["慈善", "规模较小但主题集中", "大额但可能更分散"]
-        ]}
-      ]
+      id: "八-资产配置", title: "八、 资产配置", blocks: [{ type: "markdown", markdown: "### 资产结构\n\n| 资产板块 | 说明 | 风险属性 |\n|-|-|-|\n| PE 基金投资 | 中低端市场并购基金 LP 配置 | 中高风险、长锁定期 |\n| 共同投资 | 与 PE 基金共同跟投具体标的 | 中高风险、集中度较高 |\n| VC / 生命科学 | 通过 Hopen Life Science 布局 | 高风险、高潜在回报 |\n| 创业支持平台 | JEM、Grand Angels 等，连接创业者与交易机会 | 高不确定性 |\n| 慈善基金会 | Jandernoa Foundation，聚焦教育和社区议题 | 非财务回报 |\n| 现金 / 流动性资产 | 公开资料未披露 | 未知 |\n\n### 业绩数据\n\n42 North Partners 是单一家族办公室，不对外募资，因此没有公开披露 IRR、回报倍数或完整资产负债表。行业数据库虽可能存在机构档案，但未记录具体业绩。\n\n目前唯一明确的量化信号来自 2016 年 Crain's Grand Rapids 报道：42 North 在西密歇根有约 2 亿美元投资组合，且投资标的和收购机会增长迅速。这一数字只对应公开报道中的区域投资组合，不能直接视为完整家族资产规模。\n\n### 行业地位\n\n42 North 不在公开家办排名中，但 Mike Jandernoa 曾进入 PLMA Hall of Fame，并担任 Gerald R. Ford Presidential Foundation Trustee。家办的行业影响力更多来自本地创业、教育和社区网络，而不是公开 AUM 排名。\n\n### 全球家办坐标\n\n| 维度 | 42 North Partners | 对比家办（Ottawa Avenue Private Capital / RDV Corp） |\n|-|-|-|\n| AUM 档次 | 低于 10 亿美元的小型 SFO | 约 50 亿至 100 亿美元的中型平台 |\n| 地理 | Grand Rapids, Michigan | 同样深耕 Grand Rapids |\n| 家族来源 | Perrigo OTC 制药 | Amway 直销与消费品 |\n| 策略 | 中低端市场 PE、创业和社区深耕 | VC、PE、房地产多元化 |\n| 二代参与 | 三子全员参与 | 家族成员与职业经理人混合 |\n| 隐私度 | 高 | 中等 |\n\n**核心判断：** 42 North 属于规模较小但高度集中的 SFO。与同城超大型家族资本平台相比，它的优势不在全球资产覆盖，而在西密歇根中低端市场的本地信息、家族关系和长期持有能力。\n\n> **数据边界：** 单一家族办公室通常不公开完整 AUM、IRR、回报倍数和信托安排，所有公开规模数字都需要结合来源和日期阅读。\n\n---" }]
     },
     {
-      id: "sources-risk",
-      title: "十、信息来源、争议与适用人群",
-      blocks: [
-        { type: "paragraph", text: "这篇研究不是公司年报，而是基于公开资料的家办画像。它将官方网站、基金会资料、行业协会、媒体报道和 SEC 文件放在文末，并把无法核实的内容单独标成数据盲区。" },
-        { type: "heading", title: "风险与争议" },
-        { type: "paragraph", text: "文章提到 Perrigo 董事会斗争、政治捐款争议、财富对单一企业的历史依赖，以及三个支柱对二代成员的依赖。这些内容不是家办宣传，而是研究文章中的反向观察。" },
-        { type: "heading", title: "适用人群" },
-        { type: "paragraph", text: "适合关心二代传承、美国中西部 PE、美国与中国 SFO 架构差异，以及家族慈善和创业生态的人阅读。" },
-        { type: "sources", items: [
-          ["42 North Partners 官网", "https://www.42np.com"],
-          ["Ford Presidential Foundation", "https://geraldrfordfoundation.org/trustees/michael-jandernoa/"],
-          ["PLMA Hall of Fame", "https://plma.com/hall-of-fame/manufacturers/michael-jandernoa/"],
-          ["Crain's Grand Rapids", "https://www.crainsgrandrapids.com/news/health-care/jandernoa-withdraws-from-perrigo-after-36-years-will-focus-on-family-office/"],
-          ["University of Michigan News", "https://news.umich.edu/mike-and-sue-jandernoa-give-4-3-million-to-u-m/"],
-          ["SEC Filing - Perrigo S-4", "https://www.sec.gov/Archives/edgar/data/"]
-        ]}
-      ]
+      id: "九-对亚洲启示", title: "九、 对亚洲启示", blocks: [{ type: "markdown", markdown: "### 可借鉴经验\n\n1. **三支柱架构的二代分工：** 将投资、创业或企业运营、慈善与社区事务拆成相对独立的模块，让不同子女分别承担责任，减少内部竞争并创造独立成长路径。\n2. **外部历练后回归：** 让二代先在 Deloitte、UBS、EY、KPMG 等专业机构积累经验，再回到家族平台承担具体责任。\n3. **SFO 与外部基金协同：** 保持家族资本私密性，同时通过外部基金和联合创始人身份扩大交易网络与 deal flow。\n4. **创业导师计划：** JEM 将创业教育、慈善声誉和潜在投资机会连接起来，形成比单纯捐赠更有长期价值的生态。\n5. **区域深耕：** 在资产规模有限时，优先利用本地和行业信息优势，不必一开始就追求全球化配置。\n6. **聚焦型慈善：** Jandernoa Foundation 的教育议题说明，小规模基金会也可以通过集中主题形成超出资产规模的社会影响力。\n\n### 不可直接复制\n\n1. **美国法律工具：** LLC 结构和 501(c)(3) 私人基金会不能直接移植到中国，应根据本国信托、基金会和税务框架重新设计。\n2. **西密歇根社会资本：** Grand Rapids 的荷兰裔家族网络和长期信任关系具有地域特殊性，需要在本地寻找商会、校友或行业网络替代。\n3. **中低端市场机会：** 中国的债权融资环境、退出通道和尽调透明度与美国不同，42 North 的投资策略不能直接照搬，但“利用本地信息优势深耕特定市场”的原则具有普适性。\n\n| 维度 | 42 North Partners | 典型中国 SFO |\n|-|-|-|\n| 财富来源 | 单一企业 Perrigo | 房地产、制造业、互联网等多源 |\n| 二代培养 | 外部机构历练后回归 | 海外留学或家族企业内部培养 |\n| 投资范围 | 区域集中 | 更偏全球化配置 |\n| 慈善 | 规模较小但主题集中 | 规模和主题差异较大 |\n| 外部网络 | PE 基金和创业平台联合创始人 | GP 配置或自营投资 |\n\n---" }]
+    },
+    {
+      id: "十-信息来源", title: "十、 信息来源", blocks: [{ type: "markdown", markdown: "### 参考资料\n\n| 来源 | 类型 | 用途 |\n|-|-|-|\n| 42 North Partners 官网 | 官方 | 家办定位、业务与团队信息 |\n| Ford Presidential Foundation | 官方 | Mike Jandernoa 人物资料 |\n| PLMA Hall of Fame | 行业 | Perrigo 经营经历与行业资料 |\n| Crain's Grand Rapids | 媒体 | 家办成立、家族成员回归与 Perrigo 关系 |\n| University of Michigan News | 官方 | 家族捐赠与社区事务 |\n| SEC Perrigo 文件 | 官方 | 公司经营、持股和上市历史 |\n| Gerald R. Ford Presidential Foundation | 官方 | 公共事务和治理背景 |\n| 飞书知识库“当家办来敲门” | 原始研究 | 本篇研究整理的基础文档 |\n\n### 风险与争议\n\n- **Perrigo 董事会斗争：** Mike 在 2017 年退出 Perrigo 董事会，公开叙事一方面称其为主动选择，另一方面也存在 Starboard Value 主动投资者施压的背景。\n- **政治捐款争议：** 公开研究提到 Mike 在较长时期内参与政治捐款，这使个人政治立场与基金会运营之间的边界受到关注。\n- **单一财富来源依赖：** Jandernoa 家族财富高度依赖 Perrigo 股权，42 North 的分散化投资正在降低这一风险，但历史集中度仍值得关注。\n- **接班人断层风险：** 三个支柱分别依赖一名二代成员，如果其中一人离开，业务连续性和家族内部职责平衡可能受到影响。\n\n### 信息边界\n\n这篇研究不是公司年报，而是基于公开资料的家办画像。公开资料能够支持家族背景、Perrigo 经营经历、家办公开定位和部分投资平台信息，但无法确认完整资产规模、回报数据、信托安排、家族成员之间的股权分配以及所有投资项目。涉及规模、时间和投资表现的内容，应以原始来源和披露日期为准。\n\n### 适用人群\n\n适合关心二代传承规划、美国中西部 PE 投资、美国与中国 SFO 架构差异，以及家族慈善和创业生态的人阅读。\n\n---" }]
     }
   ]
 };

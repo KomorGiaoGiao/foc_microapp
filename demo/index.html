@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0d0e10" />
     <title></title>
     <style>
       :root {
@@ -14,6 +15,19 @@
         --muted: rgba(245, 245, 245, .58);
         --soft: rgba(245, 245, 245, .1);
         --accent: #f5f5f5;
+        --glass-surface: rgba(29, 30, 32, .56);
+        --glass-surface-strong: rgba(29, 30, 32, .76);
+        --glass-control: rgba(255, 255, 255, .08);
+        --glass-control-hover: rgba(255, 255, 255, .15);
+        --glass-border: rgba(255, 255, 255, .2);
+        --glass-highlight: rgba(255, 255, 255, .16);
+        --glass-shadow: 0 18px 42px rgba(0, 0, 0, .24);
+        --map-background: #0b0c0e;
+        --map-atmosphere: #9da2a8;
+        --map-point: #f5f5f5;
+        --map-path: rgba(255, 255, 255, .96);
+        --ease-out: cubic-bezier(.23, 1, .32, 1);
+        --ease-in-out: cubic-bezier(.77, 0, .175, 1);
       }
 
       * { box-sizing: border-box; }
@@ -26,7 +40,7 @@
       .rail-brand { display: none; }
       .brand-mark { display: grid; place-items: center; width: 30px; height: 30px; border: 1px solid rgba(255,255,255,.72); color: var(--accent); border-radius: 8px; font-size: 10px; font-weight: 600; letter-spacing: .08em; }
       .rail-group { display: flex; align-items: center; padding: 4px; }
-      .tool-button { position: relative; width: 46px; height: 46px; margin: 0 2px; display: grid; place-items: center; border: 0; background: transparent; cursor: pointer; opacity: .68; transition: opacity .2s, background .2s, color .2s; }
+      .tool-button { position: relative; width: 46px; height: 46px; margin: 0 2px; display: grid; place-items: center; border: 0; background: transparent; cursor: pointer; opacity: .68; transition: opacity .2s, background .2s, color .2s, transform .14s var(--ease-out); }
       .tool-button:hover, .tool-button.active { color: var(--accent); opacity: 1; background: rgba(255,255,255,.12); border-radius: 9px; }
       .tool-button.active::before { content: ""; position: absolute; bottom: -5px; width: 18px; height: 2px; border-radius: 2px; background: var(--accent); }
       .tool-button svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
@@ -37,13 +51,13 @@
       .live-status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px rgba(255,255,255,.15); }
 
       .map-tools { position: fixed; z-index: 4; right: 20px; bottom: 24px; display: flex; flex-direction: column; gap: 6px; }
-      .map-tool { width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 10px; background: rgba(17,18,20,.66); color: rgba(255,255,255,.82); cursor: pointer; font-size: 19px; line-height: 1; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+      .map-tool { width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 10px; background: rgba(17,18,20,.66); color: rgba(255,255,255,.82); cursor: pointer; font-size: 19px; line-height: 1; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); transition: transform .14s var(--ease-out), color .2s, border-color .2s, background .2s; }
       .map-tool:hover { color: var(--accent); border-color: rgba(255,255,255,.7); }
       .map-tool svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
       .search-panel { position: fixed; z-index: 6; left: 50%; bottom: 88px; top: auto; width: min(360px, calc(100vw - 40px)); transform: translateX(-50%); padding: 14px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 14px 36px rgba(0,0,0,.24); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
       .search-panel[hidden], .filter-panel[hidden], .stats-panel[hidden] { display: none; }
-      .search-panel:not([hidden]), .filter-panel:not([hidden]), .stats-panel:not([hidden]) { animation: floating-panel-in .18s ease-out both; }
+      .search-panel:not([hidden]), .filter-panel:not([hidden]), .stats-panel:not([hidden]) { animation: floating-panel-in .18s var(--ease-out) both; }
       @keyframes floating-panel-in { from { opacity: 0; transform: translateX(-50%) translateY(7px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
       .search-label { display: block; margin-bottom: 8px; color: var(--muted); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
       .search-input { width: 100%; height: 36px; padding: 0 10px; border: 1px solid rgba(255,255,255,.18); border-radius: 8px; outline: 0; background: rgba(0,0,0,.2); color: var(--text); font-size: 13px; }
@@ -55,6 +69,9 @@
       .search-empty { padding: 12px 8px; color: var(--muted); font-size: 12px; }
 
       .filter-panel, .stats-panel { position: fixed; z-index: 4; left: 50%; bottom: 88px; transform: translateX(-50%); width: min(300px, calc(100vw - 40px)); padding: 14px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 14px 36px rgba(0,0,0,.24); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+      .stats-panel { width: min(340px, calc(100vw - 40px)); }
+      .stats-context { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: -4px 0 12px; color: var(--muted); font-size: 11px; }
+      .stats-context strong { color: var(--text); font-size: 12px; font-weight: 500; }
       .panel-kicker { margin-bottom: 12px; color: var(--muted); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
       .filter-field { display: block; margin-bottom: 12px; color: var(--muted); font-size: 12px; }
       .country-picker { position: relative; margin-top: 7px; }
@@ -75,12 +92,29 @@
       .stat-item strong { display: block; color: var(--text); font-size: 17px; font-weight: 500; }
       .stat-item span { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; white-space: nowrap; }
       .stats-title { margin: 14px 0 7px; color: var(--muted); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
-      .top-city { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,.08); color: rgba(244,244,241,.82); font-size: 12px; }
+      .top-city { width: 100%; display: block; padding: 8px 0 9px; border: 0; border-bottom: 1px solid rgba(255,255,255,.08); background: transparent; color: rgba(244,244,241,.82); cursor: pointer; font-size: 12px; text-align: left; }
       .top-city:last-child { border-bottom: 0; }
+      .top-city:hover, .top-city:focus-visible { color: var(--text); outline: 0; }
+      .top-city-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
       .top-city small { color: var(--muted); font-size: 11px; }
+      .top-city-bar { height: 4px; margin-top: 7px; overflow: hidden; border-radius: 999px; background: rgba(255,255,255,.1); }
+      .top-city-bar span { display: block; width: 0; height: 100%; border-radius: inherit; background: var(--accent); opacity: .72; transition: width .35s var(--ease-out); }
+      .stats-empty { padding: 12px 0 4px; color: var(--muted); font-size: 12px; }
 
       .selection { position: fixed; z-index: 4; left: 50%; bottom: 88px; width: min(350px, calc(100vw - 40px)); transform: translateX(-50%); display: none; padding: 16px 18px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 14px 36px rgba(0,0,0,.22); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
-      .selection.visible { display: block; animation: floating-panel-in .18s ease-out both; }
+      .selection.visible { display: block; animation: floating-panel-in .18s var(--ease-out) both; }
+      .selection.is-updating .selection-kicker,
+      .selection.is-updating #selected-name,
+      .selection.is-updating #selected-description,
+      .selection.is-updating .office-list-panel,
+      .selection.is-updating .selection-meta,
+      .selection.is-updating .actions { animation: selection-content-in .28s var(--ease-out) both; }
+      .selection.is-updating #selected-name { animation-delay: .025s; }
+      .selection.is-updating #selected-description { animation-delay: .05s; }
+      .selection.is-updating .office-list-panel { animation-delay: .075s; }
+      .selection.is-updating .selection-meta { animation-delay: .1s; }
+      .selection.is-updating .actions { animation-delay: .125s; }
+      @keyframes selection-content-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
       .selection-kicker { color: var(--accent); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; }
       .selection strong { display: block; margin: 7px 0 4px; color: var(--text); font-size: 21px; font-weight: 500; }
       .selection p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
@@ -98,8 +132,25 @@
       .office-list-badge { flex: 0 0 auto; padding: 3px 5px; border: 1px solid rgba(255,255,255,.2); border-radius: 5px; color: var(--muted); font-size: 9px; white-space: nowrap; }
       .office-list-empty { padding: 12px 8px; color: var(--muted); font-size: 11px; }
       .actions { display: flex; gap: 8px; margin-top: 14px; }
-      .action-button { height: 30px; padding: 0 11px; border: 1px solid rgba(255,255,255,.56); border-radius: 8px; background: rgba(255,255,255,.06); color: var(--accent); cursor: pointer; font-size: 12px; }
+      .action-button { height: 30px; padding: 0 11px; border: 1px solid rgba(255,255,255,.56); border-radius: 8px; background: rgba(255,255,255,.06); color: var(--accent); cursor: pointer; font-size: 12px; transition: transform .14s var(--ease-out), background .2s, border-color .2s; }
       .action-button:hover { background: rgba(255,255,255,.14); }
+      .country-picker-trigger,
+      .country-picker-option,
+      .search-result,
+      .office-list-item,
+      .top-city,
+      .knowledge-close,
+      .knowledge-toc-toggle { transition: transform .14s var(--ease-out), background .2s, color .2s, border-color .2s; }
+      .tool-button:active,
+      .map-tool:active,
+      .action-button:active,
+      .country-picker-trigger:active,
+      .country-picker-option:active,
+      .search-result:active,
+      .office-list-item:active,
+      .top-city:active,
+      .knowledge-close:active,
+      .knowledge-toc-toggle:active { transform: scale(.97); }
       .map-status { position: fixed; z-index: 3; left: 50%; bottom: 78px; transform: translateX(-50%); color: rgba(255,255,255,.45); font-size: 11px; pointer-events: none; }
 
       .knowledge-reader { position: fixed; z-index: 20; inset: 0; display: block; background: #111315; color: #eceeea; overflow: hidden; opacity: 0; transform: translateY(12px); transition: opacity .24s ease, transform .28s ease; }
@@ -169,8 +220,184 @@
       .knowledge-aside-value { color: rgba(236,238,234,.82); font-size: 13px; line-height: 1.6; }
       .knowledge-reading-label { color: rgba(236,238,234,.5); font-size: 11px; }
 
+      /* Shared liquid glass surfaces and the light theme. */
+      .side-rail,
+      .search-panel,
+      .filter-panel,
+      .stats-panel,
+      .selection,
+      .map-tool,
+      .knowledge-topbar,
+      .knowledge-close,
+      .knowledge-toc-toggle,
+      .knowledge-toc,
+      .knowledge-image,
+      .knowledge-fact-table,
+      .knowledge-comparison {
+        background: var(--glass-surface);
+        border-color: var(--glass-border);
+        box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-highlight);
+        backdrop-filter: blur(12px) saturate(145%);
+        -webkit-backdrop-filter: blur(12px) saturate(145%);
+      }
+
+      .side-rail { border-radius: 18px; }
+      .search-panel, .filter-panel, .stats-panel, .selection { border-radius: 18px; }
+      .map-tool, .knowledge-close, .knowledge-toc-toggle { background: var(--glass-control); }
+      .map-tool:hover, .knowledge-close:hover, .knowledge-toc-toggle:hover,
+      .knowledge-toc-toggle[aria-expanded="true"] { background: var(--glass-control-hover); }
+      .search-input, .country-picker-trigger, .office-list-search {
+        background: var(--glass-control);
+        border-color: var(--glass-border);
+        box-shadow: inset 0 1px 0 var(--glass-highlight);
+      }
+      .tool-button:hover, .tool-button.active,
+      .search-result:hover, .office-list-item:hover, .office-list-item.active,
+      .country-picker-option:hover, .country-picker-option[aria-selected="true"] { background: var(--glass-control-hover); }
+      .action-button { background: var(--glass-control); border-color: var(--glass-border); box-shadow: inset 0 1px 0 var(--glass-highlight); }
+
+      .side-rail::before,
+      .search-panel::before,
+      .filter-panel::before,
+      .stats-panel::before,
+      .selection::before,
+      .knowledge-topbar::before,
+      .knowledge-close::before,
+      .knowledge-toc-toggle::before {
+        content: "";
+        position: absolute;
+        inset: 1px;
+        z-index: 0;
+        border-radius: inherit;
+        pointer-events: none;
+        background: linear-gradient(145deg, rgba(255, 255, 255, .28), transparent 34%, rgba(255, 255, 255, .035) 78%);
+        opacity: .9;
+        background-size: 180% 180%;
+        animation: liquid-shimmer 9s ease-in-out infinite alternate;
+        backdrop-filter: blur(1px) saturate(130%);
+        -webkit-backdrop-filter: blur(1px) saturate(130%);
+        filter: var(--liquid-filter, none);
+      }
+      @keyframes liquid-shimmer {
+        from { background-position: 0% 0%; }
+        to { background-position: 100% 100%; }
+      }
+      .side-rail > *,
+      .search-panel > *,
+      .filter-panel > *,
+      .stats-panel > *,
+      .selection > *,
+      .knowledge-topbar > *,
+      .knowledge-close > *,
+      .knowledge-toc-toggle > * { position: relative; z-index: 1; }
+
+      body[data-theme="light"] {
+        color-scheme: light;
+        --ink: #cfdbe2;
+        --rail: rgba(255, 255, 255, .58);
+        --panel: rgba(255, 255, 255, .66);
+        --line: rgba(36, 55, 72, .16);
+        --text: #172432;
+        --muted: rgba(23, 36, 50, .62);
+        --soft: rgba(23, 36, 50, .08);
+        --accent: #173f5f;
+        --glass-surface: rgba(245, 249, 251, .48);
+        --glass-surface-strong: rgba(241, 247, 250, .7);
+        --glass-control: rgba(239, 247, 250, .34);
+        --glass-control-hover: rgba(248, 252, 253, .62);
+        --glass-border: rgba(33, 58, 79, .22);
+        --glass-highlight: rgba(255, 255, 255, .65);
+        --glass-shadow: 0 18px 42px rgba(53, 77, 99, .22), 0 2px 5px rgba(255, 255, 255, .22) inset;
+        --map-background: #c9d5dd;
+        --map-atmosphere: #7f9db3;
+        --map-point: #173f5f;
+        --map-path: rgba(23, 63, 95, .9);
+        background: var(--ink);
+      }
+
+      body[data-theme="light"] .tool-button,
+      body[data-theme="light"] .map-tool,
+      body[data-theme="light"] .knowledge-close,
+      body[data-theme="light"] .knowledge-toc-toggle { color: rgba(23, 36, 50, .7); }
+      body[data-theme="light"] .tool-button:hover,
+      body[data-theme="light"] .tool-button.active,
+      body[data-theme="light"] .map-tool:hover { color: var(--accent); }
+      body[data-theme="light"] .tool-button.active::before { background: var(--accent); }
+      body[data-theme="light"] .live-status::before { background: #2b7a78; box-shadow: 0 0 0 3px rgba(43, 122, 120, .15); }
+      body[data-theme="light"] .search-input,
+      body[data-theme="light"] .country-picker-trigger,
+      body[data-theme="light"] .office-list-search { color: var(--text); }
+      body[data-theme="light"] .country-picker-menu { background: var(--glass-surface-strong); box-shadow: var(--glass-shadow); }
+      body[data-theme="light"] .country-picker-option,
+      body[data-theme="light"] .filter-check,
+      body[data-theme="light"] .top-city,
+      body[data-theme="light"] .office-list-item,
+      body[data-theme="light"] .search-result { color: rgba(23, 36, 50, .8); }
+      body[data-theme="light"] .knowledge-reader { background: #d6e1e6; color: var(--text); }
+      body[data-theme="light"] .knowledge-topbar { background: var(--glass-surface-strong); }
+      body[data-theme="light"] .knowledge-toc { background: rgba(243, 247, 249, .78); }
+      body[data-theme="light"] .knowledge-toc a { border-left-color: rgba(23, 36, 50, .16); color: rgba(23, 36, 50, .58); }
+      body[data-theme="light"] .knowledge-toc a:hover,
+      body[data-theme="light"] .knowledge-toc a.active { border-left-color: var(--accent); color: var(--text); background: rgba(23, 63, 95, .08); }
+      body[data-theme="light"] .knowledge-hero,
+      body[data-theme="light"] .knowledge-section h2,
+      body[data-theme="light"] .knowledge-section h3,
+      body[data-theme="light"] .knowledge-hero h1 { color: var(--text); }
+      body[data-theme="light"] .knowledge-eyebrow,
+      body[data-theme="light"] .knowledge-meta,
+      body[data-theme="light"] .knowledge-reading-label,
+      body[data-theme="light"] .knowledge-aside-label,
+      body[data-theme="light"] .knowledge-toc-title { color: rgba(23, 36, 50, .5); }
+      body[data-theme="light"] .knowledge-summary,
+      body[data-theme="light"] .knowledge-paragraph,
+      body[data-theme="light"] .knowledge-markdown-list,
+      body[data-theme="light"] .knowledge-fact-table td,
+      body[data-theme="light"] .knowledge-comparison td,
+      body[data-theme="light"] .knowledge-insight p,
+      body[data-theme="light"] .knowledge-risk p { color: rgba(23, 36, 50, .8); }
+      body[data-theme="light"] .knowledge-fact-table th,
+      body[data-theme="light"] .knowledge-comparison th { color: rgba(23, 36, 50, .54); background: rgba(23, 63, 95, .06); }
+      body[data-theme="light"] .knowledge-markdown-quote,
+      body[data-theme="light"] .knowledge-insight { background: rgba(23, 63, 95, .07); border-left-color: rgba(23, 63, 95, .58); }
+      body[data-theme="light"] .knowledge-risk { background: rgba(160, 104, 64, .1); border-left-color: rgba(160, 104, 64, .7); }
+      body[data-theme="light"] .knowledge-code { background: rgba(23, 36, 50, .08); border-color: var(--glass-border); color: rgba(23, 36, 50, .78); }
+      body[data-theme="light"] .knowledge-image { background: rgba(255, 255, 255, .42); }
+      body[data-theme="light"] .knowledge-tag { border-color: var(--glass-border); color: rgba(23, 36, 50, .68); }
+      body[data-theme="light"] .knowledge-timeline-item::before { background: #d6e1e6; border-color: var(--accent); }
+      body[data-theme="light"] .knowledge-timeline { border-left-color: rgba(23, 36, 50, .22); }
+      body[data-theme="light"] .knowledge-timeline-item strong,
+      body[data-theme="light"] .knowledge-timeline-item span,
+      body[data-theme="light"] .knowledge-source-list { color: rgba(23, 36, 50, .72); }
+      body[data-theme="light"] .knowledge-source-list a { color: var(--accent); }
+      body[data-theme="light"] .knowledge-close,
+      body[data-theme="light"] .knowledge-toc-toggle { color: var(--text); }
+
+      body[data-theme="light"] .side-rail::before,
+      body[data-theme="light"] .search-panel::before,
+      body[data-theme="light"] .filter-panel::before,
+      body[data-theme="light"] .stats-panel::before,
+      body[data-theme="light"] .selection::before,
+      body[data-theme="light"] .knowledge-topbar::before,
+      body[data-theme="light"] .knowledge-close::before,
+      body[data-theme="light"] .knowledge-toc-toggle::before { background-image: linear-gradient(145deg, rgba(255, 255, 255, .62), transparent 36%, rgba(255, 255, 255, .08) 78%); }
+      .tool-button:focus { outline: none; }
+      .tool-button:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .side-rail::before,
+        .search-panel::before,
+        .filter-panel::before,
+        .stats-panel::before,
+        .selection::before,
+        .knowledge-topbar::before,
+        .knowledge-close::before,
+        .knowledge-toc-toggle::before { animation: none; }
+      }
+
       @media (prefers-reduced-motion: reduce) {
         .search-panel:not([hidden]), .filter-panel:not([hidden]), .stats-panel:not([hidden]), .selection.visible { animation: none; }
+        .selection.is-updating > * { animation: none; }
+        .top-city-bar span { transition: none; }
         .knowledge-reader { transition: none; }
       }
 
@@ -224,6 +451,10 @@
           <svg viewBox="0 0 24 24"><path d="M5 19V9M12 19V5M19 19v-7"/></svg>
           <span class="tool-label">数据</span>
         </button>
+        <button class="tool-button" id="theme-toggle" title="浅色模式" aria-label="切换到浅色模式" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.6"/><path d="M12 2.8v2M12 19.2v2M21.2 12h-2M4.8 12h-2M18.5 5.5l-1.4 1.4M6.9 17.1l-1.4 1.4M18.5 18.5l-1.4-1.4M6.9 6.9 5.5 5.5"/></svg>
+          <span class="tool-label" id="theme-toggle-label">浅色模式</span>
+        </button>
       </div>
     </aside>
     <div class="search-panel" id="search-panel" hidden>
@@ -256,12 +487,13 @@
     </div>
     <div class="stats-panel" id="stats-panel" hidden>
       <div class="panel-kicker">数据概览</div>
+      <div class="stats-context"><strong id="stats-scope">当前视图</strong><span id="stats-filter-summary">全部城市</span></div>
       <div class="stats-grid">
         <div class="stat-item"><strong id="total-offices">0</strong><span>家族办公室</span></div>
         <div class="stat-item"><strong id="total-cities">0</strong><span>城市</span></div>
         <div class="stat-item"><strong id="total-countries">0</strong><span>国家 / 地区</span></div>
       </div>
-      <div class="stats-title">城市分布</div>
+      <div class="stats-title">家办最多的城市</div>
       <div id="top-cities"></div>
     </div>
     <div class="map-tools" aria-label="地图控制">
@@ -318,6 +550,9 @@
       const searchResults = document.getElementById("search-results");
       const filterPanel = document.getElementById("filter-panel");
       const statsPanel = document.getElementById("stats-panel");
+      const statsScope = document.getElementById("stats-scope");
+      const statsFilterSummary = document.getElementById("stats-filter-summary");
+      const topCitiesRoot = document.getElementById("top-cities");
       const countryFilter = document.getElementById("country-filter");
       const countryPicker = document.getElementById("country-picker");
       const countryPickerTrigger = document.getElementById("country-picker-trigger");
@@ -336,6 +571,15 @@
       let selectedOfficeName = null;
       let selectedCountry = null;
       let selectedOfficePoint = null;
+      let selectionMotionFrame = null;
+      const themeToggle = document.getElementById("theme-toggle");
+      const themeToggleLabel = document.getElementById("theme-toggle-label");
+      const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+      const storedTheme = (() => {
+        try { return window.localStorage.getItem("foc-map-theme"); } catch { return null; }
+      })();
+      const initialTheme = storedTheme === "light" || storedTheme === "dark" ? storedTheme : "dark";
+      document.body.dataset.theme = initialTheme;
       const isTouchDevice = Boolean(window.matchMedia?.("(pointer: coarse)").matches || navigator.maxTouchPoints > 0);
       const isMobileViewport = window.matchMedia?.("(max-width: 600px)").matches ?? window.innerWidth <= 600;
       const defaultView = { lat: 24, lng: 40, altitude: isMobileViewport ? 2.95 : 2.6 };
@@ -377,10 +621,41 @@
 
       function getPolygonStrokeColor(polygon) {
         const properties = polygon.properties || {};
-        if (properties.kind === "province") return "rgba(245, 245, 245, 0.9)";
+        const palette = getMapPalette();
+        if (properties.kind === "province") return palette.provinceStroke;
         return polygon === selectedCountry
-          ? "rgba(255, 255, 255, 0.96)"
-          : "rgba(190, 195, 200, 0.5)";
+          ? palette.selectedStroke
+          : palette.countryStroke;
+      }
+
+      function getMapPalette() {
+        return document.body.dataset.theme === "light"
+          ? {
+              background: "#c9d5dd",
+              globe: "#b9cad5",
+              atmosphere: "#7f9db3",
+              point: "#173f5f",
+              path: "rgba(23, 63, 95, .9)",
+              provinceStroke: "rgba(23, 63, 95, .7)",
+              selectedStroke: "rgba(23, 63, 95, .96)",
+              countryStroke: "rgba(64, 88, 108, .48)",
+              countryCap: "rgba(255, 255, 255, .68)",
+              countrySide: "rgba(64, 88, 108, .16)",
+              ring: ["rgba(23, 63, 95, .9)", "rgba(23, 63, 95, 0)"]
+            }
+          : {
+              background: "#0b0c0e",
+              globe: "#111315",
+              atmosphere: "#9da2a8",
+              point: "#f5f5f5",
+              path: "rgba(255, 255, 255, .96)",
+              provinceStroke: "rgba(245, 245, 245, .9)",
+              selectedStroke: "rgba(255, 255, 255, .96)",
+              countryStroke: "rgba(190, 195, 200, .5)",
+              countryCap: "rgba(45, 48, 52, .76)",
+              countrySide: "rgba(180, 185, 190, .14)",
+              ring: ["rgba(255, 255, 255, .95)", "rgba(255, 255, 255, 0)"]
+            };
       }
 
       function getPointRadius(point) {
@@ -407,45 +682,56 @@
       }
 
       function updateMapHighlights() {
+        const palette = getMapPalette();
         globe
           .pathsData(selectedCountry ? getBoundaryPaths(selectedCountry.geometry) : [])
           .ringsData(selectedOfficePoint ? [selectedOfficePoint] : [])
           .polygonStrokeColor(getPolygonStrokeColor)
-          .pointRadius(getPointRadius);
+          .pointAltitude((point) => point === selectedOfficePoint ? 0.065 : 0.035)
+          .pointRadius(getPointRadius)
+          .pointColor(() => palette.point)
+          .pathColor(() => palette.path)
+          .ringColor(() => palette.ring);
       }
 
       const globe = Globe({ animateIn: true })(globeContainer)
         .backgroundColor("#0b0c0e")
         .showAtmosphere(!isTouchDevice)
-        .atmosphereColor("#9da2a8")
+        .atmosphereColor(getMapPalette().atmosphere)
         .atmosphereAltitude(isTouchDevice ? 0.1 : 0.16)
         .polygonAltitude(({ properties }) => properties.kind === "province" ? 0.032 : 0.012)
-        .polygonCapColor(({ properties }) => properties.kind === "province" ? "transparent" : "rgba(45, 48, 52, 0.76)")
-        .polygonSideColor(({ properties }) => properties.kind === "province" ? "transparent" : "rgba(180, 185, 190, 0.14)")
+        .polygonCapColor(({ properties }) => properties.kind === "province" ? "transparent" : getMapPalette().countryCap)
+        .polygonSideColor(({ properties }) => properties.kind === "province" ? "transparent" : getMapPalette().countrySide)
         .polygonStrokeColor(getPolygonStrokeColor)
         .polygonLabel(({ properties }) => properties.name || properties.NAME)
         .onPolygonClick(handleCountryClick)
         .pointsData(offices)
         .pointLat("lat")
         .pointLng("lng")
-        .pointAltitude(0.035)
+        .pointAltitude((point) => point === selectedOfficePoint ? 0.065 : 0.035)
         .pointRadius(getPointRadius)
-        .pointColor(() => "#f5f5f5")
+        .pointsTransitionDuration(650)
+        .pointColor(() => getMapPalette().point)
         .pointLabel(({ city, country, count }) => `${city}${country ? ` · ${country}` : ""} · ${count} 家`)
         .onPointClick(handleOfficeClick)
         .pathsData([])
         .pathPoints("points")
         .pathPointLat("lat")
         .pathPointLng("lng")
-        .pathColor(() => "rgba(255, 255, 255, 0.96)")
+        .pathColor(() => getMapPalette().path)
         .pathStroke(2.8)
+        .pathDashLength(0.72)
+        .pathDashGap(0.28)
+        .pathDashAnimateTime(1500)
+        .pathTransitionDuration(500)
         .ringsData([])
         .ringLat("lat")
         .ringLng("lng")
-        .ringColor(() => ["rgba(255, 255, 255, 0.95)", "rgba(255, 255, 255, 0)"])
+        .ringColor(() => getMapPalette().ring)
         .ringMaxRadius(1.45)
         .ringPropagationSpeed(1.15)
         .ringRepeatPeriod(1250);
+      globe.polygonsTransitionDuration(600);
 
       const globeControls = globe.controls();
       globeControls.autoRotate = !isTouchDevice;
@@ -457,6 +743,35 @@
       renderer?.setPixelRatio(Math.min(window.devicePixelRatio || 1, isTouchDevice ? 1.25 : 1.75));
 
       globe.pointOfView(defaultView, 0);
+
+      function applyTheme(theme, persist = true) {
+        const nextTheme = theme === "light" ? "light" : "dark";
+        document.body.dataset.theme = nextTheme;
+        document.documentElement.style.colorScheme = nextTheme;
+        themeToggle.setAttribute("aria-pressed", String(nextTheme === "light"));
+        themeToggle.setAttribute("aria-label", nextTheme === "light" ? "切换到深色模式" : "切换到浅色模式");
+        themeToggle.title = nextTheme === "light" ? "深色模式" : "浅色模式";
+        themeToggleLabel.textContent = nextTheme === "light" ? "深色模式" : "浅色模式";
+        themeColorMeta?.setAttribute("content", nextTheme === "light" ? "#e6edf2" : "#0d0e10");
+        if (persist) {
+          try { window.localStorage.setItem("foc-map-theme", nextTheme); } catch { /* storage may be unavailable in an embedded webview */ }
+        }
+        const palette = getMapPalette();
+        globe.backgroundColor(palette.background).atmosphereColor(palette.atmosphere);
+        const globeMaterial = globe.globeMaterial();
+        if (globeMaterial?.color?.set) {
+          globeMaterial.color.set(palette.globe);
+          globeMaterial.roughness = 0.88;
+          globeMaterial.metalness = 0.04;
+        }
+        globe.polygonCapColor(({ properties }) => properties.kind === "province" ? "transparent" : palette.countryCap);
+        globe.polygonSideColor(({ properties }) => properties.kind === "province" ? "transparent" : palette.countrySide);
+        globe.pointColor(() => palette.point).pathColor(() => palette.path).ringColor(() => palette.ring);
+        updateMapHighlights();
+      }
+
+      applyTheme(initialTheme, false);
+      themeToggle.addEventListener("click", () => applyTheme(document.body.dataset.theme === "light" ? "dark" : "light"));
 
       function handleCountryClick(polygon) {
         clearOfficeSelection();
@@ -522,6 +837,14 @@
         filterPanel.hidden = true;
         statsPanel.hidden = true;
         mapStatus.textContent = "已定位 · 点击返回按钮回到全球视角";
+        selection.classList.remove("is-updating");
+        if (selectionMotionFrame !== null) {
+          window.cancelAnimationFrame(selectionMotionFrame);
+        }
+        selectionMotionFrame = window.requestAnimationFrame(() => {
+          selection.classList.add("is-updating");
+          selectionMotionFrame = null;
+        });
       }
 
       function showCityOfficeList(point) {
@@ -608,6 +931,7 @@
         statsPanel.hidden = true;
         closeCountryPicker();
         selection.classList.remove("visible");
+        selection.classList.remove("is-updating");
         readKnowledge.hidden = true;
         selectedKnowledgeSlug = null;
         selectionKicker.textContent = "Selected region";
@@ -624,6 +948,7 @@
         syncCountryPicker();
         majorCitiesFilter.checked = false;
         filterCount.textContent = "显示全部城市";
+        renderStats(offices);
         closeFloatingPanels();
         globeControls.autoRotate = !isTouchDevice;
         globe.pointOfView(defaultView, 900);
@@ -757,18 +1082,55 @@
         const filtered = getFilteredOffices();
         globe.pointsData(filtered);
         filterCount.textContent = `显示 ${filtered.length} 个城市`;
+        renderStats(filtered);
+      }
+
+      function renderStats(filtered = getFilteredOffices()) {
+        const total = filtered.reduce((sum, point) => sum + Number(point.count || 0), 0);
+        const countriesList = [...new Set(filtered.map((point) => point.country || "全球"))].sort((a, b) => a.localeCompare(b));
+        const countryLabel = countryFilter.value === "all"
+          ? "全部国家 / 地区"
+          : countryFilter.options[countryFilter.selectedIndex]?.textContent || countryFilter.value;
+        const filterSummary = countryFilter.value === "all"
+          ? (majorCitiesFilter.checked ? "重点城市" : "全部城市")
+          : (majorCitiesFilter.checked ? `${countryLabel} · 重点城市` : countryLabel);
+        const topCities = [...filtered]
+          .sort((a, b) => Number(b.count || 0) - Number(a.count || 0))
+          .slice(0, 5);
+        const maxCount = Number(topCities[0]?.count || 0);
+
+        const hasActiveFilter = countryFilter.value !== "all" || majorCitiesFilter.checked;
+        statsScope.textContent = hasActiveFilter ? "筛选结果" : "全部数据";
+        statsFilterSummary.textContent = filterSummary;
+        document.getElementById("total-offices").textContent = total.toLocaleString("zh-CN");
+        document.getElementById("total-cities").textContent = filtered.length.toLocaleString("zh-CN");
+        document.getElementById("total-countries").textContent = countriesList.length.toLocaleString("zh-CN");
+
+        if (!topCities.length) {
+          topCitiesRoot.innerHTML = '<div class="stats-empty">当前筛选没有匹配城市</div>';
+          return;
+        }
+
+        topCitiesRoot.innerHTML = topCities.map((point, index) => {
+          const count = Number(point.count || 0);
+          const share = total > 0 ? `${Math.round((count / total) * 100)}%` : "0%";
+          const barWidth = maxCount > 0 ? `${Math.max(8, Math.round((count / maxCount) * 100))}%` : "0%";
+          return `<button class="top-city" type="button" data-city-index="${index}" aria-label="定位 ${escapeHtml(point.city)}，${count} 家家族办公室"><span class="top-city-heading"><span>${escapeHtml(point.city)}</span><small>${count.toLocaleString("zh-CN")} 家 · ${share}</small></span><span class="top-city-bar" aria-hidden="true"><span style="width:${barWidth}"></span></span></button>`;
+        }).join("");
+
+        topCitiesRoot.querySelectorAll(".top-city").forEach((button) => {
+          button.addEventListener("click", (event) => {
+            event.stopPropagation();
+            handleOfficeClick(topCities[Number(button.dataset.cityIndex)]);
+          });
+        });
       }
 
       function populatePanels() {
         const countriesList = [...new Set(offices.map((point) => point.country || "全球"))].sort((a, b) => a.localeCompare(b));
         countryFilter.insertAdjacentHTML("beforeend", countriesList.map((country) => `<option value="${country}">${country}</option>`).join(""));
         renderCountryPicker();
-        const total = offices.reduce((sum, point) => sum + Number(point.count || 0), 0);
-        document.getElementById("total-offices").textContent = total.toLocaleString("zh-CN");
-        document.getElementById("total-cities").textContent = offices.length.toLocaleString("zh-CN");
-        document.getElementById("total-countries").textContent = countriesList.length.toLocaleString("zh-CN");
-        const topCities = [...offices].sort((a, b) => Number(b.count || 0) - Number(a.count || 0)).slice(0, 5);
-        document.getElementById("top-cities").innerHTML = topCities.map((point) => `<div class="top-city"><span>${point.city}</span><small>${point.count} 家</small></div>`).join("");
+        renderStats(offices);
       }
 
       countryFilter.addEventListener("change", () => {
