@@ -7,6 +7,7 @@
     <title></title>
     <style>
       :root {
+        color-scheme: dark;
         --ink: #0d0e10;
         --rail: rgba(29, 30, 32, .7);
         --panel: rgba(29, 30, 32, .68);
@@ -16,7 +17,6 @@
         --soft: rgba(245, 245, 245, .1);
         --accent: #f5f5f5;
         --glass-surface: rgba(29, 30, 32, .56);
-        --glass-surface-strong: rgba(29, 30, 32, .76);
         --glass-control: rgba(255, 255, 255, .08);
         --glass-control-hover: rgba(255, 255, 255, .15);
         --glass-border: rgba(255, 255, 255, .2);
@@ -220,7 +220,7 @@
       .knowledge-aside-value { color: rgba(236,238,234,.82); font-size: 13px; line-height: 1.6; }
       .knowledge-reading-label { color: rgba(236,238,234,.5); font-size: 11px; }
 
-      /* Shared liquid glass surfaces and the light theme. */
+      /* Shared liquid glass surfaces. */
       .side-rail,
       .search-panel,
       .filter-panel,
@@ -237,6 +237,9 @@
         background: var(--glass-surface);
         border-color: var(--glass-border);
         box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-highlight);
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
         backdrop-filter: blur(12px) saturate(145%);
         -webkit-backdrop-filter: blur(12px) saturate(145%);
       }
@@ -267,16 +270,36 @@
         content: "";
         position: absolute;
         inset: 1px;
-        z-index: 0;
+        z-index: 1;
         border-radius: inherit;
         pointer-events: none;
         background: linear-gradient(145deg, rgba(255, 255, 255, .28), transparent 34%, rgba(255, 255, 255, .035) 78%);
-        opacity: .9;
+        opacity: .55;
         background-size: 180% 180%;
         animation: liquid-shimmer 9s ease-in-out infinite alternate;
-        backdrop-filter: blur(1px) saturate(130%);
-        -webkit-backdrop-filter: blur(1px) saturate(130%);
-        filter: var(--liquid-filter, none);
+      }
+      /* The warp layer follows liquid-glass-react: the backdrop is displaced,
+         while the actual controls remain above it and stay sharp. */
+      .side-rail::after,
+      .search-panel::after,
+      .filter-panel::after,
+      .stats-panel::after,
+      .selection::after,
+      .map-tool::after,
+      .knowledge-topbar::after,
+      .knowledge-close::after,
+      .knowledge-toc-toggle::after,
+      .knowledge-toc::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        border-radius: inherit;
+        background: transparent;
+        backdrop-filter: blur(4px) saturate(145%);
+        -webkit-backdrop-filter: blur(4px) saturate(145%);
+        filter: url("#liquid-glass-filter");
       }
       @keyframes liquid-shimmer {
         from { background-position: 0% 0%; }
@@ -289,97 +312,8 @@
       .selection > *,
       .knowledge-topbar > *,
       .knowledge-close > *,
-      .knowledge-toc-toggle > * { position: relative; z-index: 1; }
+      .knowledge-toc-toggle > * { position: relative; z-index: 2; }
 
-      body[data-theme="light"] {
-        color-scheme: light;
-        --ink: #cfdbe2;
-        --rail: rgba(255, 255, 255, .58);
-        --panel: rgba(255, 255, 255, .66);
-        --line: rgba(36, 55, 72, .16);
-        --text: #172432;
-        --muted: rgba(23, 36, 50, .62);
-        --soft: rgba(23, 36, 50, .08);
-        --accent: #173f5f;
-        --glass-surface: rgba(245, 249, 251, .48);
-        --glass-surface-strong: rgba(241, 247, 250, .7);
-        --glass-control: rgba(239, 247, 250, .34);
-        --glass-control-hover: rgba(248, 252, 253, .62);
-        --glass-border: rgba(33, 58, 79, .22);
-        --glass-highlight: rgba(255, 255, 255, .65);
-        --glass-shadow: 0 18px 42px rgba(53, 77, 99, .22), 0 2px 5px rgba(255, 255, 255, .22) inset;
-        --map-background: #c9d5dd;
-        --map-atmosphere: #7f9db3;
-        --map-point: #173f5f;
-        --map-path: rgba(23, 63, 95, .9);
-        background: var(--ink);
-      }
-
-      body[data-theme="light"] .tool-button,
-      body[data-theme="light"] .map-tool,
-      body[data-theme="light"] .knowledge-close,
-      body[data-theme="light"] .knowledge-toc-toggle { color: rgba(23, 36, 50, .7); }
-      body[data-theme="light"] .tool-button:hover,
-      body[data-theme="light"] .tool-button.active,
-      body[data-theme="light"] .map-tool:hover { color: var(--accent); }
-      body[data-theme="light"] .tool-button.active::before { background: var(--accent); }
-      body[data-theme="light"] .live-status::before { background: #2b7a78; box-shadow: 0 0 0 3px rgba(43, 122, 120, .15); }
-      body[data-theme="light"] .search-input,
-      body[data-theme="light"] .country-picker-trigger,
-      body[data-theme="light"] .office-list-search { color: var(--text); }
-      body[data-theme="light"] .country-picker-menu { background: var(--glass-surface-strong); box-shadow: var(--glass-shadow); }
-      body[data-theme="light"] .country-picker-option,
-      body[data-theme="light"] .filter-check,
-      body[data-theme="light"] .top-city,
-      body[data-theme="light"] .office-list-item,
-      body[data-theme="light"] .search-result { color: rgba(23, 36, 50, .8); }
-      body[data-theme="light"] .knowledge-reader { background: #d6e1e6; color: var(--text); }
-      body[data-theme="light"] .knowledge-topbar { background: var(--glass-surface-strong); }
-      body[data-theme="light"] .knowledge-toc { background: rgba(243, 247, 249, .78); }
-      body[data-theme="light"] .knowledge-toc a { border-left-color: rgba(23, 36, 50, .16); color: rgba(23, 36, 50, .58); }
-      body[data-theme="light"] .knowledge-toc a:hover,
-      body[data-theme="light"] .knowledge-toc a.active { border-left-color: var(--accent); color: var(--text); background: rgba(23, 63, 95, .08); }
-      body[data-theme="light"] .knowledge-hero,
-      body[data-theme="light"] .knowledge-section h2,
-      body[data-theme="light"] .knowledge-section h3,
-      body[data-theme="light"] .knowledge-hero h1 { color: var(--text); }
-      body[data-theme="light"] .knowledge-eyebrow,
-      body[data-theme="light"] .knowledge-meta,
-      body[data-theme="light"] .knowledge-reading-label,
-      body[data-theme="light"] .knowledge-aside-label,
-      body[data-theme="light"] .knowledge-toc-title { color: rgba(23, 36, 50, .5); }
-      body[data-theme="light"] .knowledge-summary,
-      body[data-theme="light"] .knowledge-paragraph,
-      body[data-theme="light"] .knowledge-markdown-list,
-      body[data-theme="light"] .knowledge-fact-table td,
-      body[data-theme="light"] .knowledge-comparison td,
-      body[data-theme="light"] .knowledge-insight p,
-      body[data-theme="light"] .knowledge-risk p { color: rgba(23, 36, 50, .8); }
-      body[data-theme="light"] .knowledge-fact-table th,
-      body[data-theme="light"] .knowledge-comparison th { color: rgba(23, 36, 50, .54); background: rgba(23, 63, 95, .06); }
-      body[data-theme="light"] .knowledge-markdown-quote,
-      body[data-theme="light"] .knowledge-insight { background: rgba(23, 63, 95, .07); border-left-color: rgba(23, 63, 95, .58); }
-      body[data-theme="light"] .knowledge-risk { background: rgba(160, 104, 64, .1); border-left-color: rgba(160, 104, 64, .7); }
-      body[data-theme="light"] .knowledge-code { background: rgba(23, 36, 50, .08); border-color: var(--glass-border); color: rgba(23, 36, 50, .78); }
-      body[data-theme="light"] .knowledge-image { background: rgba(255, 255, 255, .42); }
-      body[data-theme="light"] .knowledge-tag { border-color: var(--glass-border); color: rgba(23, 36, 50, .68); }
-      body[data-theme="light"] .knowledge-timeline-item::before { background: #d6e1e6; border-color: var(--accent); }
-      body[data-theme="light"] .knowledge-timeline { border-left-color: rgba(23, 36, 50, .22); }
-      body[data-theme="light"] .knowledge-timeline-item strong,
-      body[data-theme="light"] .knowledge-timeline-item span,
-      body[data-theme="light"] .knowledge-source-list { color: rgba(23, 36, 50, .72); }
-      body[data-theme="light"] .knowledge-source-list a { color: var(--accent); }
-      body[data-theme="light"] .knowledge-close,
-      body[data-theme="light"] .knowledge-toc-toggle { color: var(--text); }
-
-      body[data-theme="light"] .side-rail::before,
-      body[data-theme="light"] .search-panel::before,
-      body[data-theme="light"] .filter-panel::before,
-      body[data-theme="light"] .stats-panel::before,
-      body[data-theme="light"] .selection::before,
-      body[data-theme="light"] .knowledge-topbar::before,
-      body[data-theme="light"] .knowledge-close::before,
-      body[data-theme="light"] .knowledge-toc-toggle::before { background-image: linear-gradient(145deg, rgba(255, 255, 255, .62), transparent 36%, rgba(255, 255, 255, .08) 78%); }
       .tool-button:focus { outline: none; }
       .tool-button:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
 
@@ -431,6 +365,36 @@
     </style>
   </head>
   <body>
+    <svg class="liquid-filter-defs" width="0" height="0" aria-hidden="true" focusable="false">
+      <defs>
+        <!-- Compact displacement map adapted from liquid-glass-react. The
+             radial mask keeps the center clean and limits color separation to
+             the rim, where refraction is visible without rough outlines. -->
+        <filter id="liquid-glass-filter" x="-35%" y="-35%" width="170%" height="170%" color-interpolation-filters="sRGB">
+          <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="11" result="DISPLACEMENT_MAP" />
+          <feColorMatrix in="DISPLACEMENT_MAP" type="matrix" values="0.5 0 0 0 0.5  0 0.5 0 0 0.5  0 0 0.5 0 0.5  0 0 0 1 0" result="BALANCED_MAP" />
+
+          <feImage x="0" y="0" width="100%" height="100%" preserveAspectRatio="none"
+            href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cdefs%3E%3CradialGradient id='g' cx='50%25' cy='50%25' r='70%25'%3E%3Cstop offset='0%25' stop-color='black'/%3E%3Cstop offset='62%25' stop-color='black'/%3E%3Cstop offset='100%25' stop-color='white'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='100' height='100' fill='url(%23g)'/%3E%3C/svg%3E"
+            result="EDGE_MASK" />
+
+          <feDisplacementMap in="SourceGraphic" in2="BALANCED_MAP" scale="8" xChannelSelector="R" yChannelSelector="B" result="RED_DISPLACED" />
+          <feColorMatrix in="RED_DISPLACED" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="RED_CHANNEL" />
+          <feDisplacementMap in="SourceGraphic" in2="BALANCED_MAP" scale="7.4" xChannelSelector="R" yChannelSelector="B" result="GREEN_DISPLACED" />
+          <feColorMatrix in="GREEN_DISPLACED" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="GREEN_CHANNEL" />
+          <feDisplacementMap in="SourceGraphic" in2="BALANCED_MAP" scale="6.8" xChannelSelector="R" yChannelSelector="B" result="BLUE_DISPLACED" />
+          <feColorMatrix in="BLUE_DISPLACED" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="BLUE_CHANNEL" />
+
+          <feBlend in="GREEN_CHANNEL" in2="BLUE_CHANNEL" mode="screen" result="GB_COMBINED" />
+          <feBlend in="RED_CHANNEL" in2="GB_COMBINED" mode="screen" result="RGB_COMBINED" />
+          <feGaussianBlur in="RGB_COMBINED" stdDeviation="0.2" result="ABERRATED_BLURRED" />
+          <feComposite in="ABERRATED_BLURRED" in2="EDGE_MASK" operator="in" result="EDGE_ABERRATION" />
+          <feComponentTransfer in="EDGE_MASK" result="INVERTED_MASK"><feFuncA type="table" tableValues="1 0" /></feComponentTransfer>
+          <feComposite in="SourceGraphic" in2="INVERTED_MASK" operator="in" result="CENTER_CLEAN" />
+          <feComposite in="EDGE_ABERRATION" in2="CENTER_CLEAN" operator="over" />
+        </filter>
+      </defs>
+    </svg>
     <div id="globe"></div>
     <aside class="side-rail" aria-label="地图工具">
       <div class="rail-brand"><span class="brand-mark">FO</span></div>
@@ -450,10 +414,6 @@
         <button class="tool-button" id="stats-toggle" title="数据" aria-label="数据">
           <svg viewBox="0 0 24 24"><path d="M5 19V9M12 19V5M19 19v-7"/></svg>
           <span class="tool-label">数据</span>
-        </button>
-        <button class="tool-button" id="theme-toggle" title="浅色模式" aria-label="切换到浅色模式" aria-pressed="false">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.6"/><path d="M12 2.8v2M12 19.2v2M21.2 12h-2M4.8 12h-2M18.5 5.5l-1.4 1.4M6.9 17.1l-1.4 1.4M18.5 18.5l-1.4-1.4M6.9 6.9 5.5 5.5"/></svg>
-          <span class="tool-label" id="theme-toggle-label">浅色模式</span>
         </button>
       </div>
     </aside>
@@ -572,14 +532,6 @@
       let selectedCountry = null;
       let selectedOfficePoint = null;
       let selectionMotionFrame = null;
-      const themeToggle = document.getElementById("theme-toggle");
-      const themeToggleLabel = document.getElementById("theme-toggle-label");
-      const themeColorMeta = document.querySelector('meta[name="theme-color"]');
-      const storedTheme = (() => {
-        try { return window.localStorage.getItem("foc-map-theme"); } catch { return null; }
-      })();
-      const initialTheme = storedTheme === "light" || storedTheme === "dark" ? storedTheme : "dark";
-      document.body.dataset.theme = initialTheme;
       const isTouchDevice = Boolean(window.matchMedia?.("(pointer: coarse)").matches || navigator.maxTouchPoints > 0);
       const isMobileViewport = window.matchMedia?.("(max-width: 600px)").matches ?? window.innerWidth <= 600;
       const defaultView = { lat: 24, lng: 40, altitude: isMobileViewport ? 2.95 : 2.6 };
@@ -629,33 +581,19 @@
       }
 
       function getMapPalette() {
-        return document.body.dataset.theme === "light"
-          ? {
-              background: "#c9d5dd",
-              globe: "#b9cad5",
-              atmosphere: "#7f9db3",
-              point: "#173f5f",
-              path: "rgba(23, 63, 95, .9)",
-              provinceStroke: "rgba(23, 63, 95, .7)",
-              selectedStroke: "rgba(23, 63, 95, .96)",
-              countryStroke: "rgba(64, 88, 108, .48)",
-              countryCap: "rgba(255, 255, 255, .68)",
-              countrySide: "rgba(64, 88, 108, .16)",
-              ring: ["rgba(23, 63, 95, .9)", "rgba(23, 63, 95, 0)"]
-            }
-          : {
-              background: "#0b0c0e",
-              globe: "#111315",
-              atmosphere: "#9da2a8",
-              point: "#f5f5f5",
-              path: "rgba(255, 255, 255, .96)",
-              provinceStroke: "rgba(245, 245, 245, .9)",
-              selectedStroke: "rgba(255, 255, 255, .96)",
-              countryStroke: "rgba(190, 195, 200, .5)",
-              countryCap: "rgba(45, 48, 52, .76)",
-              countrySide: "rgba(180, 185, 190, .14)",
-              ring: ["rgba(255, 255, 255, .95)", "rgba(255, 255, 255, 0)"]
-            };
+        return {
+          background: "#0b0c0e",
+          globe: "#111315",
+          atmosphere: "#9da2a8",
+          point: "#f5f5f5",
+          path: "rgba(255, 255, 255, .96)",
+          provinceStroke: "rgba(245, 245, 245, .9)",
+          selectedStroke: "rgba(255, 255, 255, .96)",
+          countryStroke: "rgba(190, 195, 200, .5)",
+          countryCap: "rgba(45, 48, 52, .76)",
+          countrySide: "rgba(180, 185, 190, .14)",
+          ring: ["rgba(255, 255, 255, .95)", "rgba(255, 255, 255, 0)"]
+        };
       }
 
       function getPointRadius(point) {
@@ -695,7 +633,7 @@
       }
 
       const globe = Globe({ animateIn: true })(globeContainer)
-        .backgroundColor("#0b0c0e")
+        .backgroundColor(getMapPalette().background)
         .showAtmosphere(!isTouchDevice)
         .atmosphereColor(getMapPalette().atmosphere)
         .atmosphereAltitude(isTouchDevice ? 0.1 : 0.16)
@@ -744,18 +682,7 @@
 
       globe.pointOfView(defaultView, 0);
 
-      function applyTheme(theme, persist = true) {
-        const nextTheme = theme === "light" ? "light" : "dark";
-        document.body.dataset.theme = nextTheme;
-        document.documentElement.style.colorScheme = nextTheme;
-        themeToggle.setAttribute("aria-pressed", String(nextTheme === "light"));
-        themeToggle.setAttribute("aria-label", nextTheme === "light" ? "切换到深色模式" : "切换到浅色模式");
-        themeToggle.title = nextTheme === "light" ? "深色模式" : "浅色模式";
-        themeToggleLabel.textContent = nextTheme === "light" ? "深色模式" : "浅色模式";
-        themeColorMeta?.setAttribute("content", nextTheme === "light" ? "#e6edf2" : "#0d0e10");
-        if (persist) {
-          try { window.localStorage.setItem("foc-map-theme", nextTheme); } catch { /* storage may be unavailable in an embedded webview */ }
-        }
+      function applyMapPalette() {
         const palette = getMapPalette();
         globe.backgroundColor(palette.background).atmosphereColor(palette.atmosphere);
         const globeMaterial = globe.globeMaterial();
@@ -770,8 +697,7 @@
         updateMapHighlights();
       }
 
-      applyTheme(initialTheme, false);
-      themeToggle.addEventListener("click", () => applyTheme(document.body.dataset.theme === "light" ? "dark" : "light"));
+      applyMapPalette();
 
       function handleCountryClick(polygon) {
         clearOfficeSelection();
