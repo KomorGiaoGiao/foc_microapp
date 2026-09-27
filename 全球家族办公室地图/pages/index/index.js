@@ -1,5 +1,5 @@
 Page({
   data: {
-    mapUrl: 'https://komorgiaogiao.github.io/foc_microapp/demo/index.html?v=f883bcc'
+    mapUrl: 'https://komorgiaogiao.github.io/foc_microapp/demo/index.html?v=96366cd'
   }
 });
