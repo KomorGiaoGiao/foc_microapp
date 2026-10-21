@@ -34,7 +34,13 @@
 
 直接打开根目录的 `index.html`，或通过静态服务器打开 `demo/index.html`。
 
-抖音小程序加载的网页地址是：
+网页正式访问地址是：
+
+```text
+https://map.familyofficemeta.com/
+```
+
+抖音小程序加载的网页地址仍然是：
 
 ```text
 https://komorgiaogiao.github.io/foc_microapp/demo/index.html

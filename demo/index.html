@@ -239,8 +239,8 @@
         box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-highlight);
         isolation: isolate;
         overflow: hidden;
-        backdrop-filter: blur(12px) saturate(145%);
-        -webkit-backdrop-filter: blur(12px) saturate(145%);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
       }
 
       .map-tool,
@@ -249,6 +249,15 @@
       .knowledge-toc { position: relative; }
 
       .side-rail { border-radius: 18px; }
+      /* The bottom tab is the primary liquid surface: keep it translucent
+         enough for the globe to remain visible through the lens. */
+      .side-rail {
+        background: var(--rail);
+        border-color: var(--line);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, .28);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+      }
       .search-panel, .filter-panel, .stats-panel, .selection { border-radius: 18px; }
       .map-tool, .knowledge-close, .knowledge-toc-toggle { background: var(--glass-control); }
       .map-tool:hover, .knowledge-close:hover, .knowledge-toc-toggle:hover,
@@ -262,6 +271,13 @@
       .search-result:hover, .office-list-item:hover, .office-list-item.active,
       .country-picker-option:hover, .country-picker-option[aria-selected="true"] { background: var(--glass-control-hover); }
       .action-button { background: var(--glass-control); border-color: var(--glass-border); box-shadow: inset 0 1px 0 var(--glass-highlight); }
+      .side-rail .tool-button:hover,
+      .side-rail .tool-button.active {
+        background: rgba(255, 255, 255, .12);
+        box-shadow: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+      }
 
       .side-rail::before,
       .search-panel::before,
@@ -282,6 +298,11 @@
         background-size: 180% 180%;
         animation: liquid-shimmer 9s ease-in-out infinite alternate;
       }
+      .side-rail::before {
+        background: linear-gradient(145deg, rgba(255, 255, 255, .2), transparent 36%, rgba(255, 255, 255, .025) 78%);
+        opacity: .7;
+        animation: none;
+      }
       /* The warp layer follows liquid-glass-react: the backdrop is displaced,
          while the actual controls remain above it and stay sharp. */
       .side-rail::after,
@@ -301,9 +322,12 @@
         pointer-events: none;
         border-radius: inherit;
         background: transparent;
-        backdrop-filter: blur(4px) saturate(145%);
-        -webkit-backdrop-filter: blur(4px) saturate(145%);
+        backdrop-filter: blur(10px) saturate(155%);
+        -webkit-backdrop-filter: blur(10px) saturate(155%);
         filter: url("#liquid-glass-filter");
+      }
+      .side-rail::after {
+        display: none;
       }
       @keyframes liquid-shimmer {
         from { background-position: 0% 0%; }
@@ -317,6 +341,7 @@
       .knowledge-topbar > *,
       .knowledge-close > *,
       .knowledge-toc-toggle > * { position: relative; z-index: 2; }
+      .map-tool > * { position: relative; z-index: 2; }
 
       .tool-button:focus { outline: none; }
       .tool-button:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
@@ -380,6 +405,9 @@
 
           <feImage x="0" y="0" width="100%" height="100%" preserveAspectRatio="none"
             href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cdefs%3E%3CradialGradient id='g' cx='50%25' cy='50%25' r='70%25'%3E%3Cstop offset='0%25' stop-color='black'/%3E%3Cstop offset='62%25' stop-color='black'/%3E%3Cstop offset='100%25' stop-color='white'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='100' height='100' fill='url(%23g)'/%3E%3C/svg%3E"
+            result="EDGE_MASK_IMAGE" />
+          <feColorMatrix in="EDGE_MASK_IMAGE" type="matrix"
+            values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.213 0.715 0.072 0 0"
             result="EDGE_MASK" />
 
           <feDisplacementMap in="SourceGraphic" in2="BALANCED_MAP" scale="8" xChannelSelector="R" yChannelSelector="B" result="RED_DISPLACED" />
@@ -461,8 +489,8 @@
       <div id="top-cities"></div>
     </div>
     <div class="map-tools" aria-label="地图控制">
-      <button class="map-tool" id="zoom-in" title="放大" aria-label="放大">+</button>
-      <button class="map-tool" id="zoom-out" title="缩小" aria-label="缩小">−</button>
+      <button class="map-tool" id="zoom-in" title="放大" aria-label="放大"><span aria-hidden="true">+</span></button>
+      <button class="map-tool" id="zoom-out" title="缩小" aria-label="缩小"><span aria-hidden="true">−</span></button>
       <button class="map-tool" id="reset-view" title="复位视角" aria-label="复位视角">
         <svg viewBox="0 0 24 24"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 5.5v4h4"/></svg>
       </button>
