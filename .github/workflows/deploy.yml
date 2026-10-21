@@ -61,6 +61,9 @@ jobs:
         run: |
           rsync -az --delete \
             --exclude='.DS_Store' \
+            --exclude='.user.ini' \
+            --exclude='.well-known/' \
+            --exclude='.htaccess' \
             -e "ssh -i $HOME/.ssh/deploy_key -p $DEPLOY_PORT" \
             demo/ "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/"
 
