@@ -245,8 +245,25 @@
 
       .map-tool,
       .knowledge-close,
-      .knowledge-toc-toggle,
-      .knowledge-toc { position: relative; }
+      .knowledge-toc-toggle { position: relative; }
+
+      /* The table of contents is a readable navigation surface, not a glass
+         lens. Keeping its text outside the shared filter stack prevents the
+         backdrop displacement layer from blurring the links. */
+      .knowledge-toc {
+        position: sticky;
+        top: 0;
+        align-self: start;
+        max-height: calc(100vh - 130px);
+        overflow: auto;
+        background: rgba(29, 30, 32, .72);
+        border: 1px solid rgba(255, 255, 255, .12);
+        border-radius: 10px;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, .18);
+        isolation: auto;
+      }
+      .knowledge-toc::before,
+      .knowledge-toc::after { display: none; }
 
       .side-rail { border-radius: 18px; }
       /* The bottom tab is the primary liquid surface: keep it translucent

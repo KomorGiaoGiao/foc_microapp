@@ -1,0 +1,71 @@
+name: Deploy family office map
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: familyoffice-map-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      DEPLOY_HOST: ${{ secrets.ECS_HOST }}
+      DEPLOY_USER: ${{ secrets.ECS_USER }}
+      DEPLOY_PORT: ${{ secrets.ECS_PORT || '22' }}
+      DEPLOY_PATH: /www/wwwroot/map.familyofficemeta.com
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate static site
+        run: |
+          test -f demo/index.html
+          test -f demo/knowledge-reader.js
+          test -f demo/vendor/globe.gl.min.js
+
+      - name: Check deployment credentials
+        id: credentials
+        env:
+          DEPLOY_HOST: ${{ secrets.ECS_HOST }}
+          DEPLOY_USER: ${{ secrets.ECS_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.ECS_SSH_KEY }}
+        run: |
+          if [ -z "$DEPLOY_HOST" ] || [ -z "$DEPLOY_USER" ] || [ -z "$SSH_PRIVATE_KEY" ]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Add ECS_HOST, ECS_USER, ECS_SSH_KEY (and optionally ECS_PORT) to enable server deployment."
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Configure SSH
+        if: steps.credentials.outputs.configured == 'true'
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.ECS_SSH_KEY }}
+        run: |
+          install -d -m 700 "$HOME/.ssh"
+          printf '%s\n' "$SSH_PRIVATE_KEY" > "$HOME/.ssh/deploy_key"
+          chmod 600 "$HOME/.ssh/deploy_key"
+          ssh-keyscan -p "$DEPLOY_PORT" "$DEPLOY_HOST" >> "$HOME/.ssh/known_hosts"
+
+      - name: Deploy demo directory
+        if: steps.credentials.outputs.configured == 'true'
+        run: |
+          rsync -az --delete \
+            --exclude='.DS_Store' \
+            -e "ssh -i $HOME/.ssh/deploy_key -p $DEPLOY_PORT" \
+            demo/ "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/"
+
+      - name: Verify deployed entrypoint
+        if: steps.credentials.outputs.configured == 'true'
+        run: |
+          ssh -i "$HOME/.ssh/deploy_key" -p "$DEPLOY_PORT" "$DEPLOY_USER@$DEPLOY_HOST" \
+            "test -s '$DEPLOY_PATH/index.html'"
